@@ -28,6 +28,7 @@
     "@babel/preset-env": "^7.20.2",
     "@babel/preset-react": "^7.18.6",
     "@babel/preset-typescript": "^7.18.6",
+    "@types/navermaps": "^3.6.1",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.9",
     "@types/styled-components": "^5.1.26",
