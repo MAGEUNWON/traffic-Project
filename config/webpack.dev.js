@@ -8,7 +8,7 @@ module.exports = merge(common, {
   // 개발용은 수정이 빈번하고 디버깅을 해야하기 때문에 용량보다 빌드 시간, 로그, 디버깅이 중요함. 
   // 로그, 디버깅, 번들링 타임을 고려하면 개발용은 inline-source-map옵션을 사용하고 webpack-dev-server 명령어를 사용하는게 가장 좋음. 
   devServer: {
-    open: false,
+    open: true,
     hot: true, //테스트 구동과 동시에 기본페이지가 오픈됨
     compress: true,
     port: 3000,
