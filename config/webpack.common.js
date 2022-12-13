@@ -23,6 +23,11 @@ module.exports = {
                 exclude: /node_modules/,
                 // loader를 배제시킬 파일 명시
             },
+
+            {
+                test: /\.(png|svg|jpg|jpeg|gif|webp)$/i,
+                type: "asset/resource",
+            },
         ],
     },
     plugins: [
