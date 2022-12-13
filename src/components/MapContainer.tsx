@@ -5,7 +5,7 @@ declare global {
     kakao: any;
   }
 }
-const mapContainer = () =>{
+const MapContainer = () =>{
   useEffect(()=>{
 
     //지도를 담을 DOM 영역
@@ -23,4 +23,4 @@ const mapContainer = () =>{
   );
 }
 
-export default mapContainer;
+export default MapContainer;
