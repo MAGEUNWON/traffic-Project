@@ -5,7 +5,7 @@ declare global {
     kakao: any;
   }
 }
-const MapContainer = () =>{
+const MapContainer = ({searchPlace}:any) =>{
   useEffect(()=>{
 
     const infowindow = new window.kakao.maps.InfoWindow({zIndex:1});
@@ -34,7 +34,7 @@ const MapContainer = () =>{
       }
     }
     let ps = new window.kakao.maps.services.Places();
-    ps.keywordSearch("상희네",placesSearchCB);
+    ps.keywordSearch(searchPlace,placesSearchCB);
     
     const displayMaker = (place:any):any =>{
       let maker = new window.kakao.maps.Marker({
@@ -48,7 +48,7 @@ const MapContainer = () =>{
       })
     }
 
-  },[])
+  },[searchPlace])
   return(
     <div id="map" style={{width : "100vw", height : "100vh"}}/>
   );

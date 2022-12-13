@@ -1,5 +1,6 @@
 import React from "react";
 import MapContainer from './components/MapContainer'
+import Search from './components/Search'
 
 declare global {
   interface Window {
@@ -10,7 +11,7 @@ declare global {
 const App = () =>{
   return (
     <div className="root">
-      <MapContainer/>
+      <Search/>
     </div>
   )
 }
