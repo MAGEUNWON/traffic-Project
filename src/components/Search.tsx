@@ -1,6 +1,6 @@
 import React,{useState} from "react";
 import MapContainer from "./MapContainer";
-
+//검색 인풋
 const Search = () =>{
   const [InputText, setInputText] = useState('')
   const [Place,setPlace] = useState('')
@@ -15,6 +15,7 @@ const Search = () =>{
     setInputText('')
   }
 
+  // form과 input을 이용하여 검색창 구현 + 카카오 mapcontainer추가
   return(
     <>
       <form className="inputForm" onSubmit={handleSubmit}>
