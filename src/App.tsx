@@ -1,5 +1,12 @@
+import React from "react";
+import Kakao from "./components/kakaoMap";
+
 const App = () =>{
-  return <div>hi</div>;
+  return (
+    <div className="root">
+      <Kakao />
+    </div>
+  );
 }
 
 export default App;
