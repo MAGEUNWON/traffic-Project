@@ -17,6 +17,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.2.1",
     "package": "^1.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -38,7 +39,7 @@
     "css-loader": "^6.7.2",
     "css-minimizer-webpack-plugin": "^4.2.2",
     "dotenv": "^16.0.3",
-    "html-webpack-plugin": "^5.5.0",
+    "html-webpack-plugin": "^4.4.0",
     "mini-css-extract-plugin": "^2.7.0",
     "sass": "^1.56.1",
     "sass-loader": "^13.2.0",

@@ -5,9 +5,9 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Naver Map  -->
-  <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=f96ial6pr3"></script>
+  <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=<%= htmlWebpackPlugin.options.env.REACT_APP_JS_KEY_NAVER %>"></script>
   <!-- Kakao Map -->
-  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3a27f0ecd365ae752a3d12ee81f46a0c"></script>
+  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=<%= htmlWebpackPlugin.options.env.REACT_APP_JS_KEY_KAKAO %>"></script>
   <title>지도 API 핸들링</title>
 </head>
 <body>

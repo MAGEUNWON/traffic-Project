@@ -2,8 +2,11 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 // 웹팩에서 실행해서 나오는 결과물을 확인하기 위해서는 html 파일을 수동으로 작성해야 함. babel-loader에서 chunkhash를 사용하면 파일의 내용이 수정될 때마다 파일 이름이 변경되도록 할 수 있음. 이런 옵션 때문에 파일의 내용이 변경될 때마다 html 파일의 내용도 수정해야 함. 이러한 작업을 자동으로 하는 플러그인이 html-webpack-plugin임.(html 파일에 javascript 번들을 자동으로 묶어 줌)
 const path = require("path");
 const webpack = require("webpack");
+const dotenv = require("dotenv");
 // const {BundleAnalyzerPlugin} = require("webpack-bundle-analyzer");
 // BundleAnalyzer는 Bundle 최적화 용도로 사용
+
+dotenv.config();
 
 module.exports = {
   entry:`${path.resolve(__dirname, "../src")}/index.tsx`,
@@ -26,7 +29,16 @@ module.exports = {
     // webpack으로 변환한 파일에 추가적인 기능을 제공할 수 있음. 플러그인은 해당 결과물의 형태를 바꿔 주는 역할을 수행. 예를 들어 번들된 JS를 난독화 한다던가 특정 텍스트를 추출하는 용도로 사용할 수 있음. 
     // 분리된 css, js 파일들을 각각 html에 link 자동화
     new HtmlWebpackPlugin({
-      template: "public/index.html",
+      // index.html에 output에서 만들어진 bundle.js를 적용하여, deploy에 새로운 html 파일 생성
+      template: './public/index.html',
+
+      // template에 해당하는 파일에 dotenv 사용을 위한 설정
+      env: process.env,
+    }),
+
+    // dotenv 사용을 위한 설정
+    new webpack.DefinePlugin({
+      'process.env': JSON.stringify(process.env),
     }),
     new webpack.ProvidePlugin({
       React: "react",
