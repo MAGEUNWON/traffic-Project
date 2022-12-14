@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import axios from "axios";
 
-const Map = () => {
+const NaverMap = () => {
     const mapRef = useRef<HTMLElement | null | any>(null);
     const mapElement = useRef<any>(null);
     const [data, setData] = useState<any>([]);
@@ -12,7 +12,7 @@ const Map = () => {
 
         if (!mapElement.current || !naver) return;
 
-        var trafficLayer = new naver.maps.TrafficLayer({
+        let trafficLayer = new naver.maps.TrafficLayer({
             interval: 300000, // 5분마다 새로고침 (최소값 5분)
         });
 
@@ -27,13 +27,14 @@ const Map = () => {
         };
 
         mapRef.current = new naver.maps.Map(mapElement.current, mapOptions);
-        naver.maps.Event.addListener(
-            mapRef.current,
-            "trafficLayer_changed",
-            (test) => {
-                console.log(test);
-            }
-        );
+
+        // naver.maps.Event.addListener(
+        //     mapRef.current,
+        //     "trafficLayer_changed",
+        //     (test) => {
+        //         console.log(test);
+        //     }
+        // );
 
         var locationBtnHtml = "<button>cctv</button>";
 
@@ -98,4 +99,4 @@ const Map = () => {
     );
 };
 
-export default Map;
+export default NaverMap;
