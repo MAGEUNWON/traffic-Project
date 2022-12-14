@@ -2,6 +2,12 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 // 웹팩에서 실행해서 나오는 결과물을 확인하기 위해서는 html 파일을 수동으로 작성해야 함. babel-loader에서 chunkhash를 사용하면 파일의 내용이 수정될 때마다 파일 이름이 변경되도록 할 수 있음. 이런 옵션 때문에 파일의 내용이 변경될 때마다 html 파일의 내용도 수정해야 함. 이러한 작업을 자동으로 하는 플러그인이 html-webpack-plugin임.(html 파일에 javascript 번들을 자동으로 묶어 줌)
 const path = require("path");
 const webpack = require("webpack");
+const dotenv = require('dotenv');
+dotenv.config();
+
+
+
+
 // const {BundleAnalyzerPlugin} = require("webpack-bundle-analyzer");
 // BundleAnalyzer는 Bundle 최적화 용도로 사용
 
@@ -11,7 +17,7 @@ module.exports = {
   module: {
     rules: [
       // loader는 웹 애플리케이션을 해석할 때 자바스크립트 파일이 아닌 HTML, CSS등 웹 자원들을 변환할 수 있도록 도와줌. 자주 사용되는 로더는 babel, css, style, file-loader 등이 있음.
-        // 기본적으로 webpack은 자바스크립트 및 JSON 파일만 해석 가능함. 하지만 loader를 사용하면 webpack이 다른 포맷의 파일을 처리하고 이를 앱에서 사용할 수 있는 모듈로 변환 할 수 있음.
+      // 기본적으로 webpack은 자바스크립트 및 JSON 파일만 해석 가능함. 하지만 loader를 사용하면 webpack이 다른 포맷의 파일을 처리하고 이를 앱에서 사용할 수 있는 모듈로 변환 할 수 있음.
       {
         test: /\.(ts|tsx|js|jsx)$/,
         // loader를 적용시킬 파일 유형 명시(정규 표현식 사용)
@@ -27,10 +33,15 @@ module.exports = {
     // 분리된 css, js 파일들을 각각 html에 link 자동화
     new HtmlWebpackPlugin({
       template: "public/index.html",
+      env : process.env
     }),
     new webpack.ProvidePlugin({
       React: "react",
     }),
+    new webpack.DefinePlugin({
+      'process.env': JSON.stringify(process.env),
+    }),
+    
     // 이 설정을 해놔야 App.tsx에서 import React from 'react'를 생략할 수 있음. 
   ],
   resolve: {
