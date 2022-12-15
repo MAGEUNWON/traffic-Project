@@ -1,29 +1,35 @@
 import requests
 import os
 from dotenv import load_dotenv
+from urllib.parse import urlparse
 import xmltodict
 import json
 
 load_dotenv()
 api_key = os.environ.get("api_key")
 
+# parts = urlparse()
 class DataRoute():
 
         def dajuen_Api():
-        
+            # api_key = os.environ.get("api_key")
+            
             api_key_decode = requests.utils.unquote(api_key) #, "UTF-8" 넣어줘도 나오고 안넣어줘도 나옴
 
-            parameters = {"serviceKey":api_key_decode, "pageNo":1,"numOfRows":10}
+            URL = 'http://openapitraffic.daejeon.go.kr/traffic/rest/getTrafficInfoAll.do'
+            params = {"serviceKey":api_key_decode,"pageNo":'1',"numOfRows":'10'}
 
-            req = requests.get('http://openapitraffic.daejeon.go.kr/traffic/rest/getTrafficInfoAll.do', params = parameters)
+            req = requests.get(URL, params=params)
+            
+        
+            
+            # xPars = xmltodict.parse(req.text)
+            # jsonDump = json.dumps(xPars)
+            # jsonBody = json.loads(jsonDump)
+            # dajeunJson = jsonBody['response']['header']
 
-            xPars = xmltodict.parse(req.text)
-            jsonDump = json.dumps(xPars)
-            jsonBody = json.loads(jsonDump)
-            dajeunJson = jsonBody['response']['body']['TRAFFIC-LIST']['TRAFFIC']
-
-            print(dajeunJson)
-            return dajeunJson
+            print(req.text)
+            # return dajeunJson
 
         dajuen_Api()
 

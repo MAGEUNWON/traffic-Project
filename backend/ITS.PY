@@ -1,5 +1,9 @@
 import requests
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
+api_key2 = os.environ.get("api_key2")
 
 def get_cctv_ulr(minX, maxX, minY, maxY):
     minX = str(minX)
@@ -11,7 +15,7 @@ def get_cctv_ulr(minX, maxX, minY, maxY):
 
     #개인key 입력
     api_call = 'https://openapi.its.go.kr:9443/eventInfo?'\
-                'apiKey=185891a7bc29448b861eb0ff3a718c0d'\
+                'apiKey=api_key2'\
                 '&type=all'\
                 '&eventType=all'\
                 '&minX='+minX + \
@@ -19,7 +23,7 @@ def get_cctv_ulr(minX, maxX, minY, maxY):
                 '&minY='+minY + \
                 '&maxY='+maxY + \
                 '&getType=json'
-  
+
     print(api_call)
     
     w_dataset = requests.get(api_call).json()
