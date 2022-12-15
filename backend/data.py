@@ -1,24 +1,26 @@
-import shapefile  #the pyshp module : Should install pyshp module.
-import pandas as pd
-from pyproj import Proj, transform  #Should install pyproj module
+import geopandas as gpd
+import matplotlib.pyplot as plt
 
 
 
+# shp_path_link = 'C:/Users/Administrator/Desktop/NODELINKDATA//MOCT_LINK.shp'
+# sf_link = shapefile.Reader(shp_path_link)
+
+# print(sf_node.fields)
+# print(sf_link)
+
+plt.rcParams['font.family'] = 'NanumGothic'
+plt.rcParams['figure.figsize'] = (10,10)
 
 shp_path_node = 'C:/Users/Administrator/Desktop/NODELINKDATA/MOCT_NODE.shp'
-sf_node = shapefile.Reader(shp_path_node)
-
-shp_path_link = 'C:/Users/Administrator/Desktop/NODELINKDATA//MOCT_LINK.shp'
-sf_link = shapefile.Reader(shp_path_link)
-
-print(sf_node.fields)
-print(sf_link)
+node = gpd.read_file(shp_path_node)
+print(node)
 
 # construct pandas dataframe
 #grab the shapefile's field names
-fields_node = [x[0] for x in sf_node.fields][1:]
-records_node = sf_node.records()
-shps = [s.points for s in sf_node.shapes()]
+# fields_node = [x[0] for x in sf_node.fields][1:]
+# records_node = sf_node.records()
+# shps = [s.points for s in sf_node.shapes()]
 # records_node = sf_node.records()
 # shps = [s.points for s in sf_node.shapes()] # node has coordinate data.
 # # link

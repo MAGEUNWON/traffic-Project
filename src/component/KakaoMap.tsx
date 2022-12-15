@@ -19,10 +19,9 @@ const KakaoMap = () => {
         if (!mapElement.current || !kakao) return;
 
         var options = {
-            center: new kakao.maps.LatLng(33.450701, 126.570667),
+            center: new kakao.maps.LatLng(36.349318, 127.377361),
             level: 3,
         };
-
         mapRef.current = new kakao.maps.Map(mapElement.current, options);
     }, []);
 
@@ -32,7 +31,7 @@ const KakaoMap = () => {
         <div
             className="map"
             ref={mapElement}
-            style={{ width: "500px", minHeight: "500px" }}
+            style={{ width: "100%", minHeight: "100%" }}
         ></div>
     );
 };
