@@ -6,7 +6,6 @@ import useAsync from './useAsync';
 async function getTrafficData() {
   const response = await axios.get(
     `https://openapi.its.go.kr:9443/vdsInfo?apiKey=75838fa1ad8b44f48ddd2da9fc72ee94&getType=json`
-    // `http://openapitraffic.daejeon.go.kr/traffic/rest/getTrafficInfoAll.do?ServiceKey=I85A3/sSJo0nHw8WV8QCKVFuvEvHx0rV7pUSOUGF3pz8aVlEud1y9T9X+laxUxQbdobVT1ef+5+2SBTUQus86Q==&numOfRows=20&pageNo=1`
     );
 
   return response.data;
@@ -22,8 +21,6 @@ function TrafficData() {
   if (!datas) return null;
 
   const data = datas.body.items;
-  // const data = datas;
-  // console.log(data);
 
   return (
     <>
