@@ -1,6 +1,7 @@
 import react,{useState,useEffect} from "react"
 import axios from "axios"
 
+
 interface ItsData {
   linkID : string;
   roadName : string;
@@ -19,7 +20,7 @@ const Its =()=>{
       setLoaing(true)
       try{
         const res = await axios.get(
-        'https://openapi.its.go.kr:9443/trafficInfo?apiKey=test&type=all&minX=126.800000&maxX=127.890000&minY=34.900000&maxY=35.100000&getType=json'
+        'http://openapitraffic.daejeon.go.kr/traffic/rest/getTrafficInfoAll.do?serviceKey=3mzcord3q5w6kIIDIkzfjbApi4SmCWPYnUpazaf4qx4Ro1qn44qKhG69pl3aydYWaJHhEDp0LxHvx1kEyF8o%2FA%3D%3D&pageNo=1&numOfRows=20'
         );
         setDatas(res.data);
         
@@ -31,17 +32,17 @@ const Its =()=>{
   fetchData()
 },[]);
 console.log(datas)
-// const itsdata = datas.body.items;
+// const itsdata = datas.body.items
   
-  return(
-    <>
-    {/* {itsdata.map(item=> (
-      <ul key={item.linkID}>
-        <li>linkID : {item.linkID}</li>
-      </ul>
-    ))} */}
-    </>
-  );
+//   return(
+//     <>
+//     {itsdata.map(item=> (
+//       <ul key={item.linkID}>
+//         <li>linkID : {item.linkID}</li>
+//       </ul>
+//     ))}
+//     </>
+//   );
 }
 
 export default Its;
