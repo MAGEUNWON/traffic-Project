@@ -18,12 +18,12 @@ const App = () =>{
     //   <Navermap/>
     // </div>
     ////카카오
-    // <div className="root">
-    //   <Search/>
-    // </div>
     <div className="root">
-      <Its/>
+      <Search/>
     </div>
+    // <div className="root">
+    //   <Its/>
+    // </div>
   )
 }
 
