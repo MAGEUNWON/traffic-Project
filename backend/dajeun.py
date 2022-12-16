@@ -14,9 +14,14 @@ class DataRoute():
             api_key_decode = requests.utils.unquote(api_key) #, "UTF-8" 넣어줘도 나오고 안넣어줘도 나옴
 
             url = 'http://openapitraffic.daejeon.go.kr/traffic/rest/getTrafficInfoAll.do'
+
             parameters = {"serviceKey":api_key_decode, "pageNo":1,"numOfRows":10}
 
-            req = requests.get(url, params = parameters)
+            # req = requests.get(url, params = parameters)
+            req = requests.get(f'http://openapitraffic.daejeon.go.kr/traffic/rest/getTrafficInfoAll.do?ServiceKey={api_key}&numOfRows=20&pageNo=1')
+            
+            # print(req.text)
+
 
             xPars = xmltodict.parse(req.text)
             jsonDump = json.dumps(xPars)
