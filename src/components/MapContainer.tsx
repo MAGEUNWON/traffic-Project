@@ -52,14 +52,16 @@ const MapContainer = ({searchPlace}:any) =>{
       // 마커에 클릭 이벤트를 추가
       window.kakao.maps.event.addListener(maker,'click',()=>{
         // 마커를 클릭하면 장소명이 인포윈도우에 출력된다.
-        infowindow.setContent('<div style="padding:5px; font-size:12px;">'+place.place_name + '</div>');
+        infowindow.setContent('<iframe width="500" height ="300" src = "http://www.utic.go.kr/view/map/openDataCctvStream.jsp?key=GVjHkAH6NW3wdeJs3xypMhq52MGhEen3IP85ShkXpZ5dkKm81mXBfHzyduE0BFv&cctvid=E07002&cctvName=%25EA%25B0%2580%25EC%259E%25A5%25EA%25B5%2590%25EC%2598%25A4%25EA%25B1%25B0%25EB%25A6%25AC&kind=E&cctvip=118&cctvch=null&id=CCTV15&cctvpasswd=null&cctvport=null"/>');        
         infowindow.open(map,maker)
       })
     }
 
   },[searchPlace])
   return(
-    <div id="map" style={{width : "100vw", height : "100vh"}}/>
+    <div id="map" style={{width : "100vw", height : "100vh"}}>
+      
+    </div>
   );
 }
 
