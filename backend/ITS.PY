@@ -19,7 +19,7 @@ def get_cctv_ulr(minX, maxX, minY, maxY):
                 '&minY='+minY + \
                 '&maxY='+maxY + \
                 '&getType=json'
-  
+
     print(api_call)
     
     w_dataset = requests.get(api_call).json()
