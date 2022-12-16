@@ -8,7 +8,9 @@ load_dotenv()
 open_api_key = os.environ.get("API_KEY_ENCODING")
 
 class GetPublicData():
+    
     def api_dj_traffic():
+        
         params = '&numOfRows=20&pageNo=1'
         open_url = 'http://openapitraffic.daejeon.go.kr/traffic/rest/getTrafficInfoAll.do?ServiceKey=' + open_api_key + params
         # Open API URL 생성
@@ -35,4 +37,4 @@ class GetPublicData():
             print("")
 
     api_dj_traffic()
-
+    
