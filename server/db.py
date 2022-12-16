@@ -1,35 +1,46 @@
-import logging
-import sys
+import json
+import os
 
 import pymysql
+from dotenv import load_dotenv
+from getDataJson import GetPublicData
 
-host = "localhost"
-port = "3306"
-database = "public_api"
-username = "root"
-password = "pass"
+load_dotenv()
+open_api_key = os.environ.get("API_KEY_POLICE")
 
 
-def main():
-
-    try:
-    #DB Connection 생성
-        conn = pymysql.connect(host, user=username, passwd=password, db=database, use_unicode=True, charset='utf8')
-        cursor = conn.cursor()
-
-    except:
-        logging.error("")
-        sys.exit(1)
-
-	
-    cursor.execute("show tables")
-    print(cursor.fetchall())
-
-    query = "SELECT * FROM public_api"
-    cursor.execute(query)
-    conn.commit()
+def insertsql_from_json():
+    # 접속
+    conn = pymysql.connect(
+        host='localhost',
+        port=3306,
+        user='root',
+        password='pass',
+        database='projectb',
+        charset='utf8',
+    )
+    # Cursor Object 가져오기
+    curs = conn.cursor()
     
-    conn.close()
+    check_number = 0
+    try :
+        with open(GetPublicData(), encoding='utf-8') as json_file:
+            json_data = json.load(json_file)
+            json_line = json_data['items']
+            
+            while(check_number != len(json_line)) :
+                print(check_number)
+                
+                sql = "INSERT INTO projectb.safezone(SNCT_SEQ) VALUES(%s)"
+                val = json_line['SNCT_SEQ']
+                
+                curs.execute(sql, val)
+            
+            conn.commit()
+            
+    finally :
+        conn.close()
+        
+    print("record Inserted")
     
-if __name__ == '__main__':
-	main()
+insertsql_from_json()
