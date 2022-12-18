@@ -1,5 +1,5 @@
 from flask import Flask
-from dajeun import DataRoute
+from API import DataRoute
 
 app = Flask(__name__)
 
@@ -14,6 +14,23 @@ def dajuen_Api():
     data = DataRoute.dajuen_Api()
     return data
 
+
+@app.route('/unexpected', methods=['GET'])
+def Unexpected_Api():
+    data = DataRoute.Unexpected_Api()
+    return data
+
+
+@app.route('/safe', methods=['GET'])
+def SafeData_Api():
+    data = DataRoute.SafeData_Api()
+    return data
+
+
+@app.route('/danger', methods=['GET'])
+def danger_Api():
+    data = DataRoute.danger_Api()
+    return data
 
     
 if __name__ == '__main__':
