@@ -6,8 +6,6 @@ declare global {
     kakao: any;
   }
 }
-
-
 const MapContainer = () =>{
 
   //useState를 활용하여 db에서 불러온 값 저장
@@ -24,16 +22,29 @@ const MapContainer = () =>{
   }
   fetchData()  
 },[]);
-
 useEffect(()=>{ 
   // 처음 지도에 보일 화면 
   let container = document.getElementById('map'),
-      options = {
-      center : new window.kakao.maps.LatLng(36.348991, 127.377069),
-      level : 7
+  options = {
+    center : new window.kakao.maps.LatLng(36.348991, 127.377069),
+    level : 7
   };
   //지도를 생성!
   let map = new window.kakao.maps.Map(container, options);
+  let ImageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/2018/pc/img/marker_cctv.png',
+  imageSize = new window.kakao.maps.Size(24, 27),
+  imageOption = {offset: new window.kakao.maps.Point(24, 27)};
+
+  // const zoomIn=()=>{
+  //   let level = map.getlevel();
+
+  //   map.setLevel(level-1);
+
+  //   displayLevel();
+
+  // }
+
+  // displayLevel();
   
   // 반복문을 사용하여 마커 표시
   for(let i = 0; i <datas.length;i++){
@@ -48,7 +59,8 @@ useEffect(()=>{
     let marker = new window.kakao.maps.Marker({
       title : name,
       map:map,  
-      position : new window.kakao.maps.LatLng(ycode,xcode)
+      position : new window.kakao.maps.LatLng(ycode,xcode),
+      image : new window.kakao.maps.MarkerImage(ImageSrc,imageSize,imageOption)
     });
     
     
@@ -65,9 +77,8 @@ useEffect(()=>{
     })
     //마커 클릭시 인포윈도우 팝업
     window.kakao.maps.event.addListener(marker,"click",()=>{
-      infowindow.open(map,marker)
-      
-    })
+      infowindow.open(map,marker)      
+    })    
   }
   
 
