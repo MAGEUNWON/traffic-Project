@@ -16,16 +16,16 @@ const App = () =>{
 
   return (
     
-      <div className="root">
+      <>
         <Kakao maptype={maptype}></Kakao>  
-        <p className = "button">
+        <div className = "button">
           <button value="traffic" onClick={handleClick}>도로교통정보 보기</button>
           <button value="roadview" onClick={handleClick}>로드뷰 도로정보 보기</button>
           <button value="terrain" onClick={handleClick}>지형정보 보기</button>
           <button value="use_district" onClick={handleClick}>지적편집도 보기</button>
-        </p>
+        </div>
 
-      </div>
+      </>
     
     
   );

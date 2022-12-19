@@ -23,6 +23,9 @@ const Kakao = ({maptype}:{maptype:any}) =>{
 
     let map = new window.kakao.maps.Map(container, options);
 
+    // let mapTypeControl = new window.kakao.maps.mapTypeControl();
+    // map.addControl(mapTypeControl, window.kakao.maps.ControlPosiiton.TOPRIGHT);
+
     // maptype === 'traffic'?  window.kakao.maps.MapTypeId.TRAFFIC:null
     // maptype === 'roadview'?  window.kakao.maps.MapTypeId.ROADVIEEW:null
     // maptype === 'use_district'?  window.kakao.maps.MapTypeId.USE_DISTRICT:null

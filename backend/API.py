@@ -16,11 +16,12 @@ class DataRoute():
             api_key_decode = requests.utils.unquote(api_key) #, "UTF-8" 넣어줘도 나오고 안넣어줘도 나옴
 
             url = 'http://openapitraffic.daejeon.go.kr/traffic/rest/getTrafficInfoAll.do?'
+            # url = 'http://openapitraffic.daejeon.go.kr/traffic/rest/getTrafficInfo.do?'
 
             # parameters = {"serviceKey":api_key_decode, "pageNo":1,"numOfRows":14444}
 
             # req = requests.get(url, params = parameters)
-            req = requests.get(f'{url}ServiceKey={api_key}&numOfRows=14444&pageNo=1')
+            req = requests.get(f'{url}ServiceKey={api_key}&numOfRows=14444&pageNo=1&linkId=1850095200')
             
             # print(req.text)
 
@@ -30,8 +31,14 @@ class DataRoute():
             jsonBody = json.loads(jsonDump)
             dajeunJson = jsonBody['response']['body']['TRAFFIC-LIST']['TRAFFIC']
 
+            address = []
+            for i in range(len(dajeunJson)):
+                if "대덕" in dajeunJson[i]['roadName']:
+                    address.append(dajeunJson[i])
+            
+
             # print(dajeunJson)
-            return dajeunJson
+            return address
 
         dajuen_Api()
 
@@ -88,5 +95,3 @@ class DataRoute():
             return address
 
         dajuen_Api()
-
-
