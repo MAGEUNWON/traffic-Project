@@ -75,9 +75,17 @@ class DataRoute():
 
             url = 'http://www.utic.go.kr/guide/getRoadAccJson.do?'
             req = requests.get(f'{url}key={api_keyP}')
+            jsonBody =req.json()
+            data = jsonBody['items']
+            print(jsonBody['items'])
 
-            print(req)
-            return req.text
+            address = []
+            for i in range(len(data)):
+                if "대전" in data[i]['ADDRESS_JIBUN']:
+                    address.append(data[i])
+
+            print(address)
+            return address
 
         dajuen_Api()
 
