@@ -46,11 +46,12 @@ useEffect(()=>{
 
   // displayLevel();
   
+  let info:any = []
   // 반복문을 사용하여 마커 표시
   for(let i = 0; i <datas.length;i++){
 
     // db에서 가져온 데이터에서 이름, x좌표,y좌표 추출
-    let name = datas[i].NAME
+    let name= datas[i].NAME
     let url = datas[i].URL
     let xcode = datas[i].XCODE
     let ycode = datas[i].YCODE
@@ -75,12 +76,29 @@ useEffect(()=>{
       content : iwCotent, 
       removable : iwRemoveable,      
     })
-    //마커 클릭시 인포윈도우 팝업
+    info.push(infowindow)
+    console.log(info)
+
+    const close = ()=>{
+      for(let i = 0; i<info.length;i++){
+        info[i].close();
+      }
+    }
+
+  
     window.kakao.maps.event.addListener(marker,"click",()=>{
-      infowindow.open(map,marker)      
+      close();
+      infowindow.open(map,marker)
     })    
+    // window.kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
+    
   }
   
+  function makeOutListener(infowindow) {
+    return function() {
+        infowindow.close();
+    };
+}
 
 
 
