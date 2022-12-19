@@ -9,7 +9,7 @@ declare global {
 const MapContainer = () =>{
 
   //useState를 활용하여 db에서 불러온 값 저장
-  const [datas,setDatas] = useState<string>(''); 
+  const [datas,setDatas] = useState<any>(''); 
   axios.defaults.withCredentials = true;
   useEffect(()=>{
     const fetchData = async ()=>{      
@@ -35,18 +35,10 @@ useEffect(()=>{
   imageSize = new window.kakao.maps.Size(24, 27),
   imageOption = {offset: new window.kakao.maps.Point(24, 27)};
 
-  // const zoomIn=()=>{
-  //   let level = map.getlevel();
 
-  //   map.setLevel(level-1);
-
-  //   displayLevel();
-
-  // }
-
-  // displayLevel();
-  
+  // 다른 마커 클릭시 기존 인포윈도우 닫기 위한 빈배열 선언
   let info:any = []
+
   // 반복문을 사용하여 마커 표시
   for(let i = 0; i <datas.length;i++){
 
@@ -76,32 +68,23 @@ useEffect(()=>{
       content : iwCotent, 
       removable : iwRemoveable,      
     })
-    info.push(infowindow)
-    console.log(info)
 
+    //infowindow를 배열에 push
+    info.push(infowindow)
+    
+    //반복문을 통하여 인포윈도우를 전부 닫기
     const close = ()=>{
       for(let i = 0; i<info.length;i++){
         info[i].close();
       }
     }
 
-  
+    //인포윈도우를 전부 닫은후 클릭한 마커 인포윈도우 오픈
     window.kakao.maps.event.addListener(marker,"click",()=>{
       close();
       infowindow.open(map,marker)
     })    
-    // window.kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
-    
-  }
-  
-  function makeOutListener(infowindow) {
-    return function() {
-        infowindow.close();
-    };
-}
-
-
-
+  } 
 })
 
 
