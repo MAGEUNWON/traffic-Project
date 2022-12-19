@@ -1,3 +1,6 @@
 node_modules
 venv
 .env
+dbconnection.py
+dist
+__pycache__
