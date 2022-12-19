@@ -83,7 +83,12 @@ useEffect(()=>{
     window.kakao.maps.event.addListener(marker,"click",()=>{
       close();
       infowindow.open(map,marker)
-    })    
+    })   
+
+    //지도 아무곳이나 클릭시 열려있던 인포 윈도우 닫기
+    window.kakao.maps.event.addListener(map,"click",()=>{
+      close();      
+    })       
   } 
 })
 
