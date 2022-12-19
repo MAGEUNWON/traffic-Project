@@ -13,7 +13,7 @@ declare global {
 const App = () =>{
   return (
 
-    ////카카오
+    //카카오
     <div className="root">
       <MapContainer/>
     </div>
