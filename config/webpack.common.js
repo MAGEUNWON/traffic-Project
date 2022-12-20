@@ -4,6 +4,11 @@ const path = require("path");
 const webpack = require("webpack");
 // const {BundleAnalyzerPlugin} = require("webpack-bundle-analyzer");
 // BundleAnalyzer는 Bundle 최적화 용도로 사용
+const dotenv = require("dotenv");
+
+dotenv.config();
+
+
 
 module.exports = {
   entry:`${path.resolve(__dirname, "../src")}/index.tsx`,
@@ -23,10 +28,17 @@ module.exports = {
     ],
   },
   plugins: [
+    //dotenv사용을 위한 설정
+    new webpack.DefinePlugin({
+      'process.env' : JSON.stringify(process.env),
+    }),
+
     // webpack으로 변환한 파일에 추가적인 기능을 제공할 수 있음. 플러그인은 해당 결과물의 형태를 바꿔 주는 역할을 수행. 예를 들어 번들된 JS를 난독화 한다던가 특정 텍스트를 추출하는 용도로 사용할 수 있음. 
     // 분리된 css, js 파일들을 각각 html에 link 자동화
     new HtmlWebpackPlugin({
       template: "public/index.html",
+      //template에 해당하는 파일에 dotenv 사용을 위한 설정
+      env:process.env,
     }),
     new webpack.ProvidePlugin({
       React: "react",
