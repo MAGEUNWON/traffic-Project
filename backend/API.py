@@ -21,7 +21,7 @@ class DataRoute():
             # parameters = {"serviceKey":api_key_decode, "pageNo":1,"numOfRows":14444}
 
             # req = requests.get(url, params = parameters)
-            req = requests.get(f'{url}ServiceKey={api_key}&numOfRows=14444&pageNo=1&linkId=1850095200')
+            req = requests.get(f'{url}ServiceKey={api_key}&numOfRows=14444&pageNo=1')
             
             # print(req.text)
 
@@ -38,7 +38,7 @@ class DataRoute():
             
 
             # print(dajeunJson)
-            return address
+            return dajeunJson
 
         dajuen_Api()
 
@@ -94,4 +94,4 @@ class DataRoute():
             print(address)
             return address
 
-        dajuen_Api()
+        danger_Api()
