@@ -1,5 +1,5 @@
 import React from "react";
-import MapContainer from './components/MapContainer'
+import CCTV from './components/MapContainer'
 
 
 
@@ -15,7 +15,7 @@ const App = () =>{
 
     //카카오
     <div className="root">
-      <MapContainer/>
+      <CCTV/>
     </div>
     // <div className="root">
     //   <Its/>
