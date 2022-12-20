@@ -46,9 +46,9 @@ let map = new window.kakao.maps.Map(container, options);
       for(let i = 0; i <datas.length;i++){
     
         // db에서 가져온 데이터에서 이름, x좌표,y좌표 추출
-        let name= datas[i].NAME
+        let name= datas[i].NAME        
         let url = datas[i].URL
-        let xcode = datas[i].XCODE
+        let xcode = datas[i].XCODE        
         let ycode = datas[i].YCODE
     
         //마커 생성
@@ -62,7 +62,7 @@ let map = new window.kakao.maps.Map(container, options);
         
         
         //infowindow 설정
-        let iwCotent = `<div style="padding:5px;">${name}</div><iframe width="330" height ="280" src = "${url}"/>`,
+        let iwCotent = `<div style="padding:5px;">${name}</div><iframe width="330" height ="280" src = "${url}"></iframe><div style="font-size:5px;background-color:#333;color:#fff">경찰청(UTIC)(LIVE)제공</div>`,
         iwPosition = new window.kakao.maps.LatLng(ycode,xcode),
         iwRemoveable = true;
         
