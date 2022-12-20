@@ -21,6 +21,17 @@ module.exports = {
         exclude: /node_modules/,
         // loader를 배제시킬 파일 명시
       },
+      {
+        test: /\.(jpe?g|png|gif)$/i,
+        use: [
+          {
+            loader: "url-loader",
+            options: {
+              limit: 8192,
+            },
+          },
+        ],
+      },
     ],
   },
   plugins: [

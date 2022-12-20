@@ -1,38 +1,38 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Map from "./Map";
 
-interface AccidentData {
-  data: [
-    {
-      addressJibun: null | string;
-      addressJibunCd: null | string;
-      addressNew: null | string;
-      controlType: null | string;
-      endDate: null | string;
-      important: null | string;
-      incTrafficCode: null | string;
-      incidentId: null | string;
-      incidentRegionCd: null | string;
-      incidentTitle: null | string;
-      incidenteGradeCd: null | string;
-      incidenteSubTypeCd: null | string;
-      incidenteTrafficCd: null | string;
-      incidenteTypeCd: null | string;
-      lane: null | string;
-      lineLinkId: null | string;
-      linkId: null | string;
-      locationData: null | string;
-      locationDataX: null | string;
-      locationDataY: null | string;
-      locationTypeCd: null | string;
-      roadName: null | string;
-      sourceCode: null | string;
-      startDate: null | string;
-      updateDate: null | string;
-    }
-  ];
-}
+// interface AccidentData {
+//   data: [
+//     {
+//       addressJibun: null | string;
+//       addressJibunCd: null | string;
+//       addressNew: null | string;
+//       controlType: null | string;
+//       endDate: null | string;
+//       important: null | string;
+//       incTrafficCode: null | string;
+//       incidentId: null | string;
+//       incidentRegionCd: null | string;
+//       incidentTitle: null | string;
+//       incidenteGradeCd: null | string;
+//       incidenteSubTypeCd: null | string;
+//       incidenteTrafficCd: null | string;
+//       incidenteTypeCd: null | string;
+//       lane: null | string;
+//       lineLinkId: null | string;
+//       linkId: null | string;
+//       locationData: null | string;
+//       locationDataX: null | string;
+//       locationDataY: null | string;
+//       locationTypeCd: null | string;
+//       roadName: null | string;
+//       sourceCode: null | string;
+//       startDate: null | string;
+//       updateDate: null | string;
+//     }
+//   ];
+// }
 
 const Accident = () => {
   const [accidentData, setAccidentData] = useState<any>([{}]);
@@ -48,11 +48,11 @@ const Accident = () => {
     };
     getData();
   }, []);
+
   console.log(accidentData);
 
   return (
     <>
-      <button>돌발상황</button>
       <Map accidentData={accidentData} />
     </>
   );

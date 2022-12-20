@@ -22,7 +22,7 @@ def all_accident():
 daejeon_data = []
 
 
-def accident():
+def daejeon_accident():
     url = f'http://www.utic.go.kr/guide/imsOpenData.do?key={POLICE_KEY}'
     resonse = requests.get(url)
     xmlData = resonse.text
@@ -33,6 +33,7 @@ def accident():
         if '대전' in data[i]['addressJibun']:
             daejeon_data.append(data[i])
     return daejeon_data
+
 
 # def accident_construction():
 #   for i in range(len(daejeon_data)):

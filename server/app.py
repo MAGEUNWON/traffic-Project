@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_cors import CORS
-from db import accident, all_accident
+from db import all_accident, daejeon_accident
 app = Flask(__name__)
 CORS(app)
 
@@ -17,8 +17,8 @@ def accident():
 
 
 @app.route('/accident')
-def daejeon_accident():
-    data = accident()
+def dj_accident():
+    data = daejeon_accident()
     return data
 
 
