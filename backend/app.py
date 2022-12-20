@@ -1,5 +1,7 @@
 from flask import Flask
-from API import DataRoute
+# from API import DataRoute
+from config.db import DataRoute
+
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
