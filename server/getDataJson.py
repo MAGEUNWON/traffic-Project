@@ -45,7 +45,7 @@ class GetPublicData():
                     "위도": item['Y'],
                     "관리기관명": item['GOV_NM'],
                     "관리기관전화번호": item['GOV_TEL'],
-                    "시설종류(어린이보호구역, 노인보호구역, 장애인보호구역)": item ['FCLTY_TY'],
+                    "시설종류": item ['FCLTY_TY'],
                     "지오매트리정보": item['GEOM'],
                     "데이터 구분": item['DATA_TYPE']
                     }
