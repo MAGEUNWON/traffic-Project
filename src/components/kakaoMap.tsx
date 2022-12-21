@@ -19,7 +19,7 @@ interface btnSet {
 }
 
 const Kakao = () => {
-  const [mapTypes, SetMapTypes] = useState<string>("traffic");
+  const [mapTypes, SetMapTypes] = useState<string>("terrain");
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     SetMapTypes(e.currentTarget.value);
@@ -53,10 +53,7 @@ const Kakao = () => {
     let changeMapType;
 
     //maptype에 따라 지도에 추가할 지도타입을 결정
-    if (ref.current === "traffic") {
-      //교통정보 지도타입
-      changeMapType = window.kakao.maps.MapTypeId.TRAFFIC;
-    } else if (ref.current === "roadview") {
+    if (ref.current === "roadview") {
       //로드뷰 도로정보 지도타입
       changeMapType = window.kakao.maps.MapTypeId.ROADVIEW;
     } else if (ref.current === "terrain") {
@@ -92,7 +89,6 @@ const Kakao = () => {
   }, [mapTypes]);
 
   const btnSet: btnSet[] = [
-    { value: "traffic", con: "도로교통정보" },
     { value: "roadview", con: "로드뷰" },
     { value: "terrain", con: "지형정보" },
     { value: "use_district", con: "지적편집도" },
