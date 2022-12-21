@@ -23,6 +23,12 @@ const Board = () => {
   // } else {
   //   return(<CCTV></CCTV>)
   // }
+
+  return(
+    <div>
+      {}
+    </div>
+  )
 }
 
 export default Board
