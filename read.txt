@@ -7,3 +7,7 @@ npm install babel-plugin-styled-components
 
 일단 main 브런치에는 둘다 설치 해놓음. sass도 설치 되있음. 안쓸거면 나중에 지울 것.
 
+
+
+backend 폴더 안에 .env 파일 있음
+리액트 루트 폴더에 .env 파일 있음(리액트에서 .env 설정 쓰려면 npm install dotenv / npm install -D html-webpack-plugin 해줘야 함.)
