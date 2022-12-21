@@ -1,12 +1,12 @@
 import styled from "styled-components";
 
-const Search = () => {
+const Search = ({ placeholder }: { placeholder: string }) => {
   return (
     <form>
-      <SearchWarp type = "text" placeholder="어디로갈까요?"/>
+      <SearchWarp type="text" placeholder={placeholder} />
     </form>
   );
-}
+};
 
 const SearchWarp = styled.input`
 width: 250px;
