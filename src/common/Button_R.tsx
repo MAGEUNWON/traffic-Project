@@ -1,14 +1,17 @@
 import styled from "styled-components";
+import React, {useState} from "react";
 
-
-const Button_R = ({icon,contents}:{icon:string,contents:string}) => {
+const Button_R = ({icon,contents,onClick}:{icon:string,contents:string, onClick:()=>void}) => {
   //여기다가 검색 디자인 만들기(검색 모양만 만들면 됨)
+
+
   return (
     <>
-      <Button_RWrap>
+      <Button_RWrap onClick={onClick}>
         <img src={icon} alt='icon'></img>
         <p>{contents}</p>
       </Button_RWrap>
+    
     </>
   );
 }
