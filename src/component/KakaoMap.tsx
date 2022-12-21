@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState, memo } from "react";
 import axios from "axios";
+import { createGlobalStyle } from "styled-components";
 
 declare global {
     interface Window {
@@ -7,7 +8,6 @@ declare global {
     }
 }
 
-const test: string[] = [];
 const KakaoMap = () => {
     const mapRef = useRef<HTMLElement | null | any>(null);
     const mapElement = useRef<any>(null);
@@ -50,10 +50,16 @@ const KakaoMap = () => {
             // 인포윈도우를 생성하고 지도에 표시합니다
 
             let polyline: any = [];
-            let markerArr: object[] = [];
+            let markerArr: any[] = [];
 
             let start = new kakao.maps.Marker({});
             let end = new kakao.maps.Marker({});
+
+            let markerObject = [start, end];
+
+            let pline: any = {};
+
+            console.log(line);
 
             for (let i = 0; i < line.length; i++) {
                 //i번째 정보를 가져옵니다.
@@ -78,8 +84,6 @@ const KakaoMap = () => {
                             strokeColor: "black",
                         });
 
-                        console.log("클릭이베트확인");
-
                         let latlng = e.latLng;
 
                         if (markerArr.length === 0) {
@@ -91,87 +95,103 @@ const KakaoMap = () => {
                             end.setPosition(latlng);
                             end.setMap(mapRef.current);
 
-                            const getData = await axios.post(
+                            const getData = await axios.post<any>(
                                 "http://localhost:8000/directions",
                                 {
                                     markerArr,
                                 }
                             );
+                            let path = getData.data.map((item: any) => {
+                                return new kakao.maps.LatLng(
+                                    item.node_Ycode,
+                                    item.node_Xcode
+                                );
+                            });
+                            path.unshift(
+                                new kakao.maps.LatLng(
+                                    markerArr[0].node_Ycode,
+                                    markerArr[0].node_Xcode
+                                )
+                            );
+                            pline = new kakao.maps.Polyline({
+                                map: mapRef.current, //지도에 선을 표시합니다.
+                                path: path, // 선을 구성하는 좌표배열 입니다
+                                strokeWeight: 10, // 선의 두께 입니다
+                                strokeColor: "red", // 선의 색깔입니다
+                                strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+                                strokeStyle: "solid", // 선의 스타일입니다
+                            });
                         } else if (markerArr.length > 1) {
+                            pline.setMap(null);
                             end.setPosition(latlng);
                             end.setMap(mapRef.current);
+                            markerArr.splice(1, 0, value.data[i]);
+
+                            const getData = await axios.post<any>(
+                                "http://localhost:8000/directions",
+                                {
+                                    markerArr,
+                                }
+                            );
+
+                            let path = getData.data.map((item: any) => {
+                                return new kakao.maps.LatLng(
+                                    item.node_Ycode,
+                                    item.node_Xcode
+                                );
+                            });
+                            path.unshift(
+                                new kakao.maps.LatLng(
+                                    markerArr[0].node_Ycode,
+                                    markerArr[0].node_Xcode
+                                )
+                            );
+                            pline = new kakao.maps.Polyline({
+                                map: mapRef.current, //지도에 선을 표시합니다.
+                                path: path, // 선을 구성하는 좌표배열 입니다
+                                strokeWeight: 10, // 선의 두께 입니다
+                                strokeColor: "red", // 선의 색깔입니다
+                                strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+                                strokeStyle: "solid", // 선의 스타일입니다
+                            });
                         }
 
-                        console.log(markerArr);
                         // console.log(start);
 
                         // end.setPosition(latlng);
                         // end.setMap(mapRef.current);
-
-                        let infowindow = new kakao.maps.InfoWindow({
-                            map: mapRef.current, // 인포윈도우가 표시될 지도
-                            position: new kakao.maps.LatLng(
-                                item.path[0].Ma,
-                                item.path[0].La
-                            ),
-                            content: `<div style="padding:5px;">
-                            <p>교차로명칭: ${value.data[i].node_name}</p>
-                            <p>위도: ${value.data[i].node_Xcode}</p>
-                            <p>경도: ${value.data[i].node_Ycode}</p>
-                            <p>노드ID: ${value.data[i].node_id}</p>
-                            <p>노드유형: ${value.data[i].node_type}</p>
-                            <p>회전제한유무:${value.data[i].turn_p}</p>
-
-                            </div>`,
-                            removable: true,
-                        });
-                        infowindow.open(mapRef.current);
                     }
                 );
             }
-            // value.data.forEach((e: any) => {
-            //     var item = e;
-            //     var polyline = new kakao.maps.Polyline({
-            //         path: item, // 선을 구성하는 좌표배열 입니다
-            //         strokeWeight: 5, // 선의 두께 입니다
-            //         strokeColor: "#1F68F6", // 선의 색깔입니다
-            //         strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-            //         strokeStyle: "solid", // 선의 스타일입니다
-            //     });
-            // });
+            let infowindowArr: any = [];
 
-            // const linePath = [
-            //     new kakao.maps.LatLng(36.33395949, 127.3719135),
-            //     new kakao.maps.LatLng(36.33420867, 127.3720276),
-            // ];
+            markerObject.forEach((el, i) => {
+                kakao.maps.event.addListener(el, "mouseover", (e: any) => {
+                    let infowindow = new kakao.maps.InfoWindow({
+                        map: mapRef.current, // 인포윈도우가 표시될 지도
+                        position: new kakao.maps.LatLng(
+                            markerArr[i].node_Ycode,
+                            markerArr[i].node_Xcode
+                        ),
+                        content: `<div>
+                            <p>교차로명칭: ${markerArr[i].node_name}</p>
+                            <p>위도: ${markerArr[i].node_Xcode}</p>
+                            <p>경도: ${markerArr[i].node_Ycode}</p>
+                            <p>노드ID: ${markerArr[i].node_id}</p>
+                            <p>노드유형: ${markerArr[i].node_type}</p>
+                            <p>회전제한유무:${markerArr[i].turn_p}</p>
+            
+                            </div>`,
+                        removable: true,
+                    });
+                    infowindowArr.push(infowindow);
 
-            // var circle = new kakao.maps.Circle({
-            //     center: new kakao.maps.LatLng(36.33420867, 127.3727467), // 원의 중심좌표 입니다
-            //     radius: 5, // 미터 단위의 원의 반지름입니다
-            //     strokeWeight: 2, // 선의 두께입니다
-            //     strokeColor: "#75B8FA", // 선의 색깔입니다
-            //     strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-            //     strokeStyle: "solid", // 선의 스타일 입니다
-            //     fillColor: "#CFE7FF", // 채우기 색깔입니다
-            //     fillOpacity: 0.7, // 채우기 불투명도 입니다
-            // });
-
-            // circle.setMap(mapRef.current);
-
-            // var polyline = new kakao.maps.Polyline({
-            //     path: line, // 선을 구성하는 좌표배열 입니다
-            //     strokeWeight: 5, // 선의 두께 입니다
-            //     strokeColor: "#1F68F6", // 선의 색깔입니다
-            //     strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-            //     strokeStyle: "solid", // 선의 스타일입니다
-            // });
-
-            // polyline.setMap(mapRef.current);
+                    infowindow.open(mapRef.current);
+                });
+            });
         });
 
         // 지도에 선을 표시합니다
-
-        // const infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
     }, []);
     return (
         <div

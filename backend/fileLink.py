@@ -51,10 +51,6 @@ with open('LINK_Data.geojson', encoding="UTF-8") as f:
         
     for ii in df['features']:
         if ii['properties']['LINK_ID'][0:3] == '183' or ii['properties']['LINK_ID'][0:3] == '184' or ii['properties']['LINK_ID'][0:3] == '185'or ii['properties']['LINK_ID'][0:3] == '186' or ii['properties']['LINK_ID'][0:3] == '187':
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
             LINK_ID.append(ii['properties']['LINK_ID'])
             F_NODE.append(ii['properties']['F_NODE'])
             T_NODE.append(ii['properties']['T_NODE'])
@@ -72,13 +68,8 @@ with open('LINK_Data.geojson', encoding="UTF-8") as f:
             REST_H.append(ii['properties']['REST_H'])
             LENGTH.append(ii['properties']['LENGTH'])
             REMARK.append(ii['properties']['REMARK'])
-=======
-=======
->>>>>>> ef1dda263392f5f8fd65ba3b07e84fc87cc804e6
-=======
->>>>>>> ef1dda263392f5f8fd65ba3b07e84fc87cc804e6
-=======
->>>>>>> ef1dda263392f5f8fd65ba3b07e84fc87cc804e6
+
+
             # LINK_ID.append(ii['properties']['LINK_ID'])
             # F_NODE.append(ii['properties']['F_NODE'])
             # T_NODE.append(ii['properties']['T_NODE'])
@@ -96,24 +87,11 @@ with open('LINK_Data.geojson', encoding="UTF-8") as f:
             # REST_H.append(ii['properties']['REST_H'])
             # LENGTH.append(ii['properties']['LENGTH'])
             # REMARK.append(ii['properties']['REMARK'])
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> ef1dda263392f5f8fd65ba3b07e84fc87cc804e6
-=======
->>>>>>> ef1dda263392f5f8fd65ba3b07e84fc87cc804e6
-=======
->>>>>>> ef1dda263392f5f8fd65ba3b07e84fc87cc804e6
-=======
->>>>>>> ef1dda263392f5f8fd65ba3b07e84fc87cc804e6
+
             coordinates.append(ii['geometry']['coordinates'][0])
 
         # res_node = df[df['features'][0:]['properties']['NODE_ID'] == str(ii) ] # STNL_REG is not int.
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     data = {
         "LINK_ID":LINK_ID,
         "F_NODE":F_NODE,
@@ -132,7 +110,7 @@ with open('LINK_Data.geojson', encoding="UTF-8") as f:
         "REST_H":REST_H,
         "LENGTH":LENGTH,
         "REMARK":REMARK,
-        # "coordinates":coordinates,
+        "coordinates":coordinates,
     }
 
     df15 = pd.DataFrame(data)
@@ -157,13 +135,6 @@ with open('LINK_Data.geojson', encoding="UTF-8") as f:
     # for i in coordinates:
     #     print(i)
         
-=======
-=======
->>>>>>> ef1dda263392f5f8fd65ba3b07e84fc87cc804e6
-=======
->>>>>>> ef1dda263392f5f8fd65ba3b07e84fc87cc804e6
-=======
->>>>>>> ef1dda263392f5f8fd65ba3b07e84fc87cc804e6
     # data = {
     #     "LINK_ID":LINK_ID,
     #     "F_NODE":F_NODE,
@@ -188,20 +159,7 @@ with open('LINK_Data.geojson', encoding="UTF-8") as f:
     # df15 = pd.DataFrame(data)
     # columns = ["위도", "경도",'추가']
 
-    print(len(coordinates))
-
-    for i in len(coordinates):
-        print(i)
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> ef1dda263392f5f8fd65ba3b07e84fc87cc804e6
-=======
->>>>>>> ef1dda263392f5f8fd65ba3b07e84fc87cc804e6
-=======
->>>>>>> ef1dda263392f5f8fd65ba3b07e84fc87cc804e6
-=======
->>>>>>> ef1dda263392f5f8fd65ba3b07e84fc87cc804e6
+  
     # df16 = pd.DataFrame(coordinates, columns=columns)
     
     # print(df16)
@@ -215,24 +173,12 @@ with open('LINK_Data.geojson', encoding="UTF-8") as f:
 
     # print(df15)
 
-    
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
+
     df15.to_csv("Daejeon_LINK_T.csv", encoding="utf-8-sig")
-=======
     # df15.to_csv("Daejeon_LINK.csv", encoding="utf-8-sig")
->>>>>>> ef1dda263392f5f8fd65ba3b07e84fc87cc804e6
-=======
     # df15.to_csv("Daejeon_LINK.csv", encoding="utf-8-sig")
->>>>>>> ef1dda263392f5f8fd65ba3b07e84fc87cc804e6
-=======
     # df15.to_csv("Daejeon_LINK.csv", encoding="utf-8-sig")
->>>>>>> ef1dda263392f5f8fd65ba3b07e84fc87cc804e6
-=======
     # df15.to_csv("Daejeon_LINK.csv", encoding="utf-8-sig")
->>>>>>> ef1dda263392f5f8fd65ba3b07e84fc87cc804e6
 
     # print(df_node)
  

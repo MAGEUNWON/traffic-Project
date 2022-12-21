@@ -59,28 +59,44 @@ def dot():
 @app.route('/directions', methods = ['POST']) # 접속하는 url
 def dirCall():
         nodeData = request.json['markerArr']
+
         # print(nodeData[0]['node_id'])
         # print(nodeData[0]['node_Xcode'])
         # print(nodeData[0]['node_Ycode'])
 
-        db_class = Database()
-        sql  = f"SELECT * FROM daejeon_link where F_NODE = {nodeData[0]['node_id']}"
-        row = db_class.executeAll(sql)
+        finalData = []
+        def navi(start, end):
+                db_class = Database() 
+                sql  = f"SELECT * FROM daejeon_link where F_NODE = {start['node_id']}"
+                row = db_class.executeAll(sql)
+                
+                print(start['node_id'])
+                dataObj = 0
+                minData = 99999999
+                for i in range(len(row)):
+                        db_class = Database()
+                        sql  = f"SELECT * FROM daejeon_node where node_id = {row[i]['T_NODE']}"
+                        dataRow = db_class.executeAll(sql)
+                        Xgap = end['node_Xcode'] - dataRow[0]['node_Xcode']
+                        Ygap = end['node_Ycode'] - dataRow[0]['node_Ycode']
+                        line = Xgap**2+Ygap**2
 
-        dataArr = []
-        for i in range(len(row)):
-                db_class = Database()
-                sql  = f"SELECT * FROM daejeon_node where node_id = {row[i]['T_NODE']}"
-                dataRow = db_class.executeAll(sql)
-                Xgap = nodeData[0]['node_Xcode'] - dataRow[0]['node_Xcode']
-                Ygap = nodeData[0]['node_Ycode'] - dataRow[0]['node_Ycode']
-                print(Xgap)
-                print(Ygap)
+                        # print(line)
+                        if line < minData:
+                                minData = line
+                                dataObj = dataRow[0]
+                finalData.append(dataObj)
 
-                dataArr.append(dataRow)
-        # print(dataArr[0])
 
-        return "a"
+                if dataObj['node_id'] == end['node_id']:
+                        print('end')
+                else:
+                        navi(dataObj,end)
+
+
+        navi(nodeData[0],nodeData[1])
+
+        return finalData
 
 
 if __name__=="__main__":
