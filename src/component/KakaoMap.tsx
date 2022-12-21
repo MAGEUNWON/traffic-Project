@@ -7,6 +7,7 @@ declare global {
     }
 }
 
+const test: string[] = [];
 const KakaoMap = () => {
     const mapRef = useRef<HTMLElement | null | any>(null);
     const mapElement = useRef<any>(null);
@@ -18,7 +19,7 @@ const KakaoMap = () => {
 
         if (!mapElement.current || !kakao) return;
 
-        axios.get("http://localhost:8000").then((value: any) => {
+        axios.get("http://localhost:8000/dot").then((value: any) => {
             console.log(value.data);
 
             const options = {
@@ -29,31 +30,31 @@ const KakaoMap = () => {
 
             let line: any[] = [];
             value.data.forEach((e: any) => {
+                console.log(e);
                 // console.log(e);
                 line.push({
                     path: [
-                        new kakao.maps.LatLng(
-                            e.BEGIN_NODE_YCODE,
-                            e.BEGIN_NODE_XCODE
-                        ),
-                        new kakao.maps.LatLng(
-                            e.END_NODE_YCODE,
-                            e.END_NODE_XCODE
-                        ),
+                        new kakao.maps.LatLng(e.node_Ycode, e.node_Xcode),
+
+                        // e.BEGIN_NODE_YCODE,
+                        // e.BEGIN_NODE_XCODE
+                        // e.node_Ycode,
+                        // e.node_Xcode,
+                        // new kakao.maps.LatLng(e.node_Ycode, e.node_Xcode),
+                        // // e.END_NODE_YCODE,
+                        // // e.END_NODE_XCODE
+                        // e.node_Ycode,
+                        // e.node_Xcode,
                     ],
                     color: "blue",
                 });
             });
 
-            var iwContent = '<div style="padding:5px;">Hello World!</div>';
             // 인포윈도우를 생성하고 지도에 표시합니다
-            var infowindow = new kakao.maps.InfoWindow({
-                content: iwContent,
-            });
 
             let polyline: any = [];
 
-            console.log(polyline);
+            console.log(line);
 
             for (let i = 0; i < line.length; i++) {
                 //i번째 정보를 가져옵니다.
@@ -72,28 +73,32 @@ const KakaoMap = () => {
 
                 kakao.maps.event.addListener(
                     polyline[i],
-                    "mouseover",
+                    "click",
                     function (e: any) {
                         console.log(e);
                         polyline[i].setOptions({
                             strokeColor: "black",
                         });
 
+                        let infowindow = new kakao.maps.InfoWindow({
+                            map: mapRef.current, // 인포윈도우가 표시될 지도
+                            position: new kakao.maps.LatLng(item.path[0].La),
+                            content: `<div style="padding:5px;">
+                            <p>교차로명칭: ${value.data[i].node_name}</p>
+                            <p>위도: ${value.data[i].node_Xcode}</p>
+                            <p>경도: ${value.data[i].node_Ycode}</p>
+                            <p>노드ID: ${value.data[i].node_id}</p>
+                            <p>노드유형: ${value.data[i].node_type}</p>
+                            <p>회전제한유무:${value.data[i].turn_p}</p>
+                            
+                            </div>`,
+                            removable: true,
+                        });
+                        infowindow.open(mapRef.current);
                         // infowindow.open(mapRef.current);
                     }
                 );
-
-                kakao.maps.event.addListener(
-                    polyline[i],
-                    "mouseout",
-                    function (e: any) {
-                        polyline[i].setOptions({
-                            strokeColor: "blue",
-                        });
-                    }
-                );
             }
-
             // value.data.forEach((e: any) => {
             //     var item = e;
             //     var polyline = new kakao.maps.Polyline({
@@ -131,7 +136,7 @@ const KakaoMap = () => {
             //     strokeStyle: "solid", // 선의 스타일입니다
             // });
 
-            polyline.setMap(mapRef.current);
+            // polyline.setMap(mapRef.current);
         });
 
         // 지도에 선을 표시합니다

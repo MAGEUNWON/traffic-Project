@@ -29,14 +29,43 @@ def test():
         xpars = xmltodict.parse(response.text)
         jsonDump = jsonify(xpars).json
         df = pd.DataFrame(jsonDump['response']['body']['TRAFFIC-LIST']['TRAFFIC'])
-        df.to_csv("test.csv", index = False, encoding='utf-8')
-        print(df)
+
+    
+
+        df[["linkID",	"endNodeID",	"endNodeName",	"linkCount"	,"linkLength"	,"linkSqc"	,"roadName",	"speed",	"startNodeId"	,"startNodeName"	,"congestion","travelT","udType"]].to_csv("test.csv", encoding='utf-8-sig')
+        
+     
+
+
+        # print(jsonDump)
+        return jsonDump['response']['body']['TRAFFIC-LIST']['TRAFFIC']
+
+@app.route('/dot') # 접속하는 url
+def dot():
+        db_class = Database()
+        sql  = f"SELECT * FROM daejeon_node"
+        row = db_class.executeAll(sql)
+        print(row)
+
+
+        test= 'http://openapitraffic.daejeon.go.kr/traffic/rest/getTrafficInfoAll.do?ServiceKey=ZEZs4lBh8JvrR1NlN1TOVkuL/gfojiZfZDkToH3jm4tNCg7bYk57heMG8VIUdfzrcmqn3VRhSkI2yXbWF3VOcA==&pageNo=1&numOfRows=14444'
+        response = requests.get(test)
+        xpars = xmltodict.parse(response.text)
+        jsonDump = jsonify(xpars).json
+
+        daejeon_API = jsonDump['response']['body']['TRAFFIC-LIST']['TRAFFIC']
+
+        print(daejeon_API)
+
+        
+
+
+        return row
         
         # data_df = pd(jsonDump.text)
 
 
         # print(jsonDump)
-        return jsonDump
 
 
 if __name__=="__main__":
