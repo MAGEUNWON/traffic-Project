@@ -3,6 +3,9 @@ import styled from "styled-components";
 import Map from "./components/Map";
 import SectionTable from "./components/sectionTable";
 // import Naver from "./components/naverMap";
+import CCTV from "./components/Cctv";
+import Board from "./components/Board";
+
 
 
 const App = () =>{
@@ -20,7 +23,11 @@ const App = () =>{
     <>
       <AppSet>
         <SectionTable></SectionTable>
-        <Map></Map>    
+        {/* <Map></Map>
+        <CCTV></CCTV> */}
+        <Board></Board>
+
+        
       </AppSet>
       </>
   );

@@ -5,6 +5,7 @@ import React, {useEffect,useState,useRef} from "react";
 //특정 값이 변경 될 때만 호출하고 싶은 경우에는 useEffect의 두 번째 파라미터로 전달되는 배열 안에 검사하고 싶은 값을 넣어주면 됨. 
 import styled from "styled-components";
 
+
 declare global {
   interface Window{
     kakao: any;
@@ -37,8 +38,8 @@ const Map = () =>{
     let container = document.getElementById('map') as HTMLElement;  //지도를 담을 영역의 DOM 레퍼런스
     //카카오 객체가 window 하위 객체라는 것을 정의해야 하므로 window.kakao로 변경해야 함
     let options = {
-      center: new window.kakao.maps.LatLng(36.3514622, 127.3399813),
-      level: 3 //지도의 확대, 축소 정도
+      center: new window.kakao.maps.LatLng(36.349203, 127.377340),
+      level: 7 //지도의 확대, 축소 정도
     };
 
     let map = new window.kakao.maps.Map(container, options);
@@ -78,7 +79,7 @@ const Map = () =>{
     // map.addOverlayMapTypeId(window.kakao.maps.MapTypeId.TRAFFIC) //MapTypeId뒤에 TRAFFIC을 SKYVIEW 등으로 바꾸면 지도 형태가 바뀜, addOverlayMapTypeId는 removeOverlayMapTypeId로 바꾸면 추가한 지도타입 제거됨
 
     //마커가 표시될 위치
-    let markerPosition = new window.kakao.maps.LatLng(36.3514622, 127.3399813);
+    let markerPosition = new window.kakao.maps.LatLng(36.349203, 127.377340);
     //마커 생성
     let marker = new window.kakao.maps.Marker({
       position: markerPosition

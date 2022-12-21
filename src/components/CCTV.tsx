@@ -1,4 +1,4 @@
-import React,{useEffect,useState} from "react";
+import React,{ReactEventHandler, useEffect,useState} from "react";
 import axios from "axios"
 //카카오 버전
 declare global {
@@ -7,6 +7,12 @@ declare global {
   }
 }
 const CCTV = () =>{
+  const [cctv,setCctv]=useState<any>(true)
+  const cctvclick=(e:React.MouseEvent<HTMLButtonElement>)=>{
+    setCctv(e.currentTarget.value)
+    console.log(cctv)
+  }
+
 
   //useState를 활용하여 db에서 불러온 값 저장
   const [datas,setDatas] = useState<any>(''); 
@@ -14,7 +20,7 @@ const CCTV = () =>{
   useEffect(()=>{
     const fetchData = async ()=>{      
       try{
-        const res = await axios.get(`http://127.0.0.1:5000/daejeon`);         
+        const res = await axios.get(`http://127.0.0.1:5000/cctv`);         
         setDatas(res.data);        
     }catch(e:any){
       console.log(e)
@@ -96,8 +102,7 @@ let map = new window.kakao.maps.Map(container, options);
     })
   return(
     <>
-      <div id="map" style={{width : "100vw", height : "100vh"}}>      
-        <button style={{width : "70px", height : "30px",position:"absolute",zIndex:"1000"}}>CCTV</button>
+      <div id="map" style={{width : "100vw", height : "100vh", display:"none"}}>          
       </div>
     </>
   );

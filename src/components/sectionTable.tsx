@@ -3,9 +3,23 @@ import Button from "@/common/Button";
 import Search from "@/common/Search";
 import Button_R from "@/common/Button_R";
 import Main from "@/common/main";
+import CCTV from "./Cctv";
+import Map from "./Map";
+import { useState } from "react";
+
 
 const SectionTable = () => {
-
+  const [changeComponent,setChangeComponent]=useState();
+  const clickButton =(e:any)=>{
+    const {name} = e.target;
+    setChangeComponent(name)
+  }
+  const change = {
+    cctv : <CCTV/>,
+    map : <Map/>
+  };
+  
+  console.log(changeComponent)
 
 
   return (
