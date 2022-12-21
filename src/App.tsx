@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Map from "./components/Map";
+import Kakao from "./components/kakaoMap";
 import SectionTable from "./components/sectionTable";
 import "./App.css";
-// import Naver from "./components/naverMap";
 
 const App = () => {
   const [maptype, setMaptype] = useState<string>("traffic");
@@ -20,7 +19,7 @@ const App = () => {
     <>
       <AppSet>
         <SectionTable></SectionTable>
-        <Map></Map>
+        <Kakao></Kakao>
       </AppSet>
     </>
   );
@@ -36,8 +35,8 @@ const App = () => {
 }
 
 const AppSet = styled.div`
-  width: 100vw;
-  height: 100vh;
+  width: 98vw;
+  height: 98vh;
   display: flex;
   align-itmes: center;
   justify-content: center;

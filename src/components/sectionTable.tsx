@@ -34,7 +34,7 @@ const button_item = [
 
 const SectionTable = () => {
   const [isCheck, setIsCheck] = useState<boolean>(true);
-  // console.log(isCheck);
+  console.log(isCheck);
 
   return (
     <>
@@ -43,10 +43,12 @@ const SectionTable = () => {
           <Button_R
             icon="/asset/icon_search.png"
             contents="검색"
-            onClick={() => setIsCheck(true)}
+            onClick={() => {
+              setIsCheck(true);
+            }}
           ></Button_R>
           <Button_R
-            icon="/asset/icon_roadCar.png"
+            icon="/asset/icon_search.png"
             contents="길찾기"
             onClick={() => {
               setIsCheck(false);
@@ -71,6 +73,12 @@ const SectionTable = () => {
               <Button key={index} icon={value.src} name={value.name}></Button>
             );
           })}
+          {/* <Button icon="asset/icon_cctv.png"></Button>
+          <Button icon="asset/icon_conflagration.png"></Button>
+          <Button icon="asset/icon_safe.png"></Button>
+          <Button icon="asset/icon_forecast.png"></Button>
+          <Button icon="asset/icon_traffic.png"></Button>
+          <Button icon="asset/icon_parkinglot.png"></Button> */}
         </ButtonDiv>
       </SectionSet>
     </>
@@ -79,7 +87,7 @@ const SectionTable = () => {
 
 const SectionSet = styled.section`
   width: 20vw;
-  height: 100vh;
+  height: 99vh;
   background-color: #e7e7e7;
   display: flex;
   flex-direction: column;

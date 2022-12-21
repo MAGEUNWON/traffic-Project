@@ -1,6 +1,8 @@
 import styled from "styled-components";
 
 const Button = ({ icon, name }: { icon: string; name: string }) => {
+  //cctv모양 만들기
+
   return (
     <>
       <ButtonWarp>
