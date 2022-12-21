@@ -3,7 +3,7 @@ import Button from "@/common/Button";
 import Search from "@/common/Search";
 import Button_R from "@/common/Button_R";
 import Main from "@/common/main";
-import CCTV from "./Cctv";
+import CCTV from "./CCTV";
 import Map from "./Map";
 import { useState } from "react";
 

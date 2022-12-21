@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Map from "./components/Map";
 import SectionTable from "./components/sectionTable";
 // import Naver from "./components/naverMap";
-import CCTV from "./components/Cctv";
+import CCTV from "./components/CCTV";
 import Board from "./components/Board";
 
 
