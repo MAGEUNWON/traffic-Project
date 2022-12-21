@@ -1,9 +1,11 @@
+import pandas as pd
+from pandas.io.json import json_normalize
 import requests
 import xmltodict
 import json
 import os
 from dotenv import load_dotenv
-
+from bs4 import BeautifulSoup
 load_dotenv()
 
 POLICE_KEY = os.getenv("POLICE_KEY")
@@ -48,4 +50,18 @@ def parking_lot():
     return data['response']['body']
 
 
-parking_lot()
+# 주차장 정보 csv파일롤 저장
+# for i in range(15):
+#     url = f'http://apis.data.go.kr/6300000/pis/parkinglotIF?serviceKey={SERVICE_KEY}&numOfRows=50&pageNo={i+1}'
+
+#     # print(url)
+
+#     response = requests.get(url)
+#     contents = response.text
+#     jsonData = json.dumps(xmltodict.parse(contents))
+#     loadJson = json.loads(jsonData)
+#     # print(loadJson)
+#     body = loadJson['response']['body']['item']
+#     # print(body)
+#     dataframe = json_normalize(body)
+#     dataframe.to_csv(f'parkinglot{i}.csv', encoding="UTF-8")
