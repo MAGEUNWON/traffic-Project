@@ -9,6 +9,8 @@ const Button_R = ({
   contents: string;
   onClick: () => void;
 }) => {
+  //여기다가 검색 디자인 만들기(검색 모양만 만들면 됨)
+
   return (
     <>
       <Button_RWrap onClick={onClick}>

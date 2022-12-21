@@ -34,7 +34,7 @@ const button_item = [
 
 const SectionTable = () => {
   const [isCheck, setIsCheck] = useState<boolean>(true);
-  // console.log(isCheck);
+  console.log(isCheck);
 
   return (
     <>
@@ -43,10 +43,12 @@ const SectionTable = () => {
           <Button_R
             icon="/asset/icon_search.png"
             contents="검색"
-            onClick={() => setIsCheck(true)}
+            onClick={() => {
+              setIsCheck(true);
+            }}
           ></Button_R>
           <Button_R
-            icon="/asset/icon_roadCar.png"
+            icon="/asset/icon_search.png"
             contents="길찾기"
             onClick={() => {
               setIsCheck(false);
@@ -60,6 +62,9 @@ const SectionTable = () => {
           <>
             <Search placeholder="출발지 검색"></Search>{" "}
             <Search placeholder="도착지 검색"></Search>{" "}
+            <form>
+              <PathButton>경로검색</PathButton>
+            </form>
           </>
         )}
 
@@ -71,6 +76,12 @@ const SectionTable = () => {
               <Button key={index} icon={value.src} name={value.name}></Button>
             );
           })}
+          {/* <Button icon="asset/icon_cctv.png"></Button>
+          <Button icon="asset/icon_conflagration.png"></Button>
+          <Button icon="asset/icon_safe.png"></Button>
+          <Button icon="asset/icon_forecast.png"></Button>
+          <Button icon="asset/icon_traffic.png"></Button>
+          <Button icon="asset/icon_parkinglot.png"></Button> */}
         </ButtonDiv>
       </SectionSet>
     </>
@@ -95,10 +106,6 @@ const Button_RDiv = styled.div`
   justify-content: space-around;
 `;
 
-// const SearchSet = styled.input`
-// margin-top: 3px;
-// `
-
 const ButtonDiv = styled.div`
   width: 218px;
   height: 190px;
@@ -109,10 +116,14 @@ const ButtonDiv = styled.div`
   justify-content: space-around;
 `;
 
-// const MainSet = styled.main`
-// width: 300px;
-// height: 500px;
-// background-color: #FFFFFF;
-// `;
+const PathButton = styled.button`
+  width: 70px;
+  height: 25px;
+  background-color: #1f68f6;
+  color: #ffffff;
+  border 1px solid #1f68f6;
+  border-radius: 0.5rem;
+  margin-left: 11rem;
+`;
 
 export default SectionTable;
