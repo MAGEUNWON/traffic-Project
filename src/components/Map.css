@@ -1,0 +1,12 @@
+.content-box {
+  width: 150px;
+  background-color: aliceblue;
+  border-radius: 20px;
+  box-sizing: border-box;
+  padding: 10px;
+  white-space: normal;
+  font-size: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}

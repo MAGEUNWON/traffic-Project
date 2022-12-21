@@ -1,9 +1,12 @@
 import Button from "@/common/Button";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, lazy } from "react";
 //useEffect는 리액트 컴포넌트가 렌더링 될 때마다 특정 작업을 수행하도록 설정할 수 있는 Hook. 기본적으로 렌더링되고 난 직후마다 실행.
 //useEffect에서 설정한 함수를 컴포넌트가 화면에 맨 처음 렌더링될 때만 실행하고, 업데이트될 때는 실행하지 않으려면 함수의 두 번째 파라미터로 비어 있는 배열을 넣어 주면 됨.
 //특정 값이 변경 될 때만 호출하고 싶은 경우에는 useEffect의 두 번째 파라미터로 전달되는 배열 안에 검사하고 싶은 값을 넣어주면 됨.
 import styled from "styled-components";
+import SectionTable from "./sectionTable";
+
+import "./map.css";
 
 declare global {
   interface Window {
@@ -20,6 +23,7 @@ interface btnSet {
 
 const Map = () => {
   const [mapTypes, SetMapTypes] = useState<string>("terrain");
+  const [kakaomap, setKakaomap] = useState("");
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     SetMapTypes(e.currentTarget.value);
@@ -36,10 +40,11 @@ const Map = () => {
     //카카오 객체가 window 하위 객체라는 것을 정의해야 하므로 window.kakao로 변경해야 함
     let options = {
       center: new window.kakao.maps.LatLng(36.3514622, 127.3399813),
-      level: 3, //지도의 확대, 축소 정도
+      level: 7, //지도의 확대, 축소 정도
     };
 
     let map = new window.kakao.maps.Map(container, options);
+    setKakaomap(map);
 
     // let mapTypeControl = new window.kakao.maps.mapTypeControl();
     // map.addControl(mapTypeControl, window.kakao.maps.ControlPosiiton.TOPRIGHT);
@@ -95,8 +100,70 @@ const Map = () => {
     { value: "use_district", con: "지적편집도" },
   ];
 
+  function prac() {
+    console.log("예시함수");
+  }
+
+  function markerEvent(data: any) {
+    console.log("마커이벤트");
+    for (let i = 0; i < data.length; i++) {
+      // console.log("마커");
+      let position = new window.kakao.maps.LatLng(
+        data[i].locationDataY,
+        data[i].locationDataX
+      );
+      const imageSize = new window.kakao.maps.Size(25, 25);
+      const constructionSize = new window.kakao.maps.Size(20, 20);
+      const constructionSrc = "/asset/construction.png";
+      const cautionSrc = "/asset/caution.png";
+      const stopSrc = "/asset/stop.png";
+
+      const accidentMarker = new window.kakao.maps.Marker({
+        map: kakaomap,
+        position: position, // 마커를 표시할 위치
+        // image: new kakao.maps.MarkerImage(constructionSrc, imageSize),
+        image: data[i].incidentTitle?.includes("[공사]")
+          ? new window.kakao.maps.MarkerImage(constructionSrc, constructionSize)
+          : data[i].incidentTitle?.includes("[사고]")
+          ? new window.kakao.maps.MarkerImage(cautionSrc, imageSize)
+          : new window.kakao.maps.MarkerImage(stopSrc, imageSize),
+      });
+
+      const content = `
+      <div class="content-box">
+        <span>${data[i].addressJibun}</span>
+        <span>${data[i].incidentTitle}</span>
+      </div>
+    `;
+      // 돌발 상황 정보 오버레이 생성
+      const overlay = new window.kakao.maps.CustomOverlay({
+        position: position,
+        content: content,
+      });
+
+      // 돌발정보 마커에 마우스오버하면, 해당 돌발 상황 정보 오버레이가 보인다.
+      window.kakao.maps.event.addListener(
+        accidentMarker,
+        "mouseover",
+        function () {
+          overlay.setMap(kakaomap);
+        }
+      );
+
+      // 돌발정보 마커를 마우스오버 하면, 해당 돌발 상황 정보 오버레이가 사라진다.
+      window.kakao.maps.event.addListener(
+        accidentMarker,
+        "mouseout",
+        function () {
+          overlay.setMap(null);
+        }
+      );
+    }
+  }
+
   return (
     <>
+      <SectionTable prac={prac} markerEvent={markerEvent} />
       <div id="map" style={{ width: "80vw", height: "99vh" }} />
       <ButtonSet>
         {btnSet.map((value, index) => {

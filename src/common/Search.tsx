@@ -1,9 +1,12 @@
 import styled from "styled-components";
 
-const Search = () => {
+interface Search {
+  placeholder: string;
+}
+const Search = ({ placeholder }: Search) => {
   return (
     <form>
-      <SearchWarp type="text" placeholder="어디로갈까요?" />
+      <SearchWarp type="text" placeholder={placeholder} />
     </form>
   );
 };

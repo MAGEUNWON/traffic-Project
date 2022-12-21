@@ -8,6 +8,10 @@ import "./App.css";
 
 const App = () => {
   const [maptype, setMaptype] = useState<string>("traffic");
+  // const [SituationData, setSituationData] = useState<any>([{}]);
+  // const getSituationData = (text: any) => {
+  //   setSituationData(text);
+  // };
 
   // const handleClick = (event:React.MouseEvent<HTMLElement>) => {
   //   "setOverlayMapTypeID('traffic')"
@@ -20,7 +24,6 @@ const App = () => {
   return (
     <>
       <AppSet>
-        <SectionTable></SectionTable>
         <Map></Map>
       </AppSet>
     </>

@@ -1,10 +1,18 @@
 import styled from "styled-components";
 
-const Button = ({ icon, name }: { icon: string; name: string }) => {
+const Button = ({
+  icon,
+  name,
+  onClick,
+}: {
+  icon: string;
+  name: string;
+  onClick: (() => any) | undefined;
+}) => {
   //cctv모양 만들기
 
   return (
-    <ButtonWarp>
+    <ButtonWarp onClick={onClick}>
       <img src={icon} alt="icon" />
       <p>{name}</p>
     </ButtonWarp>
