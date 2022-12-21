@@ -62,6 +62,9 @@ const SectionTable = () => {
           <>
             <Search placeholder="출발지 검색"></Search>{" "}
             <Search placeholder="도착지 검색"></Search>{" "}
+            <form>
+              <PathButton>경로검색</PathButton>
+            </form>
           </>
         )}
 
@@ -87,7 +90,7 @@ const SectionTable = () => {
 
 const SectionSet = styled.section`
   width: 20vw;
-  height: 99vh;
+  height: 100vh;
   background-color: #e7e7e7;
   display: flex;
   flex-direction: column;
@@ -103,10 +106,6 @@ const Button_RDiv = styled.div`
   justify-content: space-around;
 `;
 
-// const SearchSet = styled.input`
-// margin-top: 3px;
-// `
-
 const ButtonDiv = styled.div`
   width: 218px;
   height: 190px;
@@ -117,10 +116,14 @@ const ButtonDiv = styled.div`
   justify-content: space-around;
 `;
 
-// const MainSet = styled.main`
-// width: 300px;
-// height: 500px;
-// background-color: #FFFFFF;
-// `;
+const PathButton = styled.button`
+  width: 70px;
+  height: 25px;
+  background-color: #1f68f6;
+  color: #ffffff;
+  border 1px solid #1f68f6;
+  border-radius: 0.5rem;
+  margin-left: 11rem;
+`;
 
 export default SectionTable;

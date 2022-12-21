@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Kakao from "./components/kakaoMap";
+import Map from "./components/Map";
 import SectionTable from "./components/sectionTable";
 import "./App.css";
 
@@ -19,7 +19,7 @@ const App = () => {
     <>
       <AppSet>
         <SectionTable></SectionTable>
-        <Kakao></Kakao>
+        <Map></Map>
       </AppSet>
     </>
   );
@@ -35,8 +35,8 @@ const App = () => {
 }
 
 const AppSet = styled.div`
-  width: 98vw;
-  height: 98vh;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   align-itmes: center;
   justify-content: center;
