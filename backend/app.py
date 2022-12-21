@@ -28,13 +28,7 @@ def test():
         response = requests.get(test)
         xpars = xmltodict.parse(response.text)
         jsonDump = jsonify(xpars).json
-        df = pd.DataFrame(jsonDump['response']['body']['TRAFFIC-LIST']['TRAFFIC'])
 
-    
-
-        df[["linkID",	"endNodeID",	"endNodeName",	"linkCount"	,"linkLength"	,"linkSqc"	,"roadName",	"speed",	"startNodeId"	,"startNodeName"	,"congestion","travelT","udType"]].to_csv("test.csv", encoding='utf-8-sig')
-        
-     
 
 
         # print(jsonDump)
@@ -45,20 +39,15 @@ def dot():
         db_class = Database()
         sql  = f"SELECT * FROM daejeon_node"
         row = db_class.executeAll(sql)
-        print(row)
 
+        # test= 'http://openapitraffic.daejeon.go.kr/traffic/rest/getTrafficInfoAll.do?ServiceKey=ZEZs4lBh8JvrR1NlN1TOVkuL/gfojiZfZDkToH3jm4tNCg7bYk57heMG8VIUdfzrcmqn3VRhSkI2yXbWF3VOcA==&pageNo=1&numOfRows=14444'
+        # response = requests.get(test)
+        # xpars = xmltodict.parse(response.text)
+        # jsonDump = jsonify(xpars).json
 
-        test= 'http://openapitraffic.daejeon.go.kr/traffic/rest/getTrafficInfoAll.do?ServiceKey=ZEZs4lBh8JvrR1NlN1TOVkuL/gfojiZfZDkToH3jm4tNCg7bYk57heMG8VIUdfzrcmqn3VRhSkI2yXbWF3VOcA==&pageNo=1&numOfRows=14444'
-        response = requests.get(test)
-        xpars = xmltodict.parse(response.text)
-        jsonDump = jsonify(xpars).json
+        # daejeon_API = jsonDump['response']['body']['TRAFFIC-LIST']['TRAFFIC']
 
-        daejeon_API = jsonDump['response']['body']['TRAFFIC-LIST']['TRAFFIC']
-
-        print(daejeon_API)
-
-        
-
+        # print(daejeon_API)
 
         return row
         
@@ -66,6 +55,32 @@ def dot():
 
 
         # print(jsonDump)
+
+@app.route('/directions', methods = ['POST']) # 접속하는 url
+def dirCall():
+        nodeData = request.json['markerArr']
+        # print(nodeData[0]['node_id'])
+        # print(nodeData[0]['node_Xcode'])
+        # print(nodeData[0]['node_Ycode'])
+
+        db_class = Database()
+        sql  = f"SELECT * FROM daejeon_link where F_NODE = {nodeData[0]['node_id']}"
+        row = db_class.executeAll(sql)
+
+        dataArr = []
+        for i in range(len(row)):
+                db_class = Database()
+                sql  = f"SELECT * FROM daejeon_node where node_id = {row[i]['T_NODE']}"
+                dataRow = db_class.executeAll(sql)
+                Xgap = nodeData[0]['node_Xcode'] - dataRow[0]['node_Xcode']
+                Ygap = nodeData[0]['node_Ycode'] - dataRow[0]['node_Ycode']
+                print(Xgap)
+                print(Ygap)
+
+                dataArr.append(dataRow)
+        # print(dataArr[0])
+
+        return "a"
 
 
 if __name__=="__main__":

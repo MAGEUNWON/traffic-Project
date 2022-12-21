@@ -20,8 +20,6 @@ const KakaoMap = () => {
         if (!mapElement.current || !kakao) return;
 
         axios.get("http://localhost:8000/dot").then((value: any) => {
-            console.log(value.data);
-
             const options = {
                 center: new kakao.maps.LatLng(36.349318, 127.377361),
                 level: 3,
@@ -30,7 +28,6 @@ const KakaoMap = () => {
 
             let line: any[] = [];
             value.data.forEach((e: any) => {
-                console.log(e);
                 // console.log(e);
                 line.push({
                     path: [
@@ -53,8 +50,10 @@ const KakaoMap = () => {
             // 인포윈도우를 생성하고 지도에 표시합니다
 
             let polyline: any = [];
+            let markerArr: object[] = [];
 
-            console.log(line);
+            let start = new kakao.maps.Marker({});
+            let end = new kakao.maps.Marker({});
 
             for (let i = 0; i < line.length; i++) {
                 //i번째 정보를 가져옵니다.
@@ -74,15 +73,47 @@ const KakaoMap = () => {
                 kakao.maps.event.addListener(
                     polyline[i],
                     "click",
-                    function (e: any) {
-                        console.log(e);
+                    async function (e: any) {
                         polyline[i].setOptions({
                             strokeColor: "black",
                         });
 
+                        console.log("클릭이베트확인");
+
+                        let latlng = e.latLng;
+
+                        if (markerArr.length === 0) {
+                            markerArr.push(value.data[i]);
+                            start.setPosition(latlng);
+                            start.setMap(mapRef.current);
+                        } else if (markerArr.length === 1) {
+                            markerArr.push(value.data[i]);
+                            end.setPosition(latlng);
+                            end.setMap(mapRef.current);
+
+                            const getData = await axios.post(
+                                "http://localhost:8000/directions",
+                                {
+                                    markerArr,
+                                }
+                            );
+                        } else if (markerArr.length > 1) {
+                            end.setPosition(latlng);
+                            end.setMap(mapRef.current);
+                        }
+
+                        console.log(markerArr);
+                        // console.log(start);
+
+                        // end.setPosition(latlng);
+                        // end.setMap(mapRef.current);
+
                         let infowindow = new kakao.maps.InfoWindow({
                             map: mapRef.current, // 인포윈도우가 표시될 지도
-                            position: new kakao.maps.LatLng(item.path[0].La),
+                            position: new kakao.maps.LatLng(
+                                item.path[0].Ma,
+                                item.path[0].La
+                            ),
                             content: `<div style="padding:5px;">
                             <p>교차로명칭: ${value.data[i].node_name}</p>
                             <p>위도: ${value.data[i].node_Xcode}</p>
@@ -90,12 +121,11 @@ const KakaoMap = () => {
                             <p>노드ID: ${value.data[i].node_id}</p>
                             <p>노드유형: ${value.data[i].node_type}</p>
                             <p>회전제한유무:${value.data[i].turn_p}</p>
-                            
+
                             </div>`,
                             removable: true,
                         });
                         infowindow.open(mapRef.current);
-                        // infowindow.open(mapRef.current);
                     }
                 );
             }
