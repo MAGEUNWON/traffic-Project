@@ -1,0 +1,9 @@
+npm run build 해줘야 dist 폴더 생김 
+npm run dev 해야 서버 뜸. 
+
+npm install styled-components
+npm install babel-plugin-styled-components
+타입스크립트로 style-components 쓸거면 따로 @types/styled-components 까지 설치 해줘야함. 
+
+일단 main 브런치에는 둘다 설치 해놓음. sass도 설치 되있음. 안쓸거면 나중에 지울 것.
+
