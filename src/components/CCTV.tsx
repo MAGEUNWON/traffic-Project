@@ -7,13 +7,6 @@ declare global {
   }
 }
 const CCTV = () =>{
-  const [cctv,setCctv]=useState<any>(true)
-  const cctvclick=(e:React.MouseEvent<HTMLButtonElement>)=>{
-    setCctv(e.currentTarget.value)
-    console.log(cctv)
-  }
-
-
   //useState를 활용하여 db에서 불러온 값 저장
   const [datas,setDatas] = useState<any>(''); 
   axios.defaults.withCredentials = true;
@@ -31,10 +24,10 @@ const CCTV = () =>{
 // 처음 지도에 보일 화면 
 useEffect(()=>{ 
 let container = document.getElementById('map'),
-options = {
-  center : new window.kakao.maps.LatLng(36.348991, 127.377069),
-  level : 7
-};
+    options = {
+      center : new window.kakao.maps.LatLng(36.348991, 127.377069),
+      level : 7
+    };
 //지도를 생성!
 let map = new window.kakao.maps.Map(container, options);
 
@@ -102,7 +95,7 @@ let map = new window.kakao.maps.Map(container, options);
     })
   return(
     <>
-      <div id="map" style={{width : "100vw", height : "100vh", display:"none"}}>          
+      <div id="map" style={{width : "100vw", height : "100vh"}}>          
       </div>
     </>
   );
