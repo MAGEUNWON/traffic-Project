@@ -1,0 +1,6 @@
+.content-box {
+  background-color: aliceblue;
+  box-sizing: border-box;
+  padding: 10px;
+  font-size: 7px;
+}

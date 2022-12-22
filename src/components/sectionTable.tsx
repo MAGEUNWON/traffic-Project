@@ -5,36 +5,52 @@ import Search from "@/common/Search";
 import Button_R from "@/common/Button_R";
 import Main from "@/common/main";
 
-const button_item = [
-  {
-    src: "asset/icon_cctv.png",
-    name: "CCTV",
-  },
-  {
-    src: "asset/icon_conflagration.png",
-    name: "돌발정보",
-  },
-  {
-    src: "asset/icon_safe.png",
-    name: "보호구역",
-  },
-  {
-    src: "asset/icon_forecast.png",
-    name: "날씨상황",
-  },
-  {
-    src: "asset/icon_traffic.png",
-    name: "교통상황",
-  },
-  {
-    src: "asset/icon_parkinglot.png",
-    name: "주차장",
-  },
-];
-
-const SectionTable = () => {
+const SectionTable = ({ parkingEvent, parkingData }: any) => {
   const [isCheck, setIsCheck] = useState<boolean>(true);
   console.log(isCheck);
+
+  const button_item = [
+    {
+      src: "asset/icon_cctv.png",
+      name: "CCTV",
+      onClick: () => {
+        console.log("클릭");
+      },
+    },
+    {
+      src: "asset/icon_conflagration.png",
+      name: "돌발정보",
+      onClick: () => {
+        console.log("클릭");
+      },
+    },
+    {
+      src: "asset/icon_safe.png",
+      name: "보호구역",
+      onClick: () => {
+        console.log("클릭");
+      },
+    },
+    {
+      src: "asset/icon_forecast.png",
+      name: "날씨상황",
+      onClick: () => {
+        console.log("클릭");
+      },
+    },
+    {
+      src: "asset/icon_traffic.png",
+      name: "교통상황",
+      onClick: () => {
+        console.log("클릭");
+      },
+    },
+    {
+      src: "asset/icon_parkinglot.png",
+      name: "주차장",
+      onClick: () => parkingEvent(parkingData),
+    },
+  ];
 
   return (
     <>
@@ -73,7 +89,12 @@ const SectionTable = () => {
         <ButtonDiv>
           {button_item.map((value, index) => {
             return (
-              <Button key={index} icon={value.src} name={value.name}></Button>
+              <Button
+                key={index}
+                icon={value.src}
+                name={value.name}
+                onClick={value.onClick}
+              ></Button>
             );
           })}
           {/* <Button icon="asset/icon_cctv.png"></Button>
