@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Button from "@/common/Button";
+
 import Search from "@/common/Search";
 import Button_R from "@/common/Button_R";
 import Main from "@/common/main";
+import CCTV from "./CCTV";
+import Map from "./Map";
 
 const button_item = [
   {
@@ -32,9 +34,13 @@ const button_item = [
   },
 ];
 
-const SectionTable = () => {
+const SectionTable = ({setData}:{setData: (data:string) => void}) => {
   const [isCheck, setIsCheck] = useState<boolean>(true);
-  console.log(isCheck);
+
+  const getData =(e: React.MouseEvent<HTMLButtonElement>)=>{
+    setData(e.currentTarget.value)  
+    // console.log(e.currentTarget)  
+  }
 
   return (
     <>
@@ -71,11 +77,27 @@ const SectionTable = () => {
         <Main></Main>
 
         <ButtonDiv>
-          {button_item.map((value, index) => {
+          {button_item.map((value: any, index: any) => {
             return (
-              <Button key={index} icon={value.src} name={value.name}></Button>
+              <button style={{width:"65px", height:"65px",backgroundColor: "#ffffff", border: "1px solid white",color: "#1f68f6",borderRadius: "0.5rem",cursor: "pointer"}}
+              onClick={getData}
+              key = {value.name}
+              value = {value.name}
+              >        
+                <img key={value.src} src={value.src} alt="icon"></img>
+                <p>{value.name}</p>               
+              </button> 
+              // <Button onClick={getData} key={index} icon={value.src} name={value.name} ></Button>
             );
+            // 맵 함수로 버튼을 생성
+            // 각 버튼을 클릭 시, 함수 실행
+            // 함수가 실행되면 set을 통해 값 변경
+            // 변경된 값을 상위 폴더로 이동(매개변수 필요)
+            // 상위 폴더에서 동일한 usestate()작성해서 버튼에서 가지고 온 데이터 삽입
+            // 삼항자를 이용하여 렌더링
+          
           })}
+          
           {/* <Button icon="asset/icon_cctv.png"></Button>
           <Button icon="asset/icon_conflagration.png"></Button>
           <Button icon="asset/icon_safe.png"></Button>
@@ -125,5 +147,15 @@ const PathButton = styled.button`
   border-radius: 0.5rem;
   margin-left: 11rem;
 `;
+
+const button1 = styled.button`
+  width: 65px;
+  height: 65px;
+  background-color: #ffffff;
+  border: 1px solid white;
+  color: #1f68f6;
+  border-radius: 0.5rem;
+  cursor: pointer;
+`
 
 export default SectionTable;
