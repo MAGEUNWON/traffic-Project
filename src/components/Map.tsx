@@ -21,6 +21,8 @@ interface btnSet {
 const Map = () => {
   const [mapTypes, SetMapTypes] = useState<string>("Roadmap");
   const [data, setData] = useState(null);
+  const [parkingLot, setParkoingLot] = useState<any>([{}]);
+  const [kakaoMap, setKakaoMap] = useState();
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     SetMapTypes(e.currentTarget.value);
@@ -34,19 +36,32 @@ const Map = () => {
     // console.log(maptype)
     console.log("렌더링 완료"); //useEffect는 React.StrictMode가 적용된 개발환경에서는 콘솔이 두번씩 찍힘.
 
-    axios.get(`http://127.0.0.1:5000/hazard`).then((response) => {
-      console.log(response.data);
-      setData(response.data);
-    });
+    // axios.get(`http://127.0.0.1:5000/hazard`).then((response) => {
+    //   console.log(response.data);
+    //   setData(response.data);
+    // });
+
+    const getData = async () => {
+      try {
+        let res = await axios.get("http://127.0.0.1:5000/parkinglot");
+        console.log(res.data);
+        setParkoingLot(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getData();
 
     let container = document.getElementById("map") as HTMLElement; //지도를 담을 영역의 DOM 레퍼런스
     //카카오 객체가 window 하위 객체라는 것을 정의해야 하므로 window.kakao로 변경해야 함
+
     let options = {
       center: new window.kakao.maps.LatLng(36.3492506, 127.3776511),
       level: 3, //지도의 확대, 축소 정도
     };
 
     let map = new window.kakao.maps.Map(container, options);
+    setKakaoMap(map);
 
     // let mapTypeControl = new window.kakao.maps.mapTypeControl();
     // map.addControl(mapTypeControl, window.kakao.maps.ControlPosiiton.TOPRIGHT);
@@ -89,6 +104,7 @@ const Map = () => {
     //마커가 표시될 위치
     let markerPosition = new window.kakao.maps.LatLng(36.3492506, 127.3776511);
     //마커 생성
+    console.log(markerPosition);
     let marker = new window.kakao.maps.Marker({
       position: markerPosition,
     });
@@ -96,14 +112,31 @@ const Map = () => {
     marker.setMap(map);
   }, [mapTypes]);
 
-  console.log(data);
-
   const btnSet: btnSet[] = [
     { value: "Roadmap", con: "지도" },
     { value: "Skyview", con: "스카이뷰" },
     { value: "roadview", con: "로드뷰" },
   ];
 
+  console.log(kakaoMap);
+  function parkingEvent(data: any) {
+    console.log("파킹");
+    for (let i = 0; i < data.length; i++) {
+      let parkingPositon = new window.kakao.maps.LatLng(
+        data[i].lat,
+        data[i].lon
+      );
+      //console.log(parkingPositon);
+      const parkingImgSize = new window.kakao.maps.Size(16, 20);
+      const parkingImg = "/asset/parkinglot.png";
+      const parkingMarker = new window.kakao.maps.Marker({
+        positon: parkingPositon,
+        image: new window.kakao.maps.MarkerImage(parkingImg, parkingImgSize),
+      });
+      parkingMarker.setMap(kakaoMap);
+    }
+  }
+  parkingEvent(parkingLot);
   return (
     <>
       <div id="map" style={{ width: "80vw", height: "100vh" }} />
@@ -135,7 +168,7 @@ const Button = styled.button`
   width: 60px;
   height: 50px;
   background-color: #fff;
-  border: 1px; solid black;
+  border: 1px solid black;
   border-radius: 0.5rem;
 `;
 

@@ -121,7 +121,7 @@ const PathButton = styled.button`
   height: 25px;
   background-color: #1f68f6;
   color: #ffffff;
-  border 1px solid #1f68f6;
+  border: 1px solid #1f68f6;
   border-radius: 0.5rem;
   margin-left: 11rem;
 `;
