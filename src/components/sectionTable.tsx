@@ -4,6 +4,7 @@ import Button from "@/common/Button";
 import Search from "@/common/Search";
 import Button_R from "@/common/Button_R";
 import Main from "@/common/main";
+import FunctionData from "./FunctionData";
 
 const button_item = [
   {
@@ -16,7 +17,7 @@ const button_item = [
   },
   {
     src: "asset/icon_safe.png",
-    name: "보호구역",
+    name: "safezone",
   },
   {
     src: "asset/icon_forecast.png",
@@ -35,6 +36,7 @@ const button_item = [
 const SectionTable = () => {
   const [isCheck, setIsCheck] = useState<boolean>(true);
   const [activeId, setActiveId] = useState<number>();
+  const [key, setKey] = useState<string>(" ");
 
   return (
     <>
@@ -67,7 +69,6 @@ const SectionTable = () => {
             </form>
           </>
         )}
-
         <Main></Main>
         <ButtonDiv>
           {button_item.map((value, index) => {
@@ -78,13 +79,15 @@ const SectionTable = () => {
                 name={value.name}
                 active={activeId === index} 
                 onClick={() => {
-                  setActiveId(index); 
+                  setActiveId(index);
+                  setKey(value.name); 
                 }}
               ></Button>
             );
           })}
         </ButtonDiv>
       </SectionSet>
+      <FunctionData name={key} />
     </>
   );
 };

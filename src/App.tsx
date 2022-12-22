@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 // import Map from "./components/Map";
-import SafeZone from "./components/SafeZone";
+import FunctionData from "./components/FunctionData";
 import SectionTable from "./components/sectionTable";
 import "./App.css";
 
@@ -20,7 +20,7 @@ const App = () => {
   return (
     <AppSet>
       <SectionTable />
-      <SafeZone />
+      <FunctionData />
     </AppSet>
   );
 };
