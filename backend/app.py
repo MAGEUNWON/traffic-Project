@@ -60,43 +60,60 @@ def dot():
 def dirCall():
         nodeData = request.json['markerArr']
 
-        # print(nodeData[0]['node_id'])
-        # print(nodeData[0]['node_Xcode'])
-        # print(nodeData[0]['node_Ycode'])
+
 
         finalData = []
+        trafficLink = []
+        trafficData = []
+        
         def navi(start, end):
                 db_class = Database() 
                 sql  = f"SELECT * FROM daejeon_link where F_NODE = {start['node_id']}"
                 row = db_class.executeAll(sql)
                 
-                print(start['node_id'])
+                
                 dataObj = 0
                 minData = 99999999
+                lastLink = '';
                 for i in range(len(row)):
                         db_class = Database()
                         sql  = f"SELECT * FROM daejeon_node where node_id = {row[i]['T_NODE']}"
                         dataRow = db_class.executeAll(sql)
+                        
+
                         Xgap = end['node_Xcode'] - dataRow[0]['node_Xcode']
                         Ygap = end['node_Ycode'] - dataRow[0]['node_Ycode']
                         line = Xgap**2+Ygap**2
 
-                        # print(line)
                         if line < minData:
                                 minData = line
                                 dataObj = dataRow[0]
+                                lastLink = row[i]['LINK_ID']
+
                 finalData.append(dataObj)
+                trafficLink.append(lastLink)
+
+
 
 
                 if dataObj['node_id'] == end['node_id']:
+                        for i in trafficLink:
+                                sql  = f"SELECT * FROM daejeon_traffic where linkID = {i}"
+                                row = db_class.executeAll(sql)
+                                if len(row) != 0:
+                                        trafficData.append(row[0])
+                                
+
+                        print(trafficData)
                         print('end')
+                
                 else:
                         navi(dataObj,end)
 
 
         navi(nodeData[0],nodeData[1])
 
-        return finalData
+        return {"finalData":finalData, "trafficData":trafficData}
 
 
 if __name__=="__main__":
