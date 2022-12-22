@@ -7,16 +7,28 @@ import axios from "axios";
 const App = () => {
   const [maptype, setMaptype] = useState<string>("traffic");
   const [parkingLot, setParkoingLot] = useState<any>([{}]);
+  const [accidentData, setAccidentData] = useState<any>([{}]);
   useEffect(() => {
     const getData = async () => {
       try {
-        let res = await axios.get("http://127.0.0.1:5000/parkinglot");
-        setParkoingLot(res.data);
+        let response = await axios.get("http://127.0.0.1:5000/accident");
+        console.log(response.data);
+        setAccidentData(response.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    const getparking = async () => {
+      try {
+        let response = await axios.get("http://127.0.0.1:5000/parkinglot");
+        console.log(response.data);
+        setParkoingLot(response.data);
       } catch (err) {
         console.log(err);
       }
     };
     getData();
+    getparking();
   }, []);
   // const handleClick = (event:React.MouseEvent<HTMLElement>) => {
   //   "setOverlayMapTypeID('traffic')"
@@ -29,7 +41,7 @@ const App = () => {
   return (
     <>
       <AppSet>
-        <Map parkingData={parkingLot}></Map>
+        <Map parkingData={parkingLot} accidentData={accidentData}></Map>
       </AppSet>
     </>
   );

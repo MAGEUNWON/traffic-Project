@@ -4,8 +4,9 @@ import Button from "@/common/Button";
 import Search from "@/common/Search";
 import Button_R from "@/common/Button_R";
 import Main from "@/common/main";
+import { parkingEvent, markerEvent } from "@/components/buttonFuction";
 
-const SectionTable = ({ parkingEvent, parkingData }: any) => {
+const SectionTable = ({ parkingData, accidentData, map }: any) => {
   const [isCheck, setIsCheck] = useState<boolean>(true);
   console.log(isCheck);
 
@@ -21,7 +22,8 @@ const SectionTable = ({ parkingEvent, parkingData }: any) => {
       src: "asset/icon_conflagration.png",
       name: "돌발정보",
       onClick: () => {
-        console.log("클릭");
+        console.log("accidentData");
+        markerEvent(accidentData, map);
       },
     },
     {
@@ -48,7 +50,13 @@ const SectionTable = ({ parkingEvent, parkingData }: any) => {
     {
       src: "asset/icon_parkinglot.png",
       name: "주차장",
-      onClick: () => parkingEvent(parkingData),
+      onClick: () => {
+        console.log("클릭");
+        console.log(parkingData);
+        console.log(map);
+
+        parkingEvent(parkingData, map);
+      },
     },
   ];
 

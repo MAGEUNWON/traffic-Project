@@ -1,6 +1,6 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
-from config.db import Database
+from config.db import Database, daejeon_accident
 
 
 app = Flask(__name__)
@@ -20,6 +20,12 @@ def parking_lot():
     row = dbdate.executeAll(sql)
 
     return row
+
+
+@app.route("/accident")
+def accident():
+    data = daejeon_accident()
+    return data
 
 
 if __name__ == '__main__':
