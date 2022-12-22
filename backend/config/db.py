@@ -1,7 +1,9 @@
-import pymysql
 import os
 import sys
+
+import pymysql
 from dotenv import load_dotenv
+
 load_dotenv()
 config = {
     "user":os.environ.get("DB_USER"),
@@ -10,6 +12,7 @@ config = {
     "port":int(os.environ.get("DB_PORT")),
     "database":os.environ.get("DB_DB")
 }
+
 class Database:
     def __init__(self):
         try:
@@ -31,3 +34,10 @@ class Database:
         return row
     def commit(self):
         self.db.commit()
+        
+    def safezone_db():
+        db = pymysql.connect(**config)
+        cursor = db.cursor(pymysql.cursors.DictCursor)
+        cursor.execute('SELECT * FROM safezone_db')
+        row = cursor.fetchall()
+        return row

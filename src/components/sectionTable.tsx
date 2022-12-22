@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import Button from "@/common/Button";
 import Search from "@/common/Search";
@@ -16,7 +16,7 @@ const button_item = [
   },
   {
     src: "asset/icon_safe.png",
-    name: "보호구역",
+    name: "safe",
   },
   {
     src: "asset/icon_forecast.png",
@@ -34,7 +34,7 @@ const button_item = [
 
 const SectionTable = () => {
   const [isCheck, setIsCheck] = useState<boolean>(true);
-  console.log(isCheck);
+  const [activeId, setActiveId] = useState<number>();
 
   return (
     <>
@@ -69,19 +69,20 @@ const SectionTable = () => {
         )}
 
         <Main></Main>
-
         <ButtonDiv>
           {button_item.map((value, index) => {
             return (
-              <Button key={index} icon={value.src} name={value.name}></Button>
+              <Button 
+                key={index} 
+                icon={value.src} 
+                name={value.name}
+                active={activeId === index} 
+                onClick={() => {
+                  setActiveId(index); 
+                }}
+              ></Button>
             );
           })}
-          {/* <Button icon="asset/icon_cctv.png"></Button>
-          <Button icon="asset/icon_conflagration.png"></Button>
-          <Button icon="asset/icon_safe.png"></Button>
-          <Button icon="asset/icon_forecast.png"></Button>
-          <Button icon="asset/icon_traffic.png"></Button>
-          <Button icon="asset/icon_parkinglot.png"></Button> */}
         </ButtonDiv>
       </SectionSet>
     </>
@@ -121,7 +122,7 @@ const PathButton = styled.button`
   height: 25px;
   background-color: #1f68f6;
   color: #ffffff;
-  border 1px solid #1f68f6;
+  border: 1px solid #1f68f6;
   border-radius: 0.5rem;
   margin-left: 11rem;
 `;

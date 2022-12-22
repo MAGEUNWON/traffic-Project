@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
-import Map from "./components/Map";
+// import Map from "./components/Map";
+import SafeZone from "./components/SafeZone";
 import SectionTable from "./components/sectionTable";
 import "./App.css";
+
 
 const App = () => {
   const [maptype, setMaptype] = useState<string>("traffic");
@@ -16,12 +18,10 @@ const App = () => {
   };
 
   return (
-    <>
-      <AppSet>
-        <SectionTable></SectionTable>
-        <Map></Map>
-      </AppSet>
-    </>
+    <AppSet>
+      <SectionTable />
+      <SafeZone />
+    </AppSet>
   );
 };
 
@@ -29,7 +29,7 @@ const AppSet = styled.div`
   width: 100vw;
   height: 100vh;
   display: flex;
-  align-itmes: center;
+  align-items: center;
   justify-content: center;
 `;
 
