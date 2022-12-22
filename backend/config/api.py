@@ -84,7 +84,7 @@ class ApiRoute():
             req = requests.get(f'{url}key={api_keyP}')
             jsonBody =req.json()
             data = jsonBody['items']
-            print(jsonBody['items'])
+            # print(jsonBody['items'])
 
             # address = []
             # for i in range(len(data)):

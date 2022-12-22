@@ -31,7 +31,7 @@ class DataRoute():
     #     return
 
     def executeAll(self, query, args={}): #app.py
-        print(query,'출력하기')
+        # print(query, "출력")
         self.cursor.execute(query, args)
         row = self.cursor.fetchall()
         return row

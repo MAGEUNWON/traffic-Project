@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 from config.db import DataRoute
 from config.api import ApiRoute
 from flask_cors import CORS 
@@ -42,11 +42,36 @@ def danger_Api():
 #db 테이블 내용 get요청으로 가져옴
 @app.route('/hazard', methods=['GET'])
 def execute():
-    db_class = DataRoute()
-    sql  = f"SELECT * FROM danger" #danger 테이블 내용 다 가져와라
+    db_class = DataRoute()  #얘가 변수 query인듯?
+    sql  = f"SELECT * FROM traffic.danger" #danger 테이블 내용 다 가져와라
+    # sql  = f"SELECT LOCATION_DATA FROM danger" #location 좌표만 가져옴
     row = db_class.executeAll(sql) #executeAll은 전체 내용 다 가져오라는 명령문
     print(row)
     return row
+
+@app.route('/hazard/<polygon>', methods=['GET'])
+def Polygon(polygon):
+    db_class = DataRoute()
+    sql  = f"SELECT LOCATION_DATA FROM traffic.danger WHERE LOCATION_DATA Like '%%{polygon}%%'" #location 좌표만 가져옴
+    row = db_class.executeAll(sql) #executeAll은 전체 내용 다 가져오라는 명령문
+    print(row)
+    return jsonify(row)
+
+@app.route('/hazard/<line>', methods=['GET'])
+def Line(line):
+    db_class = DataRoute()
+    sql  = f"SELECT LOCATION_DATA FROM traffic.danger WHERE LOCATION_DATA Like '%%{line}%%'" #location 좌표만 가져옴
+    row = db_class.executeAll(sql) #executeAll은 전체 내용 다 가져오라는 명령문
+    print(row)
+    return jsonify(row)
+
+@app.route('/hazard/<point>', methods=['GET'])
+def Point(point):
+    db_class = DataRoute()
+    sql  = f"SELECT LOCATION_DATA FROM traffic.danger WHERE LOCATION_DATA Like '%%{point}%%'" #location 좌표만 가져옴
+    row = db_class.executeAll(sql) #executeAll은 전체 내용 다 가져오라는 명령문
+    print(row)
+    return jsonify(row)
 
     
 if __name__ == '__main__':
