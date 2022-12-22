@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Map from "./components/Map";
+import Hazard from "./components/hazard";
 import SectionTable from "./components/sectionTable";
 import "./App.css";
 // import { ResultContextProvider } from "./contexts/SampleContext";
@@ -19,7 +20,6 @@ const App = () => {
   return (
     <>
       <AppSet>
-        <SectionTable></SectionTable>
         <Map></Map>
       </AppSet>
     </>

@@ -4,6 +4,9 @@ import React, { useEffect, useState, useRef } from "react";
 //특정 값이 변경 될 때만 호출하고 싶은 경우에는 useEffect의 두 번째 파라미터로 전달되는 배열 안에 검사하고 싶은 값을 넣어주면 됨.
 import styled from "styled-components";
 import axios from "axios";
+import { Hazard } from "./function";
+import SectionTable from "./sectionTable";
+// import Hazard from "./function";
 
 declare global {
   interface Window {
@@ -49,6 +52,7 @@ const Map = () => {
     };
 
     let map = new window.kakao.maps.Map(container, options);
+
     setKakaoMap(map); //map useEffect 밖에서 쓰려고 담은 것.
 
     //버튼 클릭하면 호출 (clickEvent)
@@ -90,6 +94,7 @@ const Map = () => {
     //마커가 지도 위에 표시되도록 설정
     marker.setMap(map);
   }, [mapTypes]);
+  console.log(kakaoMap);
 
   //지도 타입 바뀌는 props 값 정해 놓은 것.
   const btnSet: btnSet[] = [
@@ -100,42 +105,45 @@ const Map = () => {
 
   // console.log(data); useEffect 밖에서 api 데이터 찍어야 나옴. 안에서는 null값 나옴
   // let position = [];
-  for (let i = 0; i < data.length; i++) {
-    //api 데이터 빈 배열에 담아줌. 일단 필요어 없어서 주석처리함.
-    // console.log(Object.keys(data[i]).length);
-    // let content = {
-    //   ADDRESS: data[i].ADDRESS_NEW,
-    //   LINK_ID: data[i].LINK_ID,
-    //   LOCATION_X: data[i].LOCATION_X,
-    //   LOCATION_Y: data[i].LOCATION_Y,
-    //   LOCATION_DATA: data[i].LOCATION_DATA,
-    //   DATA_DESC: data[i].DATA_DESC,
-    // };
-    // position.push(content);
-    // console.log(position);
+  // for (let i = 0; i < data.length; i++) {
+  //   //api 데이터 빈 배열에 담아줌. 일단 필요어 없어서 주석처리함.
+  //   // console.log(Object.keys(data[i]).length);
+  //   // let content = {
+  //   //   ADDRESS: data[i].ADDRESS_NEW,
+  //   //   LINK_ID: data[i].LINK_ID,
+  //   //   LOCATION_X: data[i].LOCATION_X,
+  //   //   LOCATION_Y: data[i].LOCATION_Y,
+  //   //   LOCATION_DATA: data[i].LOCATION_DATA,
+  //   //   DATA_DESC: data[i].DATA_DESC,
+  //   // };
+  //   // position.push(content);
+  //   // console.log(position);
 
-    // 마커 이미지의 이미지 주소
-    var imageSrc =
-      "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+  //   // 마커 이미지의 이미지 주소
+  //   var imageSrc =
+  //     "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
 
-    // 마커 이미지의 이미지 크기
-    var imageSize = new window.kakao.maps.Size(35, 35);
-    // 마커 이미지를 생성합니다
-    var markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize);
-    // 마커를 생성합니다
-    var marker = new window.kakao.maps.Marker({
-      map: kakaoMap, // 마커를 표시할 지도
-      position: new window.kakao.maps.LatLng(
-        data[i].LOCATION_Y,
-        data[i].LOCATION_X
-      ), // 마커를 표시할 위치
-      title: data[i].DATA_DESC, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시
-      image: markerImage, // 마커 이미지
-    });
-  }
-
+  //   // 마커 이미지의 이미지 크기
+  //   var imageSize = new window.kakao.maps.Size(35, 35);
+  //   // 마커 이미지를 생성합니다
+  //   var markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize);
+  //   // 마커를 생성합니다
+  //   var marker = new window.kakao.maps.Marker({
+  //     map: kakaoMap, // 마커를 표시할 지도
+  //     position: new window.kakao.maps.LatLng(
+  //       data[i].LOCATION_Y,
+  //       data[i].LOCATION_X
+  //     ), // 마커를 표시할 위치
+  //     title: data[i].DATA_DESC, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시
+  //     image: markerImage, // 마커 이미지
+  //   });
+  // }
+  // console.log(kakaoMap);
+  // Hazard(data, kakaoMap);
   return (
     <>
+      <SectionTable data={data} map={kakaoMap}></SectionTable>
+
       <div id="map" style={{ width: "80vw", height: "100vh" }} />
       <ButtonSet>
         {btnSet.map((value, index) => {
