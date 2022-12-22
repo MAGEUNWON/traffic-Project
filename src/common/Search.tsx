@@ -1,19 +1,56 @@
 import styled from "styled-components";
 
-const Search = ({ placeholder }: { placeholder: string }) => {
+export const Search = ({ placeholder }: { placeholder: string }) => {
   return (
     <form>
-      <SearchWarp type="text" placeholder={placeholder} />
+      <SearchWarp placeholder={placeholder} />
     </form>
   );
 };
 
+interface single {
+  placeholder: string;
+  onSubmit: (e: any) => void;
+  onChange: (e: any) => void;
+  value: string;
+}
+
+export const SingleSearch = ({
+  placeholder,
+  onSubmit,
+  onChange,
+  value,
+}: single) => {
+  return (
+    <SingleBox>
+      <form onSubmit={onSubmit}>
+        <input
+          type="text"
+          placeholder={placeholder}
+          onChange={onChange}
+          value={value}
+        />
+        <button>
+          <img src="asset/icon_search2.png" />
+        </button>
+      </form>
+    </SingleBox>
+  );
+};
+
 const SearchWarp = styled.input`
-width: 250px;
-height: 30px;
-background-color: #FFFFFF;
-border 2px solid #1F68F6;
-border-radius: 0.5rem;
+  width: 250px;
+  height: 30px;
+  background-color: #ffffff;
+  border: 2px solid #1f68f6;
+  border-radius: 0.5rem;
 `;
 
-export default Search;
+const SingleBox = styled.div`
+  width: 250px;
+  height: 30px;
+  background-color: gray;
+  & > input {
+    width: 250px;
+  }
+`;

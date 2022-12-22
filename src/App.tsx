@@ -7,6 +7,7 @@ import axios from "axios";
 const App = () => {
   const [maptype, setMaptype] = useState<string>("traffic");
   const [parkingLot, setParkoingLot] = useState<any>([{}]);
+  const [kaMap, setkaMap] = useState();
   useEffect(() => {
     const getData = async () => {
       try {
@@ -29,7 +30,7 @@ const App = () => {
   return (
     <>
       <AppSet>
-        <Map parkingData={parkingLot}></Map>
+        <Map setkaMap={setkaMap} parkingLot={parkingLot}></Map>
       </AppSet>
     </>
   );

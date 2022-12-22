@@ -3,7 +3,6 @@ import React, { useEffect, useState, useRef } from "react";
 //useEffect에서 설정한 함수를 컴포넌트가 화면에 맨 처음 렌더링될 때만 실행하고, 업데이트될 때는 실행하지 않으려면 함수의 두 번째 파라미터로 비어 있는 배열을 넣어 주면 됨.
 //특정 값이 변경 될 때만 호출하고 싶은 경우에는 useEffect의 두 번째 파라미터로 전달되는 배열 안에 검사하고 싶은 값을 넣어주면 됨.
 import styled from "styled-components";
-import axios from "axios";
 import SectionTable from "./sectionTable";
 import "./Map.css";
 declare global {
@@ -19,10 +18,9 @@ interface btnSet {
   [index: string]: string;
 }
 
-const Map = ({ parkingData }: any) => {
+const Map = ({ parkingLot, setkaMap }: any) => {
   const [mapTypes, SetMapTypes] = useState<string>("Roadmap");
   const [data, setData] = useState(null);
-  const [parkingLot, setParkoingLot] = useState<any>([{}]);
   const [kakaoMap, setKakaoMap] = useState();
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -52,7 +50,7 @@ const Map = ({ parkingData }: any) => {
 
     let map = new window.kakao.maps.Map(container, options);
     setKakaoMap(map);
-
+    setkaMap(map);
     // let mapTypeControl = new window.kakao.maps.mapTypeControl();
     // map.addControl(mapTypeControl, window.kakao.maps.ControlPosiiton.TOPRIGHT);
 
@@ -107,59 +105,9 @@ const Map = ({ parkingData }: any) => {
     { value: "Skyview", con: "스카이뷰" },
     { value: "roadview", con: "로드뷰" },
   ];
-
-  function parkingEvent(data: any) {
-    console.log("파킹");
-    for (let i = 0; i < data.length; i++) {
-      let position = new window.kakao.maps.LatLng(data[i].lat, data[i].lon);
-      const imageSize = new window.kakao.maps.Size(16, 20);
-      const imgSrc = "/asset/parkinglot.png";
-
-      const parkingMarker = new window.kakao.maps.Marker({
-        map: kakaoMap,
-        position: position, // 마커를 표시할 위치
-        // image: new kakao.maps.MarkerImage(constructionSrc, imageSize),
-        image: new window.kakao.maps.MarkerImage(imgSrc, imageSize),
-      });
-
-      const content = `
-      <div class="content-box">
-        <span>${data[i].name}</span>
-      </div>
-    `;
-
-      // 주차장 오버레이 생성
-      const overlay = new window.kakao.maps.CustomOverlay({
-        position: position,
-        content: content,
-      });
-
-      // 돌발정보 마커에 마우스오버하면, 해당 돌발 상황 정보 오버레이가 보인다.
-      window.kakao.maps.event.addListener(
-        parkingMarker,
-        "mouseover",
-        function () {
-          overlay.setMap(kakaoMap);
-        }
-      );
-
-      // 돌발정보 마커를 마우스오버 하면, 해당 돌발 상황 정보 오버레이가 사라진다.
-      window.kakao.maps.event.addListener(
-        parkingMarker,
-        "mouseout",
-        function () {
-          overlay.setMap(null);
-        }
-      );
-    }
-  }
-
   return (
     <>
-      <SectionTable
-        parkingEvent={parkingEvent}
-        parkingData={parkingData}
-      ></SectionTable>
+      <SectionTable parkingLot={parkingLot} map={kakaoMap}></SectionTable>
       <div id="map" style={{ width: "80vw", height: "100vh" }} />
       <ButtonSet>
         {btnSet.map((value, index) => {

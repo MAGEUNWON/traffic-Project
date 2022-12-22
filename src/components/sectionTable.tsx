@@ -1,13 +1,18 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Button from "@/common/Button";
-import Search from "@/common/Search";
+import { Search, SingleSearch } from "@/common/Search";
 import Button_R from "@/common/Button_R";
 import Main from "@/common/main";
+import parkingEvent from "@/components/prac";
 
-const SectionTable = ({ parkingEvent, parkingData }: any) => {
+const SectionTable = ({ map, parkingLot }: any) => {
+  console.log(map);
   const [isCheck, setIsCheck] = useState<boolean>(true);
+  const [where, setWhere] = useState();
+  const [whereText, setwhereText] = useState<any>("");
   console.log(isCheck);
+  const [place, setPlace] = useState();
 
   const button_item = [
     {
@@ -48,10 +53,23 @@ const SectionTable = ({ parkingEvent, parkingData }: any) => {
     {
       src: "asset/icon_parkinglot.png",
       name: "주차장",
-      onClick: () => parkingEvent(parkingData),
+      onClick: () => {
+        console.log(parkingLot.parkingLot);
+        console.log(map);
+        parkingEvent(parkingLot.parkingLot, map);
+      },
     },
   ];
 
+  const onChangeWhere = (e: any) => {
+    setWhere(e.target.value);
+    setPlace(whereText);
+    setwhereText("");
+  };
+
+  const submitWhere = (e: any) => {
+    e.preventDefault();
+  };
   return (
     <>
       <SectionSet>
@@ -73,11 +91,16 @@ const SectionTable = ({ parkingEvent, parkingData }: any) => {
         </Button_RDiv>
 
         {isCheck ? (
-          <Search placeholder="어디로 갈까요?"></Search>
+          <SingleSearch
+            onSubmit={submitWhere}
+            placeholder="어디로 갈까요?"
+            onChange={onChangeWhere}
+            value={whereText}
+          />
         ) : (
           <>
-            <Search placeholder="출발지 검색"></Search>{" "}
-            <Search placeholder="도착지 검색"></Search>{" "}
+            <Search placeholder="출발지 검색"></Search>
+            <Search placeholder="도착지 검색"></Search>
             <form>
               <PathButton>경로검색</PathButton>
             </form>
