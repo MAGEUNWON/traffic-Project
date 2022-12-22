@@ -17,7 +17,6 @@ const App = () => {
   };
   // const [bringName,setBringName] = useState('');
   const [data, setData] = useState('Map')
-
   const getData = (e:string) => {
     setData(e)
     // console.log(e)
