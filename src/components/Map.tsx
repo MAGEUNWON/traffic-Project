@@ -19,25 +19,27 @@ interface btnSet {
 }
 
 const Map = () => {
-  const [mapTypes, SetMapTypes] = useState<string>("Roadmap");
-  const [data, setData] = useState(null);
+  const [mapTypes, SetMapTypes] = useState<string>("Roadmap"); //지도 타입 바뀌는 용도
+  const [data, setData] = useState<any>([{}]); //api 담을 용도
+  const [kakaoMap, setKakaoMap] = useState(); //map 밖에서 쓰려고 담는 용도
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     SetMapTypes(e.currentTarget.value);
   };
 
   const ref = useRef("");
-
   ref.current = mapTypes;
 
   useEffect(() => {
     // console.log(maptype)
     console.log("렌더링 완료"); //useEffect는 React.StrictMode가 적용된 개발환경에서는 콘솔이 두번씩 찍힘.
 
+    //axios로 도로별위험요소 api 불러옴. data usestate에 담아줌
     axios.get(`http://127.0.0.1:5000/hazard`).then((response) => {
-      console.log(response.data);
+      // console.log(response.data[0].ADDRESS_JIBUN);
       setData(response.data);
     });
+    // console.log(data);
 
     let container = document.getElementById("map") as HTMLElement; //지도를 담을 영역의 DOM 레퍼런스
     //카카오 객체가 window 하위 객체라는 것을 정의해야 하므로 window.kakao로 변경해야 함
@@ -47,20 +49,13 @@ const Map = () => {
     };
 
     let map = new window.kakao.maps.Map(container, options);
-
-    // let mapTypeControl = new window.kakao.maps.mapTypeControl();
-    // map.addControl(mapTypeControl, window.kakao.maps.ControlPosiiton.TOPRIGHT);
-
-    // maptype === 'traffic'?  window.kakao.maps.MapTypeId.TRAFFIC:null
-    // maptype === 'roadview'?  window.kakao.maps.MapTypeId.ROADVIEEW:null
-    // maptype === 'use_district'?  window.kakao.maps.MapTypeId.USE_DISTRICT:null
+    setKakaoMap(map); //map useEffect 밖에서 쓰려고 담은 것.
 
     //버튼 클릭하면 호출 (clickEvent)
     let currentTypeId;
     let changeMapType;
 
     //maptype에 따라 지도에 추가할 지도타입을 결정
-
     if (ref.current === "Roadmap") {
       //로드뷰 도로정보 지도타입
       changeMapType = window.kakao.maps.MapTypeId.ROADMAP;
@@ -96,13 +91,48 @@ const Map = () => {
     marker.setMap(map);
   }, [mapTypes]);
 
-  console.log(data);
-
+  //지도 타입 바뀌는 props 값 정해 놓은 것.
   const btnSet: btnSet[] = [
     { value: "Roadmap", con: "지도" },
     { value: "Skyview", con: "스카이뷰" },
     { value: "roadview", con: "로드뷰" },
   ];
+
+  // console.log(data); useEffect 밖에서 api 데이터 찍어야 나옴. 안에서는 null값 나옴
+  // let position = [];
+  for (let i = 0; i < data.length; i++) {
+    //api 데이터 빈 배열에 담아줌. 일단 필요어 없어서 주석처리함.
+    // console.log(Object.keys(data[i]).length);
+    // let content = {
+    //   ADDRESS: data[i].ADDRESS_NEW,
+    //   LINK_ID: data[i].LINK_ID,
+    //   LOCATION_X: data[i].LOCATION_X,
+    //   LOCATION_Y: data[i].LOCATION_Y,
+    //   LOCATION_DATA: data[i].LOCATION_DATA,
+    //   DATA_DESC: data[i].DATA_DESC,
+    // };
+    // position.push(content);
+    // console.log(position);
+
+    // 마커 이미지의 이미지 주소
+    var imageSrc =
+      "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+
+    // 마커 이미지의 이미지 크기
+    var imageSize = new window.kakao.maps.Size(35, 35);
+    // 마커 이미지를 생성합니다
+    var markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize);
+    // 마커를 생성합니다
+    var marker = new window.kakao.maps.Marker({
+      map: kakaoMap, // 마커를 표시할 지도
+      position: new window.kakao.maps.LatLng(
+        data[i].LOCATION_Y,
+        data[i].LOCATION_X
+      ), // 마커를 표시할 위치
+      title: data[i].DATA_DESC, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시
+      image: markerImage, // 마커 이미지
+    });
+  }
 
   return (
     <>
