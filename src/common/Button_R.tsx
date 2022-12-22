@@ -13,7 +13,7 @@ const Button_R = ({
 
   return (
     <>
-      <Button_RWrap onClick={onClick}>
+      <Button_RWrap>
         <img src={icon} alt="icon"></img>
         <p>{contents}</p>
       </Button_RWrap>
