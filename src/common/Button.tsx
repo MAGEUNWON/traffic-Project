@@ -1,11 +1,20 @@
 import styled from "styled-components";
+import { useState } from "react";
+import CCTV from "@/components/CCTV";
 
-const Button = ({ icon, name }: { icon: string; name: string }) => {
+const Button = ({ icon, name}: { icon: string; name: string;}) => {
+  const [bringName,setBringName] = useState('');
+  
+  
+
   return (
     <>
-      <ButtonWarp>
-        <img src={icon} alt="icon"></img>
-        <p>{name}</p>
+      
+      <ButtonWarp>  
+        <div>        
+          <img src={icon} alt="icon"></img>
+          <p id="click">{name}</p>
+        </div>      
       </ButtonWarp>
     </>
   );
