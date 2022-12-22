@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Map from "./components/Map";
 import SectionTable from "./components/sectionTable";
 import "./App.css";
+import CCTV from "./components/CCTV";
 
 const App = () => {
   const [maptype, setMaptype] = useState<string>("traffic");
@@ -14,12 +15,28 @@ const App = () => {
     // event.currentTarget.value
     setMaptype(event.currentTarget.value);
   };
+  // const [bringName,setBringName] = useState('');
+  const [data, setData] = useState('Map')
+
+  const getData = (e:string) => {
+    setData(e)
+    // console.log(e)
+    // console.log(data)
+  }
+  // console.log(getData)
 
   return (
     <>
       <AppSet>
-        <SectionTable></SectionTable>
-        <Map></Map>
+        <SectionTable setData={getData}/>
+        {
+          data === 'Map' ? (
+            <Map/>
+          ): data === 'CCTV' ? (
+            <CCTV/>
+          ) :
+          null
+        }      
       </AppSet>
     </>
   );
