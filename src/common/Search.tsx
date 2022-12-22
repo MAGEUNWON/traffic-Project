@@ -30,7 +30,7 @@ export const SingleSearch = ({
           onChange={onChange}
           value={value}
         />
-        <button>
+        <button type="submit" onClick={() => console.log("실행")}>
           <img src="asset/icon_search2.png" />
         </button>
       </form>

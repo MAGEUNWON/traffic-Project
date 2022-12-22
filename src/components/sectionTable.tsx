@@ -1,18 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Button from "@/common/Button";
 import { Search, SingleSearch } from "@/common/Search";
 import Button_R from "@/common/Button_R";
 import Main from "@/common/main";
-import parkingEvent from "@/components/prac";
 
-const SectionTable = ({ map, parkingLot }: any) => {
-  console.log(map);
+const SectionTable = ({ kakaoMap }: any) => {
   const [isCheck, setIsCheck] = useState<boolean>(true);
-  const [where, setWhere] = useState();
-  const [whereText, setwhereText] = useState<any>("");
-  console.log(isCheck);
-  const [place, setPlace] = useState();
+  const [inputText, setInputText] = useState("");
+  const [searchplace, setSearchPlace] = useState("");
 
   const button_item = [
     {
@@ -54,22 +50,65 @@ const SectionTable = ({ map, parkingLot }: any) => {
       src: "asset/icon_parkinglot.png",
       name: "주차장",
       onClick: () => {
-        console.log(parkingLot.parkingLot);
-        console.log(map);
-        parkingEvent(parkingLot.parkingLot, map);
+        console.log("클릭");
       },
     },
   ];
 
   const onChangeWhere = (e: any) => {
-    setWhere(e.target.value);
-    setPlace(whereText);
-    setwhereText("");
+    setInputText(e.target.value);
   };
 
   const submitWhere = (e: any) => {
     e.preventDefault();
+    setSearchPlace(inputText);
+    setInputText("");
   };
+  console.log(inputText);
+  useEffect(() => {
+    var infowindow = new window.kakao.maps.InfoWindow({ zIndex: 1 });
+    // 장소 검색 객체를 생성
+    const ps = new window.kakao.maps.services.Places();
+
+    ps.keywordSearch(searchplace, placesSearchCB);
+    // 키워드 검색 완료 시 호출되는 콜백함수 입니다
+    function placesSearchCB(data: any, status: any, pagination: any) {
+      if (status === window.kakao.maps.services.Status.OK) {
+        // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
+        // LatLngBounds 객체에 좌표를 추가합니다
+        var bounds = new window.kakao.maps.LatLngBounds();
+
+        for (var i = 0; i < data.length; i++) {
+          displayMarker(data[i]);
+          bounds.extend(new window.kakao.maps.LatLng(data[i].y, data[i].x));
+        }
+
+        // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
+        kakaoMap.setBounds(bounds);
+      }
+    }
+
+    // 지도에 마커를 표시하는 함수입니다
+    function displayMarker(place: any) {
+      // 마커를 생성하고 지도에 표시합니다
+      var marker = new window.kakao.maps.Marker({
+        map: kakaoMap,
+        position: new window.kakao.maps.LatLng(place.y, place.x),
+      });
+
+      // 마커에 클릭이벤트를 등록합니다
+      window.kakao.maps.event.addListener(marker, "click", function () {
+        // 마커를 클릭하면 장소명이 인포윈도우에 표출됩니다
+        infowindow.setContent(
+          '<div style="padding:5px;font-size:12px;">' +
+            place.place_name +
+            "</div>"
+        );
+        infowindow.open(kakaoMap, marker);
+      });
+    }
+  }, []);
+
   return (
     <>
       <SectionSet>
@@ -95,7 +134,7 @@ const SectionTable = ({ map, parkingLot }: any) => {
             onSubmit={submitWhere}
             placeholder="어디로 갈까요?"
             onChange={onChangeWhere}
-            value={whereText}
+            value={inputText}
           />
         ) : (
           <>
@@ -120,12 +159,6 @@ const SectionTable = ({ map, parkingLot }: any) => {
               ></Button>
             );
           })}
-          {/* <Button icon="asset/icon_cctv.png"></Button>
-          <Button icon="asset/icon_conflagration.png"></Button>
-          <Button icon="asset/icon_safe.png"></Button>
-          <Button icon="asset/icon_forecast.png"></Button>
-          <Button icon="asset/icon_traffic.png"></Button>
-          <Button icon="asset/icon_parkinglot.png"></Button> */}
         </ButtonDiv>
       </SectionSet>
     </>

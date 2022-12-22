@@ -18,7 +18,7 @@ interface btnSet {
   [index: string]: string;
 }
 
-const Map = ({ parkingLot, setkaMap }: any) => {
+const Map = () => {
   const [mapTypes, SetMapTypes] = useState<string>("Roadmap");
   const [data, setData] = useState(null);
   const [kakaoMap, setKakaoMap] = useState();
@@ -50,7 +50,7 @@ const Map = ({ parkingLot, setkaMap }: any) => {
 
     let map = new window.kakao.maps.Map(container, options);
     setKakaoMap(map);
-    setkaMap(map);
+
     // let mapTypeControl = new window.kakao.maps.mapTypeControl();
     // map.addControl(mapTypeControl, window.kakao.maps.ControlPosiiton.TOPRIGHT);
 
@@ -98,16 +98,17 @@ const Map = ({ parkingLot, setkaMap }: any) => {
     });
     //마커가 지도 위에 표시되도록 설정
     marker.setMap(map);
-  }, [mapTypes]);
+  }, []);
 
   const btnSet: btnSet[] = [
     { value: "Roadmap", con: "지도" },
     { value: "Skyview", con: "스카이뷰" },
     { value: "roadview", con: "로드뷰" },
   ];
+
   return (
     <>
-      <SectionTable parkingLot={parkingLot} map={kakaoMap}></SectionTable>
+      <SectionTable kakaoMap={kakaoMap}></SectionTable>
       <div id="map" style={{ width: "80vw", height: "100vh" }} />
       <ButtonSet>
         {btnSet.map((value, index) => {
