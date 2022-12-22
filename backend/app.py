@@ -19,7 +19,7 @@ def test():
     return "HELLO WROLED"
 
 # 두진
-@app.route('/daejeon')
+@app.route('/cctv')
 def daejeon():
         db_class  = DataRoute()
         sql  = f"SELECT * From CCTV"
