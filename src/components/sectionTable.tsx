@@ -16,7 +16,7 @@ const button_item = [
   },
   {
     src: "asset/icon_safe.png",
-    name: "safe",
+    name: "보호구역",
   },
   {
     src: "asset/icon_forecast.png",
