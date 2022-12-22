@@ -1,6 +1,6 @@
 export const Hazard = (data: any, map: any) => {
   for (let i = 0; i < data.length; i++) {
-    //api 데이터 빈 배열에 담아줌. 일단 필요어 없어서 주석처리함.
+    //api 데이터 빈 배열에 담아줌. 일단 필요 없어서 주석처리함.
     // console.log(Object.keys(data[i]).length);
     // let content = {
     //   ADDRESS: data[i].ADDRESS_NEW,

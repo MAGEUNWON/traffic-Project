@@ -44,13 +44,6 @@ const Map = () => {
     });
     // console.log(data);
 
-
-    let areas = [
-      {
-        
-      }
-    ]
-
     let container = document.getElementById("map") as HTMLElement; //지도를 담을 영역의 DOM 레퍼런스
     //카카오 객체가 window 하위 객체라는 것을 정의해야 하므로 window.kakao로 변경해야 함
     let options = {
