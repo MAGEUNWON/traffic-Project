@@ -10,7 +10,7 @@ config = {
     "port":int(os.environ.get("DB_PORT")),
     "database":os.environ.get("DB_DB")
 }
-class Database:
+class DataRoute:
     def __init__(self):
         try:
             self.db = pymysql.connect(**config)
