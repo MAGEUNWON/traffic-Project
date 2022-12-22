@@ -6,9 +6,10 @@ import Main from "@/common/main";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const SectionTable = ({ markerEvent, prac }: any) => {
+const SectionTable = ({ markerEvent, prac, parkingEvent }: any) => {
   const [check, setCheck] = useState(true);
   const [data, setData] = useState(null);
+  const [parkingData, setParkingData] = useState(null);
   useEffect(() => {
     const getData = async () => {
       try {
@@ -19,7 +20,17 @@ const SectionTable = ({ markerEvent, prac }: any) => {
         console.log(err);
       }
     };
+    const getparking = async () => {
+      try {
+        let response = await axios.get("http://127.0.0.1:5000/parkinglot");
+        console.log(response.data);
+        setParkingData(response.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
     getData();
+    getparking();
   }, []);
 
   const button_item = [
@@ -51,7 +62,7 @@ const SectionTable = ({ markerEvent, prac }: any) => {
     {
       src: "asset/icon_parkinglot.png",
       name: "주차장",
-      onClick: () => prac(),
+      onClick: () => parkingEvent(parkingData),
     },
   ];
   return (

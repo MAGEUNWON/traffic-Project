@@ -161,9 +161,29 @@ const Map = () => {
     }
   }
 
+  function parkingEvent(data: any) {
+    console.log("파킹");
+    for (let i = 0; i < data.length; i++) {
+      let position = new window.kakao.maps.LatLng(data[i].lat, data[i].lon);
+      const imageSize = new window.kakao.maps.Size(16, 20);
+      const imgSrc = "/asset/parkinglot.png";
+
+      const parkingMarker = new window.kakao.maps.Marker({
+        map: kakaomap,
+        position: position, // 마커를 표시할 위치
+        // image: new kakao.maps.MarkerImage(constructionSrc, imageSize),
+        image: new window.kakao.maps.MarkerImage(imgSrc, imageSize),
+      });
+    }
+  }
+
   return (
     <>
-      <SectionTable prac={prac} markerEvent={markerEvent} />
+      <SectionTable
+        prac={prac}
+        markerEvent={markerEvent}
+        parkingEvent={parkingEvent}
+      />
       <div id="map" style={{ width: "80vw", height: "99vh" }} />
       <ButtonSet>
         {btnSet.map((value, index) => {
