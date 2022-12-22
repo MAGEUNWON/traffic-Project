@@ -32,12 +32,12 @@ const Map = () => {
 
   useEffect(() => {
     // console.log(maptype)
-    console.log("렌더링 완료"); //useEffect는 React.StrictMode가 적용된 개발환경에서는 콘솔이 두번씩 찍힘.
+    // console.log("렌더링 완료"); //useEffect는 React.StrictMode가 적용된 개발환경에서는 콘솔이 두번씩 찍힘.
 
-    axios.get(`http://127.0.0.1:5000/hazard`).then((response) => {
-      console.log(response.data);
-      setData(response.data);
-    });
+    // axios.get(`http://127.0.0.1:5000/hazard`).then((response) => {
+    //   console.log(response.data);
+    //   setData(response.data);
+    // });
 
     let container = document.getElementById("map") as HTMLElement; //지도를 담을 영역의 DOM 레퍼런스
     //카카오 객체가 window 하위 객체라는 것을 정의해야 하므로 window.kakao로 변경해야 함
@@ -94,9 +94,9 @@ const Map = () => {
     });
     //마커가 지도 위에 표시되도록 설정
     marker.setMap(map);
-  }, [mapTypes]);
+  }, []);
 
-  console.log(data);
+  // console.log(data);
 
   const btnSet: btnSet[] = [
     { value: "Roadmap", con: "지도" },
