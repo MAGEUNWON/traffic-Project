@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Map from "./components/Map";
 import "./App.css";
-import axios from "axios";
 
 const App = () => {
   const [maptype, setMaptype] = useState<string>("traffic");

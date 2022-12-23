@@ -20,7 +20,6 @@ interface btnSet {
 
 const Map = () => {
   const [mapTypes, SetMapTypes] = useState<string>("Roadmap");
-  const [data, setData] = useState(null);
   const [kakaoMap, setKakaoMap] = useState();
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -98,7 +97,7 @@ const Map = () => {
     });
     //마커가 지도 위에 표시되도록 설정
     marker.setMap(map);
-  }, []);
+  }, [mapTypes]);
 
   const btnSet: btnSet[] = [
     { value: "Roadmap", con: "지도" },
@@ -125,7 +124,7 @@ const Map = () => {
 
 const ButtonSet = styled.div`
   display: flex;
-  width: 250px;
+  width: 200px;
   height: 30px;
   justify-content: space-evenly;
   position: absolute;
@@ -133,13 +132,20 @@ const ButtonSet = styled.div`
   right: 1rem;
   z-index: 5;
 `;
-
 const Button = styled.button`
-  width: 60px;
-  height: 50px;
-  background-color: #fff;
-  border: 1px solid black;
+  height: 25px;
+  background-color: #1f68f6;
+  color: #fff;
+  border: none;
   border-radius: 0.5rem;
+  font-size: 13px;
+  padding: 0 7px 0 7px;
+  box-shadow: 0 2px 3px #00000050;
+  &:hover {
+    cursor: pointer;
+    background-color: #fff;
+    color: #1f68f6;
+  }
 `;
 
 export default Map;

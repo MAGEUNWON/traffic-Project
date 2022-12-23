@@ -26,6 +26,7 @@ const ButtonWarp = styled.button`
   border: 1px solid white;
   color: #1f68f6;
   border-radius: 0.5rem;
+  margin: 7px;
   cursor: pointer;
 `;
 
