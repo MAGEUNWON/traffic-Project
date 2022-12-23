@@ -36,7 +36,6 @@ const App = () => {
             try {
                 const res = await axios.get(`http://127.0.0.1:5000/cctv`);
                 setDatas(res.data);
-                console.log(res.data, "ccctv!");
             } catch (e: any) {
                 console.log(e);
             }

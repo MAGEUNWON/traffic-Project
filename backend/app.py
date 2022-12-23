@@ -146,12 +146,24 @@ def safe_zone():
 
 #상호 
 
+@app.route('/dot') # 접속하는 url
+def dot():
+        db_class = DataRoute()
+        sql  = f"SELECT * FROM daejeon_node"
+        row = db_class.executeAll(sql)
+
+        return row
+
+
 @app.route('/directions', methods = ['POST']) # 접속하는 url
 def dirCall():
         nodeData = request.json['markerArr']
         finalData = []
         trafficLink = []
         trafficData = []
+
+        finalData.append(nodeData[0])
+
         
         def navi(start, end):
                 db_class = DataRoute() 
@@ -189,9 +201,24 @@ def dirCall():
                                 row = db_class.executeAll(sql)
                                 if len(row) != 0:
                                         trafficData.append(row[0])
+                                else:
+                                        trafficData.append({
+                                                            "congestion": "정보없음",
+                                                            "endNodeID": "정보없음",
+                                                            "endNodeName": "정보없음",
+                                                            "linkCount": "정보없음",
+                                                            "linkID": "정보없음",
+                                                            "linkLength": "정보없음",
+                                                            "linkSqc": "정보없음",
+                                                            "roadName": "정보없음",
+                                                            "speed":"정보없음",
+                                                            "startNodeId": "정보없음",
+                                                            "startNodeName": "정보없음",
+                                                            "travelT": "정보없음",
+                                                            "udType": "정보없음"
+                                                            })
                                 
 
-                        print(trafficData)
                         print('end')
                 
                 else:
