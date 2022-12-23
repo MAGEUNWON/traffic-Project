@@ -49,24 +49,43 @@ const Map = () => {
     axios.get(`http://127.0.0.1:5000/hazard/polygon`).then((response) => {
       // console.log(response.data[0].ADDRESS_JIBUN);
       setData(response.data);
-      console.log(response.data);
-      let path = [];
-      for (let i = 0; i < response.data.length; i++) {
-        console.log(response.data[i].LOCATION_DATA);
-        let a = response.data[i].LOCATION_DATA.slice(
-          9,
-          response.data[i].LOCATION_DATA.length - 2
-        );
-        let b = a.split(",");
-        console.log(b);
+      console.log(response.data[46]);
+      let a = response.data[46].LOCATION_DATA.slice(
+        9,
+        response.data[46].LOCATION_DATA.length - 2
+      );
+      console.log(a);
+      let b = a.split(",");
+      console.log(b); //polygon 46번째만 가져와서 배열에 넣음.
 
-        for (let j = 0; j < b.length; j++) {
-          let c = b[j].split(" ");
-          console.log(c);
-          path.push(c);
-        }
-        console.log(path);
+      let areas = [];
+      let path = [];
+      for (let j = 0; j < b.length; j++) {
+        let c = b[j].split(" ");
+        console.log(c);
+        path.push(c);
       }
+      areas.push(path);
+      console.log(areas[0][0][0], areas[0][0][1]); //polygon 46번째 좌표만 가져와서 배열에 넣고 46번째 배열들만 다시 배열에 담음
+
+      //이 밑에 애들은 line 좌표 여러개 넣는거 할 때 할 것
+      // let path = [];
+      // for (let i = 0; i < response.data.length; i++) {
+      //   // console.log(response.data[i].LOCATION_DATA);
+      //   let a = response.data[i].LOCATION_DATA.slice(
+      //     9,
+      //     response.data[i].LOCATION_DATA.length - 2
+      //   );
+      //   let b = a.split(",");
+      // console.log(b);
+
+      // for (let j = 0; j < b.length; j++) {
+      //   let c = b[j].split(" ");
+      //   console.log(c);
+      //   path.push(c);
+      // }
+      // console.log(path);
+      // }
       // for (let i = 0; i < data.length; i++) {
       //   areas.push(new window.kakao.maps.LatLng(data[i][1], data[i][0]));
       // }
@@ -87,44 +106,6 @@ const Map = () => {
     });
 
     // console.log(data);
-
-    // let areas = [
-    //   {
-    //     name: "용산구",
-    //     path: [
-    //       new window.kakao.maps.LatLng(37.5548768201904, 126.96966524449994),
-    //       new window.kakao.maps.LatLng(37.55308718044556, 126.97642899633566),
-    //       new window.kakao.maps.LatLng(37.55522076659584, 126.97654602427454),
-    //       new window.kakao.maps.LatLng(37.55320655210504, 126.97874667968763),
-    //       new window.kakao.maps.LatLng(37.55368689494708, 126.98541456064552),
-    //       new window.kakao.maps.LatLng(37.54722934282707, 126.995229135048),
-    //       new window.kakao.maps.LatLng(37.549694559809545, 126.99832516302801),
-    //       new window.kakao.maps.LatLng(37.550159406110104, 127.00436818301327),
-    //       new window.kakao.maps.LatLng(37.54820235864802, 127.0061334023129),
-    //       new window.kakao.maps.LatLng(37.546169758665414, 127.00499711608721),
-    //       new window.kakao.maps.LatLng(37.54385947805103, 127.00727818360471),
-    //       new window.kakao.maps.LatLng(37.54413326436179, 127.00898460651953),
-    //       new window.kakao.maps.LatLng(37.539639030116945, 127.00959054834321),
-    //       new window.kakao.maps.LatLng(37.537681185520256, 127.01726163044557),
-    //       new window.kakao.maps.LatLng(37.53378887274516, 127.01719284893274),
-    //       new window.kakao.maps.LatLng(37.52290225898471, 127.00614038053493),
-    //       new window.kakao.maps.LatLng(37.51309192794448, 126.99070240960813),
-    //       new window.kakao.maps.LatLng(37.50654651085339, 126.98553683648308),
-    //       new window.kakao.maps.LatLng(37.50702053393398, 126.97524914998174),
-    //       new window.kakao.maps.LatLng(37.51751820477105, 126.94988506562748),
-    //       new window.kakao.maps.LatLng(37.52702918583156, 126.94987870367682),
-    //       new window.kakao.maps.LatLng(37.534519656862926, 126.94481851935942),
-    //       new window.kakao.maps.LatLng(37.537500243531994, 126.95335659960566),
-    //       new window.kakao.maps.LatLng(37.54231338779177, 126.95817394011969),
-    //       new window.kakao.maps.LatLng(37.54546318600178, 126.95790512689311),
-    //       new window.kakao.maps.LatLng(37.548791603525764, 126.96371984820232),
-    //       new window.kakao.maps.LatLng(37.55155543391863, 126.96233786542686),
-    //       new window.kakao.maps.LatLng(37.5541513366375, 126.9657135934734),
-    //       new window.kakao.maps.LatLng(37.55566236579088, 126.9691850696746),
-    //       new window.kakao.maps.LatLng(37.5548768201904, 126.96966524449994),
-    //     ],
-    //   },
-    // ];
 
     // let container = document.getElementById("map") as HTMLElement; //지도를 담을 영역의 DOM 레퍼런스
     // //카카오 객체가 window 하위 객체라는 것을 정의해야 하므로 window.kakao로 변경해야 함
@@ -299,7 +280,7 @@ const Map = () => {
     marker.setMap(map);
   }, [mapTypes]);
 
-  console.log(data);
+  // console.log(data);
   // for (let i = 0; i < data.length; i++) {
   //   console.log(data[i].LOCATION_DATA);
   //   let a = data[i].LOCATION_DATA.substring(9);
