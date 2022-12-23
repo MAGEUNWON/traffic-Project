@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Map from "./components/Map";
 import FunctionMap from "./components/FunctionMap";
 import SectionTable from "./components/sectionTable";
+import FunctionBtn from "./components/FunctionBtn";
 import "./App.css";
 
 
@@ -24,7 +25,10 @@ const App = () => {
 
   return (
     <AppSet>
-      <SectionTable handlebuttonClick={handleChangeValue}/>
+      <SectionSet>
+        <SectionTable />
+        <FunctionBtn handlebuttonClick={handleChangeValue}/>
+      </SectionSet>
       {value === "" ? (
         <Map />
       ) : (
@@ -40,6 +44,16 @@ const AppSet = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+const SectionSet = styled.section`
+  width: 20vw;
+  height: 100vh;
+  background-color: #e7e7e7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
 `;
 
 export default App;

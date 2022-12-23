@@ -3,7 +3,6 @@ import React, { useEffect, useState, useRef } from "react";
 //useEffect에서 설정한 함수를 컴포넌트가 화면에 맨 처음 렌더링될 때만 실행하고, 업데이트될 때는 실행하지 않으려면 함수의 두 번째 파라미터로 비어 있는 배열을 넣어 주면 됨.
 //특정 값이 변경 될 때만 호출하고 싶은 경우에는 useEffect의 두 번째 파라미터로 전달되는 배열 안에 검사하고 싶은 값을 넣어주면 됨.
 import styled from "styled-components";
-import axios from "axios";
 
 declare global {
   interface Window {
@@ -20,7 +19,6 @@ interface btnSet {
 
 const Map = () => {
   const [mapTypes, SetMapTypes] = useState<string>("Roadmap");
-  const [data, setData] = useState(null);
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     SetMapTypes(e.currentTarget.value);
@@ -95,8 +93,6 @@ const Map = () => {
     //마커가 지도 위에 표시되도록 설정
     marker.setMap(map);
   }, [mapTypes]);
-
-  console.log(data);
 
   const btnSet: btnSet[] = [
     { value: "Roadmap", con: "지도" },
