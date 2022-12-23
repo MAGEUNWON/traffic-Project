@@ -3,7 +3,6 @@ import React, { useEffect, useState, useRef } from "react";
 //useEffect에서 설정한 함수를 컴포넌트가 화면에 맨 처음 렌더링될 때만 실행하고, 업데이트될 때는 실행하지 않으려면 함수의 두 번째 파라미터로 비어 있는 배열을 넣어 주면 됨.
 //특정 값이 변경 될 때만 호출하고 싶은 경우에는 useEffect의 두 번째 파라미터로 전달되는 배열 안에 검사하고 싶은 값을 넣어주면 됨.
 import styled from "styled-components";
-import axios from "axios";
 import SectionTable from "./sectionTable";
 import "./Map.css";
 declare global {
@@ -21,8 +20,6 @@ interface btnSet {
 
 const Map = ({ parkingData, accidentData }: any) => {
   const [mapTypes, SetMapTypes] = useState<string>("Roadmap");
-  const [data, setData] = useState(null);
-  const [parkingLot, setParkoingLot] = useState<any>([{}]);
   const [kakaoMap, setKakaoMap] = useState();
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -113,7 +110,7 @@ const Map = ({ parkingData, accidentData }: any) => {
       <SectionTable
         parkingData={parkingData}
         accidentData={accidentData}
-        map={kakaoMap}
+        kakaoMap={kakaoMap}
       ></SectionTable>
       <div id="map" style={{ width: "80vw", height: "100vh" }} />
       <ButtonSet>
@@ -131,7 +128,7 @@ const Map = ({ parkingData, accidentData }: any) => {
 
 const ButtonSet = styled.div`
   display: flex;
-  width: 250px;
+  width: 200px;
   height: 30px;
   justify-content: space-evenly;
   position: absolute;
@@ -139,13 +136,20 @@ const ButtonSet = styled.div`
   right: 1rem;
   z-index: 5;
 `;
-
 const Button = styled.button`
-  width: 60px;
-  height: 50px;
-  background-color: #fff;
-  border: 1px solid black;
+  height: 25px;
+  background-color: #1f68f6;
+  color: #fff;
+  border: none;
   border-radius: 0.5rem;
+  font-size: 13px;
+  padding: 0 7px 0 7px;
+  box-shadow: 0 2px 3px #00000050;
+  &:hover {
+    cursor: pointer;
+    background-color: #fff;
+    color: #1f68f6;
+  }
 `;
 
 export default Map;

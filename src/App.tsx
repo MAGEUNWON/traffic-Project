@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Map from "./components/Map";
-import "./App.css";
 import axios from "axios";
+import "./App.css";
 
 const App = () => {
   const [maptype, setMaptype] = useState<string>("traffic");
@@ -30,6 +30,7 @@ const App = () => {
     getData();
     getparking();
   }, []);
+
   // const handleClick = (event:React.MouseEvent<HTMLElement>) => {
   //   "setOverlayMapTypeID('traffic')"
   // }

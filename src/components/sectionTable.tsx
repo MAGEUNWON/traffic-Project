@@ -1,12 +1,10 @@
-import React, { useState } from "react";
 import styled from "styled-components";
 import Button from "@/common/Button";
-import Search from "@/common/Search";
-import Button_R from "@/common/Button_R";
-import Main from "@/common/main";
+import SerchBox from "./SerchBox";
 import { parkingEvent, markerEvent } from "@/components/buttonFuction";
+import { useState } from "react";
 
-const SectionTable = ({ parkingData, accidentData, map }: any) => {
+const SectionTable = ({ parkingData, accidentData, kakaoMap }: any) => {
   const [isCheck, setIsCheck] = useState<boolean>(true);
   console.log(isCheck);
 
@@ -22,8 +20,7 @@ const SectionTable = ({ parkingData, accidentData, map }: any) => {
       src: "asset/icon_conflagration.png",
       name: "돌발정보",
       onClick: () => {
-        console.log("accidentData");
-        markerEvent(accidentData, map);
+        markerEvent(accidentData, kakaoMap);
       },
     },
     {
@@ -52,10 +49,7 @@ const SectionTable = ({ parkingData, accidentData, map }: any) => {
       name: "주차장",
       onClick: () => {
         console.log("클릭");
-        console.log(parkingData);
-        console.log(map);
-
-        parkingEvent(parkingData, map);
+        parkingEvent(parkingData, kakaoMap);
       },
     },
   ];
@@ -63,37 +57,7 @@ const SectionTable = ({ parkingData, accidentData, map }: any) => {
   return (
     <>
       <SectionSet>
-        <Button_RDiv>
-          <Button_R
-            icon="/asset/icon_search.png"
-            contents="검색"
-            onClick={() => {
-              setIsCheck(true);
-            }}
-          ></Button_R>
-          <Button_R
-            icon="/asset/icon_search.png"
-            contents="길찾기"
-            onClick={() => {
-              setIsCheck(false);
-            }}
-          ></Button_R>
-        </Button_RDiv>
-
-        {isCheck ? (
-          <Search placeholder="어디로 갈까요?"></Search>
-        ) : (
-          <>
-            <Search placeholder="출발지 검색"></Search>{" "}
-            <Search placeholder="도착지 검색"></Search>{" "}
-            <form>
-              <PathButton>경로검색</PathButton>
-            </form>
-          </>
-        )}
-
-        <Main></Main>
-
+        <SerchBox kakaoMap={kakaoMap}></SerchBox>
         <ButtonDiv>
           {button_item.map((value, index) => {
             return (
@@ -105,12 +69,6 @@ const SectionTable = ({ parkingData, accidentData, map }: any) => {
               ></Button>
             );
           })}
-          {/* <Button icon="asset/icon_cctv.png"></Button>
-          <Button icon="asset/icon_conflagration.png"></Button>
-          <Button icon="asset/icon_safe.png"></Button>
-          <Button icon="asset/icon_forecast.png"></Button>
-          <Button icon="asset/icon_traffic.png"></Button>
-          <Button icon="asset/icon_parkinglot.png"></Button> */}
         </ButtonDiv>
       </SectionSet>
     </>
@@ -118,41 +76,23 @@ const SectionTable = ({ parkingData, accidentData, map }: any) => {
 };
 
 const SectionSet = styled.section`
-  width: 20vw;
+  width: 400px;
   height: 100vh;
   background-color: #e7e7e7;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
+  padding: 0 10px 0 10px;
 `;
-
-const Button_RDiv = styled.div`
-  width: 230px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-`;
-
 const ButtonDiv = styled.div`
-  width: 218px;
-  height: 190px;
+  width: 280px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-around;
-`;
-
-const PathButton = styled.button`
-  width: 70px;
-  height: 25px;
-  background-color: #1f68f6;
-  color: #ffffff;
-  border: 1px solid #1f68f6;
-  border-radius: 0.5rem;
-  margin-left: 11rem;
+  padding: 0 10px 0px 10px;
 `;
 
 export default SectionTable;
