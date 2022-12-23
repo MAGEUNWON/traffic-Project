@@ -1,3 +1,6 @@
+import { Children, useRef, useState } from "react";
+
+
 export const parkingEvent = (data: any, map: any) => {
     for (let i = 0; i < data.length; i++) {
         let position = new window.kakao.maps.LatLng(data[i].lat, data[i].lon);
@@ -105,60 +108,77 @@ export const markerEvent = (data: any, map: any) => {
 
 // -------------------------------------------------------
 
-export const cctvFc = (datas: any, map: any) => {
-    let ImageSrc =
-            "https://t1.daumcdn.net/localimg/localimages/07/2018/pc/img/marker_cctv.png",
+export const cctvFc = (datas: any, map: any) => {        
+        let ImageSrc =
+        "https://t1.daumcdn.net/localimg/localimages/07/2018/pc/img/marker_cctv.png",
         imageSize = new window.kakao.maps.Size(24, 27),
         imageOption = { offset: new window.kakao.maps.Point(24, 27) };
-
-    // 다른 마커 클릭시 기존 인포윈도우 닫기 위한 빈배열 선언
-    let info: any = [];
-
-    // 반복문을 사용하여 마커 표시
-    for (let i = 0; i < datas.length; i++) {
-        // db에서 가져온 데이터에서 이름, x좌표,y좌표 추출
-        let name = datas[i].NAME;
-        let url = datas[i].URL;
-        let xcode = datas[i].XCODE;
-        let ycode = datas[i].YCODE;
-
-        //마커 생성
-        let marker = new window.kakao.maps.Marker({
-            title: name,
-            map: map,
-            position: new window.kakao.maps.LatLng(ycode, xcode),
-            image: new window.kakao.maps.MarkerImage(
-                ImageSrc,
-                imageSize,
-                imageOption
-            ),
-        });
-
-        let iwCotent = `<div style="padding:5px;">${name}</div><iframe width="330" height ="280" src = "${url}"></iframe><div style="font-size:5px;background-color:#333;color:#fff">경찰청(UTIC)(LIVE)제공</div>`,
+        
+        // 다른 마커 클릭시 기존 인포윈도우 닫기 위한 빈배열 선언
+        let info: any = [];
+        let markersave :any = [];
+        
+        // 반복문을 사용하여 마커 표시
+        for (let i = 0; i < datas.length; i++) {
+            // db에서 가져온 데이터에서 이름, x좌표,y좌표 추출
+            let name = datas[i].NAME;
+            let url = datas[i].URL;
+            let xcode = datas[i].XCODE;
+            let ycode = datas[i].YCODE;
+            
+            //마커 생성
+            let marker = new window.kakao.maps.Marker({
+                title: name,
+                map: map,
+                position: new window.kakao.maps.LatLng(ycode, xcode),
+                image: new window.kakao.maps.MarkerImage(
+                    ImageSrc,
+                    imageSize,
+                    imageOption
+                ),
+            });
+            markersave.push(marker);
+            console.log(markersave)
+            
+            let iwCotent = `<div style="padding:5px;">${name}</div><iframe width="330" height ="280" src = "${url}"></iframe><div style="font-size:5px;background-color:#333;color:#fff">경찰청(UTIC)(LIVE)제공</div>`,
             iwPosition = new window.kakao.maps.LatLng(ycode, xcode),
             iwRemoveable = true;
-
-        let infowindow = new window.kakao.maps.InfoWindow({
-            position: iwPosition,
-            content: iwCotent,
-            removable: iwRemoveable,
-        });
-        info.push(infowindow);
-
-        const close = () => {
-            for (let i = 0; i < info.length; i++) {
-                info[i].close();
-            }
-        };
-
-        window.kakao.maps.event.addListener(marker, "click", () => {
-            close();
-            infowindow.open(map, marker);
-        });
-
-        window.kakao.maps.event.addListener(map, "click", () => {
-            close();
-        });
+            
+            let infowindow = new window.kakao.maps.InfoWindow({
+                position: iwPosition,
+                content: iwCotent,
+                removable: iwRemoveable,
+            });
+            info.push(infowindow);
+            
+            const close = () => {
+                for (let i = 0; i < info.length; i++) {
+                    info[i].close();
+                }
+            };
+            window.kakao.maps.event.addListener(marker, "click", () => {
+                close();
+                infowindow.open(map, marker);
+                
+            });
+            
+            window.kakao.maps.event.addListener(map, "click", () => {
+                close();
+            });
+            
+            
+            
+        }   
+        const setMarkers=(map:any)=> {            
+            for (var i = 0; i < markersave.length; i++) {
+                markersave[i].setMap(map);
+            }            
+        }
+        const showMarkers=()=> {
+            setMarkers(map)    
+        }
+        const hideMarkers=()=> {
+            setMarkers(null);
+            }         
     }
-    //infowindow를 배열에 push
-};
+        

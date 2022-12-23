@@ -1,7 +1,9 @@
-import pymysql
 import os
 import sys
+
+import pymysql
 from dotenv import load_dotenv
+
 load_dotenv()
 config = {
     "user":os.environ.get("DB_USER"),

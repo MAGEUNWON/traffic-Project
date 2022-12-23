@@ -1,8 +1,9 @@
-import requests
-import os
-from dotenv import load_dotenv
-import xmltodict
 import json
+import os
+
+import requests
+import xmltodict
+from dotenv import load_dotenv
 
 load_dotenv()
 api_key = os.environ.get("api_key")
@@ -74,7 +75,7 @@ class ApiRoute():
             req = requests.get(f'{url}key={api_keyP}')
             jsonBody = req.json()
             data = jsonBody['items']
-            print(jsonBody['items'])
+            # print(jsonBody['items'])
                 # address = []
                 # for i in range(len(data)):
                 #     if "대전" in data[i]['ADDRESS_JIBUN']:

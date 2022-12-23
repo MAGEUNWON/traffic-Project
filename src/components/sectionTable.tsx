@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Button from "@/common/Button";
-import SerchBox from "./SerchBox";
+import {Search} from "@/common/Search";
 import Button_R from "@/common/Button_R";
 import Main from "@/common/main";
 import { parkingEvent, markerEvent, cctvFc } from "@/components/buttonFuction";
 
 const SectionTable = ({ parkingData, accidentData, datas, map }: any) => {
+    console.log(datas, "cctv 데이터입니다!");
     const [isCheck, setIsCheck] = useState<boolean>(true);
 
     const button_item = [
@@ -54,11 +55,41 @@ const SectionTable = ({ parkingData, accidentData, datas, map }: any) => {
             },
         },
     ];
+    console.log(isCheck);
 
     return (
         <>
             <SectionSet>
-                <SerchBox kakaoMap={map}></SerchBox>
+                <Button_RDiv>
+                    <Button_R
+                        icon="/asset/icon_search.png"
+                        contents="검색"
+                        onClick={() => {
+                            setIsCheck(true);
+                        }}
+                    ></Button_R>
+                    <Button_R
+                        icon="/asset/icon_search.png"
+                        contents="길찾기"
+                        onClick={() => {
+                            setIsCheck(false);
+                        }}
+                    ></Button_R>
+                </Button_RDiv>
+
+                {isCheck ? (
+                    <Search placeholder="어디로 갈까요?"></Search>
+                ) : (
+                    <>
+                        <Search placeholder="출발지 검색"></Search>{" "}
+                        <Search placeholder="도착지 검색"></Search>{" "}
+                        <form>
+                            <PathButton>경로검색</PathButton>
+                        </form>
+                    </>
+                )}
+
+                <Main></Main>
 
                 <ButtonDiv>
                     {button_item.map((value, index) => {
@@ -71,52 +102,13 @@ const SectionTable = ({ parkingData, accidentData, datas, map }: any) => {
                             ></Button>
                         );
                     })}
+                    {/* <Button icon="asset/icon_cctv.png"></Button>
+          <Button icon="asset/icon_conflagration.png"></Button>
+          <Button icon="asset/icon_safe.png"></Button>
+          <Button icon="asset/icon_forecast.png"></Button>
+          <Button icon="asset/icon_traffic.png"></Button>
+          <Button icon="asset/icon_parkinglot.png"></Button> */}
                 </ButtonDiv>
-
-                {/* {isCheck ? (
-                    <Search placeholder="어디로 갈까요?"></Search>
-                ) : (
-                    <form
-                        onSubmit={(e: any) => {
-                            e.preventDefault();
-                            console.log(e.target[0].value);
-                            console.log(e.target[1].value);
-                            let ps = new window.kakao.maps.services.Places();
-
-                            // 키워드로 장소를 검색합니다
-                            ps.keywordSearch(e.target[0].value, placesSearchCB);
-
-                            function placesSearchCB(
-                                data: any,
-                                status: any,
-                                pagination: any
-                            ) {
-                                if (status === "OK") {
-                                    console.log(data);
-                                    data.map((el: any) => {
-                                        console.log(el);
-                                    });
-                                }
-                            }
-                        }}
-                    >
-                        {["start", "end"].map((el, i) => {
-                            return (
-                                <div key={i}>
-                                    <Search
-                                        placeholder={
-                                            el === "start"
-                                                ? "출발지 검색"
-                                                : "도착지 검색"
-                                        }
-                                    ></Search>
-                                </div>
-                            );
-                        })}
-
-                        <PathButton>경로검색</PathButton>
-                    </form>
-                )} */}
             </SectionSet>
         </>
     );

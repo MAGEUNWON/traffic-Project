@@ -1,11 +1,13 @@
-from flask import Flask, jsonify, request
-from flask_cors import CORS 
-from config.db import DataRoute
-from config.api import ApiRoute
-import requests
 import json
-import xmltodict
 import os
+
+import requests
+import xmltodict
+from config.api import ApiRoute
+from config.db import DataRoute
+from flask import Flask, jsonify, request
+from flask_cors import CORS
+
 # from config import db
 
 
@@ -64,7 +66,7 @@ def execute():
     db_class = DataRoute()
     sql  = f"SELECT * FROM danger" #danger 테이블 내용 다 가져와라
     row = db_class.executeAll(sql) #executeAll은 전체 내용 다 가져오라는 명령문
-    print(row)
+    # print(row)
     return row
 # ----------------------------------------------------------------
 
