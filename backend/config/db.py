@@ -8,7 +8,9 @@ import xmltodict
 load_dotenv()
 
 POLICE_KEY = os.getenv("POLICE_KEY")
+load_dotenv()
 
+# db 연결 내용 객체로 묶어 놓은 것
 
 config = {
     "user": os.environ.get("DB_USER"),
@@ -19,13 +21,17 @@ config = {
 }
 
 
-class Database:
+class DataRoute():
+
     def __init__(self):
         try:
-            self.db = pymysql.connect(**config)
+            self.db = pymysql.connect(**config)  # config 객체안에 내용 한번에 다 가져옴
+            # 명령어 미리 객체로 써놔서 한번만 해주면 됨
             self.cursor = self.db.cursor(pymysql.cursors.DictCursor)
+
+        # 에러나면 출력하는 내용
         except pymysql.Error as e:
-            print(f"Error connecting to MariaDB Platform: {e}")
+            print(f"Error connecting to MySQLDB platform: {e}")
             sys.exit(1)
 
     def execute(self, query, args={}):
@@ -58,3 +64,15 @@ def daejeon_accident():
         if '대전' in data[i]['addressJibun']:
             daejeon_data.append(data[i])
     return daejeon_data
+
+
+# def execute(self, query, args={}):
+#     self.cursor.execute(query, args)
+#     return
+
+
+def executeAll(self, query, args={}):  # app.py
+    # print(query, "출력")
+    self.cursor.execute(query, args)
+    row = self.cursor.fetchall()
+    return row

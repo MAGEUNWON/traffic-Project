@@ -34,10 +34,10 @@ const App = () => {
   // const handleClick = (event:React.MouseEvent<HTMLElement>) => {
   //   "setOverlayMapTypeID('traffic')"
   // }
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    // event.currentTarget.value
-    setMaptype(event.currentTarget.value);
-  };
+  // const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  //   // event.currentTarget.value
+  //   setMaptype(event.currentTarget.value);
+  // };
 
   return (
     <>
