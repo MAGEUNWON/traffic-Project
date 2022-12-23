@@ -52,10 +52,23 @@ def execute():
 @app.route('/hazard/<polygon>', methods=['GET'])
 def Polygon(polygon):
     db_class = DataRoute()
-    sql  = f"SELECT LOCATION_DATA FROM traffic.danger WHERE LOCATION_DATA Like '%%{polygon}%%'" #location 좌표만 가져옴
+    sql  = f"SELECT LOCATION_DATA, DATA_DESC FROM traffic.danger WHERE LOCATION_DATA Like '%%{polygon}%%'" #location 좌표만 가져옴
     row = db_class.executeAll(sql) #executeAll은 전체 내용 다 가져오라는 명령문
-    print(row)
-    return jsonify(row)
+
+    data_stack = list()
+    # print(row[46]["LOCATION_DATA"])
+    str = row[46]["LOCATION_DATA"]
+    result = str[9:-2]
+    print(result)
+    List = result.split(',')
+    # print(List)
+    # for i in range(len(result)):
+    #     print(result[i])
+    for i in range(len(List)): # = index, value in enumerate(List)
+        SList = List[i].split(' ')
+        print(SList)
+        data_stack.append(SList)
+    return jsonify(data_stack)
 
 @app.route('/hazard/<line>', methods=['GET'])
 def Line(line):

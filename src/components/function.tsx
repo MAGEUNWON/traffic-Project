@@ -33,3 +33,68 @@ export const Hazard = (data: any, map: any) => {
     });
   }
 };
+
+// export const Polygon = (data:any, map: any) => {
+//   customOverlay = new window.kakao.maps.CustomOverlay({}),
+//   infowindow = new window.kakao.maps.InfoWindow({ removable: true });
+//     for (let i = 0, len = areas.length; i < len; i++) {
+//       displayArea(areas[i]);
+//     }
+
+//     function displayArea(area: any) {
+//       let polygon = new window.kakao.maps.Polygon({
+//         map: map,
+//         path: area.path,
+//         strokeWeight: 2,
+//         strokeColor: "#004c80",
+//         strokeOpacity: 0.8,
+//         fillColor: "#fff",
+//         fillOpacity: 0.7,
+//       });
+
+//       window.kakao.maps.event.addListener(
+//         polygon,
+//         "mouseover",
+//         (mouseEvent: any) => {
+//           polygon.setOptions({ fillColor: "#09f" });
+//           customOverlay.setContent('<div class="area">' + area.name + "</div>");
+
+//           customOverlay.setPosition(mouseEvent.latLng);
+//           customOverlay.setMap(map);
+//         }
+//       );
+
+//       window.kakao.maps.event.addListener(
+//         polygon,
+//         "mousemove",
+//         (mouseEvent: any) => {
+//           customOverlay.setPosition(mouseEvent.latLng);
+//         }
+//       );
+
+//       window.kakao.maps.event.addListener(polygon, "mouseout", () => {
+//         polygon.setOptions({ fillColor: "#fff" });
+//         customOverlay.setMap(null);
+//       });
+
+//       window.kakao.maps.event.addListener(
+//         polygon,
+//         "click",
+//         (mouseEvent: any) => {
+//           var content =
+//             '<div class="info">' +
+//             '   <div class="title">' +
+//             area.name +
+//             "</div>" +
+//             '   <div class="size">총 면적 : 약 ' +
+//             Math.floor(polygon.getArea()) +
+//             " m<sup>2</sup></div>" +
+//             "</div>";
+
+//           infowindow.setContent(content);
+//           infowindow.setPosition(mouseEvent.latLng);
+//           infowindow.setMap(map);
+//         }
+//       );
+//     }
+// }

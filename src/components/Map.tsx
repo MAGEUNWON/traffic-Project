@@ -38,27 +38,122 @@ const Map = () => {
     console.log("렌더링 완료"); //useEffect는 React.StrictMode가 적용된 개발환경에서는 콘솔이 두번씩 찍힘.
 
     //axios로 도로별위험요소 api 불러옴. data usestate에 담아줌
-    axios.get(`http://127.0.0.1:5000/hazard`).then((response) => {
+    axios.get(`http://127.0.0.1:5000/hazard/polygon`).then((response) => {
       // console.log(response.data[0].ADDRESS_JIBUN);
       setData(response.data);
     });
     // console.log(data);
 
-
-    let areas = [
-      {
-        
-      }
-    ]
+    // let areas = [
+    //   {
+    //     name: "용산구",
+    //     path: [
+    //       new window.kakao.maps.LatLng(37.5548768201904, 126.96966524449994),
+    //       new window.kakao.maps.LatLng(37.55308718044556, 126.97642899633566),
+    //       new window.kakao.maps.LatLng(37.55522076659584, 126.97654602427454),
+    //       new window.kakao.maps.LatLng(37.55320655210504, 126.97874667968763),
+    //       new window.kakao.maps.LatLng(37.55368689494708, 126.98541456064552),
+    //       new window.kakao.maps.LatLng(37.54722934282707, 126.995229135048),
+    //       new window.kakao.maps.LatLng(37.549694559809545, 126.99832516302801),
+    //       new window.kakao.maps.LatLng(37.550159406110104, 127.00436818301327),
+    //       new window.kakao.maps.LatLng(37.54820235864802, 127.0061334023129),
+    //       new window.kakao.maps.LatLng(37.546169758665414, 127.00499711608721),
+    //       new window.kakao.maps.LatLng(37.54385947805103, 127.00727818360471),
+    //       new window.kakao.maps.LatLng(37.54413326436179, 127.00898460651953),
+    //       new window.kakao.maps.LatLng(37.539639030116945, 127.00959054834321),
+    //       new window.kakao.maps.LatLng(37.537681185520256, 127.01726163044557),
+    //       new window.kakao.maps.LatLng(37.53378887274516, 127.01719284893274),
+    //       new window.kakao.maps.LatLng(37.52290225898471, 127.00614038053493),
+    //       new window.kakao.maps.LatLng(37.51309192794448, 126.99070240960813),
+    //       new window.kakao.maps.LatLng(37.50654651085339, 126.98553683648308),
+    //       new window.kakao.maps.LatLng(37.50702053393398, 126.97524914998174),
+    //       new window.kakao.maps.LatLng(37.51751820477105, 126.94988506562748),
+    //       new window.kakao.maps.LatLng(37.52702918583156, 126.94987870367682),
+    //       new window.kakao.maps.LatLng(37.534519656862926, 126.94481851935942),
+    //       new window.kakao.maps.LatLng(37.537500243531994, 126.95335659960566),
+    //       new window.kakao.maps.LatLng(37.54231338779177, 126.95817394011969),
+    //       new window.kakao.maps.LatLng(37.54546318600178, 126.95790512689311),
+    //       new window.kakao.maps.LatLng(37.548791603525764, 126.96371984820232),
+    //       new window.kakao.maps.LatLng(37.55155543391863, 126.96233786542686),
+    //       new window.kakao.maps.LatLng(37.5541513366375, 126.9657135934734),
+    //       new window.kakao.maps.LatLng(37.55566236579088, 126.9691850696746),
+    //       new window.kakao.maps.LatLng(37.5548768201904, 126.96966524449994),
+    //     ],
+    //   },
+    // ];
 
     let container = document.getElementById("map") as HTMLElement; //지도를 담을 영역의 DOM 레퍼런스
     //카카오 객체가 window 하위 객체라는 것을 정의해야 하므로 window.kakao로 변경해야 함
     let options = {
-      center: new window.kakao.maps.LatLng(36.3492506, 127.3776511),
+      center: new window.kakao.maps.LatLng(37.566826, 126.9786567),
       level: 3, //지도의 확대, 축소 정도
     };
 
     let map = new window.kakao.maps.Map(container, options);
+    let customOverlay = new window.kakao.maps.CustomOverlay({});
+    let infowindow = new window.kakao.maps.InfoWindow({ removable: true });
+
+    // console.log(areas[0].path[0]); //La
+    // for (let i = 0, len = areas.length; i < len; i++) {
+    //   displayArea(areas[i]);
+    // }
+
+    // function displayArea(area: any) {
+    //   let polygon = new window.kakao.maps.Polygon({
+    //     map: map,
+    //     path: area.path,
+    //     strokeWeight: 2,
+    //     strokeColor: "#004c80",
+    //     strokeOpacity: 0.8,
+    //     fillColor: "#fff",
+    //     fillOpacity: 0.7,
+    //   });
+
+    //   window.kakao.maps.event.addListener(
+    //     polygon,
+    //     "mouseover",
+    //     (mouseEvent: any) => {
+    //       polygon.setOptions({ fillColor: "#09f" });
+    //       customOverlay.setContent('<div class="area">' + area.name + "</div>");
+
+    //       customOverlay.setPosition(mouseEvent.latLng);
+    //       customOverlay.setMap(map);
+    //     }
+    //   );
+
+    //   window.kakao.maps.event.addListener(
+    //     polygon,
+    //     "mousemove",
+    //     (mouseEvent: any) => {
+    //       customOverlay.setPosition(mouseEvent.latLng);
+    //     }
+    //   );
+
+    //   window.kakao.maps.event.addListener(polygon, "mouseout", () => {
+    //     polygon.setOptions({ fillColor: "#fff" });
+    //     customOverlay.setMap(null);
+    //   });
+
+    //   window.kakao.maps.event.addListener(
+    //     polygon,
+    //     "click",
+    //     (mouseEvent: any) => {
+    //       var content =
+    //         '<div class="info">' +
+    //         '   <div class="title">' +
+    //         area.name +
+    //         "</div>" +
+    //         '   <div class="size">총 면적 : 약 ' +
+    //         Math.floor(polygon.getArea()) +
+    //         " m<sup>2</sup></div>" +
+    //         "</div>";
+
+    //       infowindow.setContent(content);
+    //       infowindow.setPosition(mouseEvent.latLng);
+    //       infowindow.setMap(map);
+    //     }
+    //   );
+    // }
 
     setKakaoMap(map); //map useEffect 밖에서 쓰려고 담은 것.
 
@@ -101,7 +196,24 @@ const Map = () => {
     //마커가 지도 위에 표시되도록 설정
     marker.setMap(map);
   }, [mapTypes]);
-  console.log(kakaoMap);
+  console.log(data);
+  // console.log(kakaoMap);
+
+  // let coordinates = [];
+  // let desc = '';
+  // let polygons = [];
+
+  const displayArea = (coordinates, desc) => {
+    let path = [];
+    let polygons = [];
+
+    coordinates[0].forEach((coordinates) => {
+      let polygon = {};
+      polygon.x = coordinates[1];
+      polygon.y = coordinates[0];
+      polygons.push(polygon);
+    });
+  };
 
   //지도 타입 바뀌는 props 값 정해 놓은 것.
   const btnSet: btnSet[] = [
