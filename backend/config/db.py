@@ -13,7 +13,7 @@ config = {
     "database":os.environ.get("DB_DB")
 }
 
-class Database:
+class DataRoute:
     def __init__(self):
         try:
             self.db = pymysql.connect(**config)
@@ -34,10 +34,3 @@ class Database:
         return row
     def commit(self):
         self.db.commit()
-        
-    def safezone_db():
-        db = pymysql.connect(**config)
-        cursor = db.cursor(pymysql.cursors.DictCursor)
-        cursor.execute('SELECT * FROM safezone_db')
-        row = cursor.fetchall()
-        return row

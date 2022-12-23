@@ -4,39 +4,47 @@ import Button from "@/common/Button";
 import Search from "@/common/Search";
 import Button_R from "@/common/Button_R";
 import Main from "@/common/main";
-import FunctionData from "./FunctionData";
 
 const button_item = [
   {
     src: "asset/icon_cctv.png",
     name: "CCTV",
+    url: "cctv"
   },
   {
     src: "asset/icon_conflagration.png",
     name: "돌발정보",
+    url: "accident"
   },
   {
     src: "asset/icon_safe.png",
-    name: "safezone",
+    name: "보호구역",
+    url: "safezone"
   },
   {
     src: "asset/icon_forecast.png",
     name: "날씨상황",
+    url: "forecast"
   },
   {
     src: "asset/icon_traffic.png",
     name: "교통상황",
+    url: "traffic"
   },
   {
     src: "asset/icon_parkinglot.png",
     name: "주차장",
+    url: "parkinglot"
   },
 ];
 
-const SectionTable = () => {
+const SectionTable = ({handlebuttonClick}: any) => {
   const [isCheck, setIsCheck] = useState<boolean>(true);
   const [activeId, setActiveId] = useState<number>();
-  const [key, setKey] = useState<string>(" ");
+
+  const handleClick = (value: string) => {
+    handlebuttonClick(value)
+  };
 
   return (
     <>
@@ -80,14 +88,13 @@ const SectionTable = () => {
                 active={activeId === index} 
                 onClick={() => {
                   setActiveId(index);
-                  setKey(value.name); 
+                  handleClick(value.url);
                 }}
               ></Button>
             );
           })}
         </ButtonDiv>
       </SectionSet>
-      <FunctionData name={key} />
     </>
   );
 };
