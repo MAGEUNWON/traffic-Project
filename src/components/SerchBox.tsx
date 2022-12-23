@@ -107,31 +107,6 @@ const SerchBox = ({ kakaoMap }: any) => {
     // 검색결과 항목을 Element로 반환하는 함수입니다
     function getListItem(index: number, places: placeType) {
       const el = document.createElement("li");
-      // let itemStr = `
-      //     <div class="info">
-      //       <span class="marker marker_${index + 1}">
-      //         ${index + 1}
-      //       </span>
-      //       <a href="${places.place_url}">
-      //         <h5 class="info-item place-name">${places.place_name}</h5>
-      //         ${
-      //           places.road_address_name
-      //             ? `<span class="info-item road-address-name">
-      //               ${places.road_address_name}
-      //              </span>
-      //              <span class="info-item address-name">
-      //            	 ${places.address_name}
-      //          	   </span>`
-      //             : `<span class="info-item address-name">
-      //        	     ${places.address_name}
-      //             </span>`
-      //         }
-      //         <span class="info-item tel">
-      //           ${places.phone}
-      //         </span>
-      //       </a>
-      //     </div>
-      //     `;
 
       let itemStr =
         '<span class="markerbg marker_' +
@@ -289,28 +264,28 @@ const SerchBox = ({ kakaoMap }: any) => {
       </div>
       <div>
         {isCheck ? (
-          <SingleSearch
-            onSubmit={submitWhere}
-            placeholder="어디로 갈까요?"
-            onChange={onChangeWhere}
-            value={inputText}
-          />
+          <>
+            <SingleSearch
+              onSubmit={submitWhere}
+              placeholder="어디로 갈까요?"
+              onChange={onChangeWhere}
+              value={inputText}
+            />
+            <SearchResult>
+              <div id="menu_wrap" className="scroll-wrapper">
+                <ul id="placesList"></ul>
+              </div>
+              <div id="pagination"></div>
+            </SearchResult>
+          </>
         ) : (
           <>
             <Search placeholder="출발지 검색"></Search>
             <Search placeholder="도착지 검색"></Search>
-            <form>
-              <PathButton>경로검색</PathButton>
-            </form>
+            <PathButton>경로검색</PathButton>
+            <SearchResult />
           </>
         )}
-      </div>
-
-      <div>
-        <div id="menu_wrap" className="scroll-wrapper">
-          <ul id="placesList"></ul>
-        </div>
-        <div id="pagination"></div>
       </div>
     </MainBox>
   );
@@ -332,31 +307,38 @@ const MainBox = styled.div`
     align-items: center;
     justify-content: space-around;
   }
-  & > div:nth-child(3) {
-    width: 350px;
-    height: 450px;
+  & > div:nth-child(2) {
     display: flex;
-    background-color: #fff;
-    border-radius: 10px;
     flex-direction: column;
     align-items: center;
-    box-shadow: 0 4px 4px #00000025;
-    & > div:nth-child(1) {
-      width: 320px;
-      height: 430px;
-      margin-top: 10px;
-      padding: 5px;
-      overflow-y: auto;
-      background: rgba(255, 255, 255);
-      font-size: 12px;
-    }
+  }
+`;
+const SearchResult = styled.div`
+  width: 350px;
+  height: 450px;
+  display: flex;
+  background-color: #fff;
+  border-radius: 10px;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  box-shadow: 0 4px 4px #00000025;
+  & > div:nth-child(1) {
+    width: 320px;
+    height: 430px;
+    margin-top: 10px;
+    padding: 5px;
+    overflow-y: auto;
+    background: rgba(255, 255, 255);
+    font-size: 12px;
   }
 `;
 
 const PathButton = styled.button`
   width: 60px;
   height: 22px;
-  padding: 3px 5px 3px 5px;
+  padding: 3px;
+  margin-bottom: 7px;
   background-color: #1f68f6;
   color: #ffffff;
   border: 1px solid #1f68f6;

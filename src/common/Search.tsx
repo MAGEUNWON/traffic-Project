@@ -52,6 +52,7 @@ const SingleBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 7px;
   & > form {
     width: inherit;
     height: inherit;
