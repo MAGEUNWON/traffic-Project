@@ -13,11 +13,8 @@ const FunctionMap = ({value}: any) => {
   const [mapData, setMapData] = useState();
   const [data, setData] = useState<any>([{}]);
 
-  const getvalue = useRef(value);
-  getvalue.current = value;
-  
-  console.log(value);
-  console.log(getvalue);
+  const getValue = useRef(value);
+  getValue.current = value;
   
   useEffect(() => {
     const getJsonData = async () => {
@@ -29,9 +26,7 @@ const FunctionMap = ({value}: any) => {
       }
     };
     getJsonData();
-  }, [getvalue.current]);
-
-  console.log(data);
+  }, [getValue.current]);
 
   // 지도 기본 설정 및 생성
   useEffect(() => {
@@ -43,21 +38,21 @@ const FunctionMap = ({value}: any) => {
     const map = new kakao.maps.Map(mapContainer, mapOptions); 
 
     setMapData(map);
-  }, [])
+  }, [getValue.current]);
 
   type imgType = {
     [key: string]: string;
   }
 
   const imageSrc: imgType = {
-    "cctv": "/asset/icon_cctv.png",
-    "safezone": "/asset/icon_safe.png",
-    "parkinglot": "/asset/icon_parkinglot.png",
+    "cctv": "/asset/cctv.png",
+    "safezone": "/asset/safezone.png",
+    "parkinglot": "/asset/parkinglot.png",
   }
 
   for (let i = 0; i < data.length; i++) {
 
-    const imageSize = new kakao.maps.Size(30, 30);
+    const imageSize = new kakao.maps.Size(26, 31);
     const markerImage = new kakao.maps.MarkerImage(imageSrc[value], imageSize);
 
     const marker = new kakao.maps.Marker({
@@ -67,7 +62,6 @@ const FunctionMap = ({value}: any) => {
       // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됨
       image: markerImage // 마커 이미지
     });
-
   }
 
   return (
