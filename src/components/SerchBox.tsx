@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Search, SingleSearch } from "@/common/Search";
 import Button_R from "@/common/Button_R";
 import "./SerchBox.css";
+import axios from "axios";
 
 const SerchBox = ({ kakaoMap }: any) => {
     const [isCheck, setIsCheck] = useState<boolean>(true);
@@ -235,6 +236,9 @@ const SerchBox = ({ kakaoMap }: any) => {
         }
     }, [searchplace]);
     // 목적지 검색창에 입력하는 input창에 입력하면 input값을 inputText에 담기
+
+    useEffect(() => {}, []);
+
     const onChangeWhere = (e: any) => {
         setInputText(e.target.value);
     };
@@ -249,15 +253,286 @@ const SerchBox = ({ kakaoMap }: any) => {
         {
             icon: "/asset/icon_search.png",
             contents: "검색",
-            onClick: () => {
+            onClick: (kakaoMap: any) => {
                 setIsCheck(true);
+                // polygon.setMap(null);
             },
         },
         {
             icon: "/asset/icon_roadCar.png",
             contents: "길찾기",
-            onClick: () => {
+            onClick: (kakaoMap: any) => {
                 setIsCheck(false);
+
+                axios.get(`http://127.0.0.1:5000/dot`).then((response: any) => {
+                    let line: any[] = [];
+
+                    response.data.forEach((e: any) => {
+                        // console.log(e);
+                        line.push({
+                            path: [
+                                new window.kakao.maps.LatLng(
+                                    e.node_Ycode,
+                                    e.node_Xcode
+                                ),
+                            ],
+                        });
+                    });
+
+                    let polyline: any = [];
+                    let markerArr: any[] = [];
+                    let start = new window.kakao.maps.Marker({});
+                    let end = new window.kakao.maps.Marker({});
+                    let pline: any = [];
+                    let markerObject = [start, end];
+
+                    for (let i = 0; i < line.length; i++) {
+                        //i번째 정보를 가져옵니다.
+                        let item = line[i];
+                        // 지도에 표시할 선을 생성합니다
+                        polyline.push(
+                            new window.kakao.maps.Polyline({
+                                map: kakaoMap, //지도에 선을 표시합니다.
+                                path: item.path, // 선을 구성하는 좌표배열 입니다
+                                strokeWeight: 10, // 선의 두께 입니다
+                                strokeColor: item.color, // 선의 색깔입니다
+                                strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+                                strokeStyle: "solid", // 선의 스타일입니다
+                            })
+                        );
+
+                        window.kakao.maps.event.addListener(
+                            polyline[i],
+                            "click",
+                            async function (e: any) {
+                                polyline[i].setOptions({
+                                    strokeColor: "black",
+                                });
+
+                                let latlng = e.latLng;
+
+                                if (markerArr.length === 0) {
+                                    markerArr.push(response.data[i]);
+                                    start.setPosition(latlng);
+                                    start.setMap(kakaoMap);
+                                } else if (markerArr.length === 1) {
+                                    markerArr.push(response.data[i]);
+                                    end.setPosition(latlng);
+                                    end.setMap(kakaoMap);
+
+                                    const getData = await axios.post<any>(
+                                        "http://localhost:5000/directions",
+                                        {
+                                            markerArr,
+                                        }
+                                    );
+                                    let path: any = [];
+
+                                    getData.data.finalData.filter(
+                                        (item: any, i: number, arr: any) => {
+                                            if (arr.length - 1 === i)
+                                                return false;
+                                            path.push([
+                                                new window.kakao.maps.LatLng(
+                                                    arr[i].node_Ycode,
+                                                    arr[i].node_Xcode
+                                                ),
+                                                new window.kakao.maps.LatLng(
+                                                    arr[i + 1].node_Ycode,
+                                                    arr[i + 1].node_Xcode
+                                                ),
+                                            ]);
+                                        }
+                                    );
+
+                                    path.kakaoMap((el: any, i: number) => {
+                                        let color = "black";
+                                        if (
+                                            getData.data.trafficData[i]
+                                                ?.congestion === 1
+                                        ) {
+                                            color = "green";
+                                        } else if (
+                                            getData.data.trafficData[i]
+                                                ?.congestion === 2
+                                        ) {
+                                            color = "Orange";
+                                        } else if (
+                                            getData.data.trafficData[i]
+                                                ?.congestion === 3
+                                        ) {
+                                            color = "red";
+                                        }
+
+                                        pline.push(
+                                            new window.kakao.maps.Polyline({
+                                                kakaoMap: kakaoMap, //지도에 선을 표시합니다.
+                                                path: el, // 선을 구성하는 좌표배열 입니다
+                                                strokeWeight: 10, // 선의 두께 입니다
+                                                strokeColor: color, // 선의 색깔입니다
+                                                strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+                                                strokeStyle: "solid", // 선의 스타일입니다
+                                            })
+                                        );
+
+                                        window.kakao.maps.event.addListener(
+                                            pline[i],
+                                            "click",
+                                            (e: any) => {
+                                                console.log(
+                                                    getData.data.trafficData
+                                                );
+                                                new window.kakao.maps.InfoWindow(
+                                                    {
+                                                        map: kakaoMap, // 인포윈도우가 표시될 지도
+                                                        position:
+                                                            new window.kakao.maps.LatLng(
+                                                                e.latLng.Ma,
+                                                                e.latLng.La
+                                                            ),
+                                                        content: `<div style='width:180px; height:auto'>
+                                                        <div>
+                                                            <p>시작노드: ${getData.data.trafficData[i].startNodeName}</p>
+                                                            <p>종료노드: ${getData.data.trafficData[i].endNodeName}</p>
+                                                            <p>링크ID: ${getData.data.trafficData[i].linkID}</p>
+                                                            <p>길이: ${getData.data.trafficData[i].linkLength}</p>
+                                                            <p>도로이름: ${getData.data.trafficData[i].roadName}</p>
+                                                            <p>속도: ${getData.data.trafficData[i].speed}</p>
+                                                            <p>교통량: ${getData.data.trafficData[i].travelT}</p>
+                                                            <p>방향: ${getData.data.trafficData[i].udType}</p>
+                                                        </div>`,
+                                                        removable: true,
+                                                    }
+                                                );
+                                            }
+                                        );
+                                    });
+                                } else if (markerArr.length > 1) {
+                                    pline.kakaoMap((el: any, i: any) =>
+                                        pline[i].setMap(null)
+                                    );
+                                    pline = [];
+
+                                    end.setPosition(latlng);
+                                    end.setMap(kakaoMap);
+                                    markerArr.splice(1, 0, response.data[i]);
+
+                                    const getData = await axios.post<any>(
+                                        "http://localhost:5000/directions",
+                                        {
+                                            markerArr,
+                                        }
+                                    );
+
+                                    let path: any = [];
+
+                                    getData.data.finalData.filter(
+                                        (item: any, i: number, arr: any) => {
+                                            if (arr.length - 1 === i)
+                                                return false;
+                                            path.push([
+                                                new window.kakao.maps.LatLng(
+                                                    arr[i].node_Ycode,
+                                                    arr[i].node_Xcode
+                                                ),
+                                                new window.kakao.maps.LatLng(
+                                                    arr[i + 1].node_Ycode,
+                                                    arr[i + 1].node_Xcode
+                                                ),
+                                            ]);
+                                        }
+                                    );
+
+                                    path.kakaoMap((el: any, index: number) => {
+                                        let color = "black";
+                                        if (
+                                            getData.data.trafficData[index]
+                                                ?.congestion === 1
+                                        ) {
+                                            color = "green";
+                                        } else if (
+                                            getData.data.trafficData[index]
+                                                ?.congestion === 2
+                                        ) {
+                                            color = "Orange";
+                                        } else if (
+                                            getData.data.trafficData[index]
+                                                ?.congestion === 3
+                                        ) {
+                                            color = "red";
+                                        }
+                                        pline.push(
+                                            new window.kakao.maps.Polyline({
+                                                map: kakaoMap, //지도에 선을 표시합니다.
+                                                path: el, // 선을 구성하는 좌표배열 입니다
+                                                strokeWeight: 10, // 선의 두께 입니다
+                                                strokeColor: color, // 선의 색깔입니다
+                                                strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+                                                strokeStyle: "solid", // 선의 스타일입니다
+                                            })
+                                        );
+                                        window.kakao.maps.event.addListener(
+                                            pline[index],
+                                            "click",
+                                            (e: any) => {
+                                                new window.kakao.maps.InfoWindow(
+                                                    {
+                                                        map: kakaoMap, // 인포윈도우가 표시될 지도
+                                                        position:
+                                                            new window.kakao.maps.LatLng(
+                                                                e.latLng.Ma,
+                                                                e.latLng.La
+                                                            ),
+
+                                                        content: `<div style='width:180px; height:auto'>
+                                                        <div>
+                                                            <p>시작노드: ${getData.data.trafficData[i].startNodeName}</p>
+                                                            <p>종료노드: ${getData.data.trafficData[i].endNodeName}</p>
+                                                            <p>링크ID: ${getData.data.trafficData[i].linkID}</p>
+                                                            <p>길이: ${getData.data.trafficData[i].linkLength}</p>
+                                                            <p>도로이름: ${getData.data.trafficData[i].roadName}</p>
+                                                            <p>속도: ${getData.data.trafficData[i].speed}</p>
+                                                            <p>교통량: ${getData.data.trafficData[i].travelT}</p>
+                                                            <p>방향: ${getData.data.trafficData[i].udType}</p>
+                                                        </div>`,
+
+                                                        removable: true,
+                                                    }
+                                                );
+                                            }
+                                        );
+                                    });
+                                }
+
+                                markerObject.forEach((el, i) => {
+                                    window.kakao.maps.event.addListener(
+                                        el,
+                                        "click",
+                                        (e: any) => {
+                                            new window.kakao.maps.InfoWindow({
+                                                map: kakaoMap, // 인포윈도우가 표시될 지도
+                                                position:
+                                                    new window.kakao.maps.LatLng(
+                                                        markerArr[i].node_Ycode,
+                                                        markerArr[i].node_Xcode
+                                                    ),
+                                                content: `<div style='width:180px; height:auto'>
+                                                                <p>교차로명칭: ${markerArr[i].node_name}</p>
+                                                                <p>위도: ${markerArr[i].node_Xcode}</p>
+                                                                <p>경도: ${markerArr[i].node_Ycode}</p>
+                                                                <p>노드ID: ${markerArr[i].node_id}</p>
+                                                                <p>노드유형: ${markerArr[i].node_type}</p>
+                                                                <p>회전제한유무:${markerArr[i].turn_p}</p>
+                                                             </div>`,
+                                                removable: true,
+                                            });
+                                        }
+                                    );
+                                });
+                            }
+                        );
+                    }
+                });
             },
         },
     ];
@@ -270,7 +545,7 @@ const SerchBox = ({ kakaoMap }: any) => {
                             key={index}
                             icon={item.icon}
                             contents={item.contents}
-                            onClick={item.onClick}
+                            onClick={() => item.onClick(kakaoMap)}
                         />
                     );
                 })}
@@ -292,12 +567,65 @@ const SerchBox = ({ kakaoMap }: any) => {
                         </SearchResult>
                     </>
                 ) : (
-                    <>
-                        <Search placeholder="출발지 검색"></Search>
-                        <Search placeholder="도착지 검색"></Search>
+                    <form
+                        onSubmit={(e: any) => {
+                            e.preventDefault();
+                            console.log(e);
+                            console.log(e.target[0].value);
+                            console.log(e.target[2].value);
+
+                            let ps = new window.kakao.maps.services.Places();
+
+                            // 키워드로 장소를 검색합니다
+                            ps.keywordSearch(e.target[0].value, placesSearchCB);
+
+                            // 키워드 검색 완료 시 호출되는 콜백함수 입니다
+                            function placesSearchCB(
+                                data: any[],
+                                status: string,
+                                pagination: Object
+                            ) {
+                                if (
+                                    status ===
+                                    window.kakao.maps.services.Status.OK
+                                ) {
+                                    // console.log(data);
+                                    // console.log(data);
+                                    // let circle = new window.kakao.maps.Circle({
+                                    //     center: new window.kakao.maps.LatLng(
+                                    //         data[0].y,
+                                    //         data[0].x
+                                    //     ), // 원의 중심좌표 입니다
+                                    //     radius: 500, // 미터 단위의 원의 반지름입니다
+                                    //     strokeWeight: 5, // 선의 두께입니다
+                                    //     strokeColor: "#75B8FA", // 선의 색깔입니다
+                                    //     strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+                                    //     strokeStyle: "dashed", // 선의 스타일 입니다
+                                    //     fillColor: "#CFE7FF", // 채우기 색깔입니다
+                                    //     fillOpacity: 0.7, // 채우기 불투명도 입니다
+                                    // });
+                                    // 지도에 원을 표시합니다
+                                    // circle.setMap(kakaoMap);
+                                }
+                            }
+                        }}
+                    >
+                        {["start", "end"].map((el) => {
+                            return (
+                                <div key={el}>
+                                    <Search
+                                        placeholder={
+                                            el === "start"
+                                                ? "출발지 검색"
+                                                : "도착지 검색"
+                                        }
+                                    ></Search>
+                                </div>
+                            );
+                        })}
                         <PathButton>경로검색</PathButton>
                         <SearchResult />
-                    </>
+                    </form>
                 )}
             </div>
         </MainBox>

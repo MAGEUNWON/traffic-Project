@@ -3,12 +3,10 @@ import styled from "styled-components";
 export const Search = ({ placeholder }: { placeholder: string }) => {
     return (
         <SingleBox>
-            <form>
-                <input placeholder={placeholder} />
-                <button>
-                    <img src="asset/icon_search2.png" />
-                </button>
-            </form>
+            <input placeholder={placeholder} />
+            <button>
+                <img src="asset/icon_search2.png" />
+            </button>
         </SingleBox>
     );
 };
@@ -35,7 +33,7 @@ export const SingleSearch = ({
                     onChange={onChange}
                     value={value}
                 />
-                <button type="submit" onClick={() => console.log("실행")}>
+                <button type="submit">
                     <img src="asset/icon_search2.png" />
                 </button>
             </form>

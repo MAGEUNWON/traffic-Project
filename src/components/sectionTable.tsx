@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Button from "@/common/Button";
 import SerchBox from "./SerchBox";
-import Button_R from "@/common/Button_R";
-import Main from "@/common/main";
 import { parkingEvent, markerEvent, cctvFc } from "@/components/buttonFuction";
 
 const SectionTable = ({ parkingData, accidentData, datas, map }: any) => {
