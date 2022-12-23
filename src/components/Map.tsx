@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 //useEffect는 리액트 컴포넌트가 렌더링 될 때마다 특정 작업을 수행하도록 설정할 수 있는 Hook. 기본적으로 렌더링되고 난 직후마다 실행.
 //useEffect에서 설정한 함수를 컴포넌트가 화면에 맨 처음 렌더링될 때만 실행하고, 업데이트될 때는 실행하지 않으려면 함수의 두 번째 파라미터로 비어 있는 배열을 넣어 주면 됨.
 //특정 값이 변경 될 때만 호출하고 싶은 경우에는 useEffect의 두 번째 파라미터로 전달되는 배열 안에 검사하고 싶은 값을 넣어주면 됨.
-import styled from "styled-components";
+import styled, { StyledInterface } from "styled-components";
 import axios from "axios";
 import { Hazard } from "./function";
 import SectionTable from "./sectionTable";
@@ -34,14 +34,58 @@ const Map = () => {
   ref.current = mapTypes;
 
   useEffect(() => {
-    // console.log(maptype)
+    let container = document.getElementById("map") as HTMLElement; //지도를 담을 영역의 DOM 레퍼런스
+    //카카오 객체가 window 하위 객체라는 것을 정의해야 하므로 window.kakao로 변경해야 함
+    let options = {
+      center: new window.kakao.maps.LatLng(36.3492506, 127.3776511),
+      level: 3, //지도의 확대, 축소 정도
+    };
+
+    let map = new window.kakao.maps.Map(container, options);
+    console.log(map);
     console.log("렌더링 완료"); //useEffect는 React.StrictMode가 적용된 개발환경에서는 콘솔이 두번씩 찍힘.
 
     //axios로 도로별위험요소 api 불러옴. data usestate에 담아줌
     axios.get(`http://127.0.0.1:5000/hazard/polygon`).then((response) => {
       // console.log(response.data[0].ADDRESS_JIBUN);
       setData(response.data);
+      console.log(response.data);
+      let path = [];
+      for (let i = 0; i < response.data.length; i++) {
+        console.log(response.data[i].LOCATION_DATA);
+        let a = response.data[i].LOCATION_DATA.slice(
+          9,
+          response.data[i].LOCATION_DATA.length - 2
+        );
+        let b = a.split(",");
+        console.log(b);
+
+        for (let j = 0; j < b.length; j++) {
+          let c = b[j].split(" ");
+          console.log(c);
+          path.push(c);
+        }
+        console.log(path);
+      }
+      // for (let i = 0; i < data.length; i++) {
+      //   areas.push(new window.kakao.maps.LatLng(data[i][1], data[i][0]));
+      // }
+      // console.log(areas);
+      // console.log(path);
+      // let polygon = new window.kakao.maps.Polygon({
+      //   path: path.map((array, i) => {
+      //     console.log(array);
+      //     return new window.kakao.maps.LatLng(array[i][1], array[i][0]);
+      //   }),
+      //   strokeWeight: 2,
+      //   strokeColor: "red",
+      //   strokeOpacity: 0.8,
+      //   fillColor: "red",
+      //   fillOpacity: 0.7,
+      // });
+      // polygon.setMap(map);
     });
+
     // console.log(data);
 
     // let areas = [
@@ -82,16 +126,74 @@ const Map = () => {
     //   },
     // ];
 
-    let container = document.getElementById("map") as HTMLElement; //지도를 담을 영역의 DOM 레퍼런스
-    //카카오 객체가 window 하위 객체라는 것을 정의해야 하므로 window.kakao로 변경해야 함
-    let options = {
-      center: new window.kakao.maps.LatLng(37.566826, 126.9786567),
-      level: 3, //지도의 확대, 축소 정도
-    };
+    // let container = document.getElementById("map") as HTMLElement; //지도를 담을 영역의 DOM 레퍼런스
+    // //카카오 객체가 window 하위 객체라는 것을 정의해야 하므로 window.kakao로 변경해야 함
+    // let options = {
+    //   center: new window.kakao.maps.LatLng(36.3492506, 127.3776511),
+    //   level: 3, //지도의 확대, 축소 정도
+    // };
 
-    let map = new window.kakao.maps.Map(container, options);
+    // let map = new window.kakao.maps.Map(container, options);
     let customOverlay = new window.kakao.maps.CustomOverlay({});
     let infowindow = new window.kakao.maps.InfoWindow({ removable: true });
+
+    // const displayArea = () => {
+
+    //   let polygon = new window.kakao.maps.Polygon({
+    //     map: map,
+    //     path: area.path,
+    //     strokeWeight: 2,
+    //     strokeColor: "#004c80",
+    //     strokeOpacity: 0.8,
+    //     fillColor: "#fff",
+    //     fillOpacity: 0.7,
+    //   });
+
+    //   window.kakao.maps.event.addListener(
+    //     polygon,
+    //     "mouseover",
+    //     (mouseEvent: any) => {
+    //       polygon.setOptions({ fillColor: "#09f" });
+    //       customOverlay.setContent('<div class="area">' + area.name + "</div>");
+
+    //       customOverlay.setPosition(mouseEvent.latLng);
+    //       customOverlay.setMap(map);
+    //     }
+    //   );
+
+    //   window.kakao.maps.event.addListener(
+    //     polygon,
+    //     "mousemove",
+    //     (mouseEvent: any) => {
+    //       customOverlay.setPosition(mouseEvent.latLng);
+    //     }
+    //   );
+
+    //   window.kakao.maps.event.addListener(polygon, "mouseout", () => {
+    //     polygon.setOptions({ fillColor: "#fff" });
+    //     customOverlay.setMap(null);
+    //   });
+
+    //   window.kakao.maps.event.addListener(
+    //     polygon,
+    //     "click",
+    //     (mouseEvent: any) => {
+    //       var content =
+    //         '<div class="info">' +
+    //         '   <div class="title">' +
+    //         area.name +
+    //         "</div>" +
+    //         '   <div class="size">총 면적 : 약 ' +
+    //         Math.floor(polygon.getArea()) +
+    //         " m<sup>2</sup></div>" +
+    //         "</div>";
+
+    //       infowindow.setContent(content);
+    //       infowindow.setPosition(mouseEvent.latLng);
+    //       infowindow.setMap(map);
+    //     }
+    //   );
+    // };
 
     // console.log(areas[0].path[0]); //La
     // for (let i = 0, len = areas.length; i < len; i++) {
@@ -196,24 +298,15 @@ const Map = () => {
     //마커가 지도 위에 표시되도록 설정
     marker.setMap(map);
   }, [mapTypes]);
+
   console.log(data);
+  // for (let i = 0; i < data.length; i++) {
+  //   console.log(data[i].LOCATION_DATA);
+  //   let a = data[i].LOCATION_DATA.substring(9);
+  //   console.log(a);
+  // }
+
   // console.log(kakaoMap);
-
-  // let coordinates = [];
-  // let desc = '';
-  // let polygons = [];
-
-  const displayArea = (coordinates, desc) => {
-    let path = [];
-    let polygons = [];
-
-    coordinates[0].forEach((coordinates) => {
-      let polygon = {};
-      polygon.x = coordinates[1];
-      polygon.y = coordinates[0];
-      polygons.push(polygon);
-    });
-  };
 
   //지도 타입 바뀌는 props 값 정해 놓은 것.
   const btnSet: btnSet[] = [
@@ -221,6 +314,25 @@ const Map = () => {
     { value: "Skyview", con: "스카이뷰" },
     { value: "roadview", con: "로드뷰" },
   ];
+
+  let areas = [];
+  let desc = "";
+  let path = [];
+
+  // for (let i = 0; i < data.length; i++) {
+  //   areas.push(new window.kakao.maps.LatLng(data[i][1], data[i][0]));
+  // }
+  // console.log(areas);
+
+  // let polygon = new window.kakao.maps.Polygon({
+  //   path: areas,
+  //   strokeWeight: 2,
+  //   strokeColor: "red",
+  //   strokeOpacity: 0.8,
+  //   fillColor: "red",
+  //   fillOpacity: 0.7,
+  // });
+  // polygon.setMap(kakaoMap);
 
   // console.log(data); useEffect 밖에서 api 데이터 찍어야 나옴. 안에서는 null값 나옴
   // let position = [];

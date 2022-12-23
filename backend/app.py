@@ -56,18 +56,23 @@ def Polygon(polygon):
     row = db_class.executeAll(sql) #executeAll은 전체 내용 다 가져오라는 명령문
 
     data_stack = list()
-    # print(row[46]["LOCATION_DATA"])
-    str = row[46]["LOCATION_DATA"]
-    result = str[9:-2]
-    print(result)
-    List = result.split(',')
-    # print(List)
+    for i in range(len(row)):
+        # print(row[i])
+        data_stack.append(row[i])
+    # print(data_stack)
+    # data_stack[i]["LOCATION_DATA"]
+
+    # str = row[46]["LOCATION_DATA"]
+    # result = str[9:-2]
+    # print(result)
+    # List = result.split(',')
+    # # print(List)
     # for i in range(len(result)):
     #     print(result[i])
-    for i in range(len(List)): # = index, value in enumerate(List)
-        SList = List[i].split(' ')
-        print(SList)
-        data_stack.append(SList)
+    # for i in range(len(List)): # = index, value in enumerate(List)
+    #     SList = List[i].split(' ')
+    #     print(SList)
+    #     data_stack.append(SList)
     return jsonify(data_stack)
 
 @app.route('/hazard/<line>', methods=['GET'])
