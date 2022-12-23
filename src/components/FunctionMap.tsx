@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 
 
@@ -13,8 +13,12 @@ const FunctionMap = ({value}: any) => {
   const [mapData, setMapData] = useState();
   const [data, setData] = useState<any>([{}]);
 
+  const getvalue = useRef(value);
+  getvalue.current = value;
+  
   console.log(value);
-
+  console.log(getvalue);
+  
   useEffect(() => {
     const getJsonData = async () => {
       try {
@@ -25,9 +29,10 @@ const FunctionMap = ({value}: any) => {
       }
     };
     getJsonData();
-  }, []);
+  }, [getvalue.current]);
 
   console.log(data);
+
   // 지도 기본 설정 및 생성
   useEffect(() => {
     const mapContainer = document.getElementById('map'), 
@@ -40,12 +45,20 @@ const FunctionMap = ({value}: any) => {
     setMapData(map);
   }, [])
 
-  const imageSrc = "/asset/icon_safe.png";
+  type imgType = {
+    [key: string]: string;
+  }
+
+  const imageSrc: imgType = {
+    "cctv": "/asset/icon_cctv.png",
+    "safezone": "/asset/icon_safe.png",
+    "parkinglot": "/asset/icon_parkinglot.png",
+  }
 
   for (let i = 0; i < data.length; i++) {
 
     const imageSize = new kakao.maps.Size(30, 30);
-    const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+    const markerImage = new kakao.maps.MarkerImage(imageSrc[value], imageSize);
 
     const marker = new kakao.maps.Marker({
       map: mapData, // 마커를 표시할 지도
