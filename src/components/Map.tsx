@@ -25,6 +25,8 @@ const Map = () => {
   const [mapTypes, SetMapTypes] = useState<string>("Roadmap"); //지도 타입 바뀌는 용도
   const [data, setData] = useState<any>([{}]); //api 담을 용도
   const [kakaoMap, setKakaoMap] = useState(); //map 밖에서 쓰려고 담는 용도
+  const [areas, setArea] = useState<any>([{}]); // polygon 좌표 담는 용도
+  const [DataDesc, setDataDesc] = useState<any>([{}]); // polygon 상세내용 담는 용도
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     SetMapTypes(e.currentTarget.value);
@@ -49,25 +51,36 @@ const Map = () => {
     axios.get(`http://127.0.0.1:5000/hazard/polygon`).then((response) => {
       // console.log(response.data[0].ADDRESS_JIBUN);
       setData(response.data);
-      console.log(response.data[46]);
-      let a = response.data[46].LOCATION_DATA.slice(
+      // console.log(response.data[46].DATA_DESC) // POLYGON 상세 내용
+      // console.log(response.data[46]); //POLYGON 좌표
+      let DataDesc = response.data[46].DATA_DESC
+      let LoSlice = response.data[46].LOCATION_DATA.slice(
         9,
         response.data[46].LOCATION_DATA.length - 2
       );
-      console.log(a);
-      let b = a.split(",");
-      console.log(b); //polygon 46번째만 가져와서 배열에 넣음.
+      // console.log(a);
+      let LoSplit = LoSlice.split(",");
+      console.log(LoSplit); //polygon 46번째만 가져와서 배열에 넣음.
 
       let areas = [];
       let path = [];
-      for (let j = 0; j < b.length; j++) {
-        let c = b[j].split(" ");
-        console.log(c);
-        path.push(c);
+      for (let j = 0; j < LoSplit.length; j++) {
+        let LoSplitTwo = LoSplit[j].split(" ");
+        // console.log(LoSplitTwo);
+        path.push(LoSplitTwo);
       }
-      areas.push(path);
-      console.log(areas[0][0][0], areas[0][0][1]); //polygon 46번째 좌표만 가져와서 배열에 넣고 46번째 배열들만 다시 배열에 담음
+      console.log(path)
+      // areas.push(path);
+      console.log(path[0][1], path[0][0]); //polygon 46번째 좌표만 가져와서 배열에 넣고 46번째 배열들만 다시 배열에 담음
 
+      for (let i = 0; i < path.length; i++) {
+        areas.push(new window.kakao.maps.LatLng(path[i][1], path[i][0]));
+      }
+      // console.log(areas); //pa?
+      setArea(areas); //areas usesStae에 담음. 
+      setDataDesc(DataDesc);
+
+    
       //이 밑에 애들은 line 좌표 여러개 넣는거 할 때 할 것
       // let path = [];
       // for (let i = 0; i < response.data.length; i++) {
@@ -107,6 +120,7 @@ const Map = () => {
 
     // console.log(data);
 
+
     // let container = document.getElementById("map") as HTMLElement; //지도를 담을 영역의 DOM 레퍼런스
     // //카카오 객체가 window 하위 객체라는 것을 정의해야 하므로 window.kakao로 변경해야 함
     // let options = {
@@ -115,128 +129,8 @@ const Map = () => {
     // };
 
     // let map = new window.kakao.maps.Map(container, options);
-    let customOverlay = new window.kakao.maps.CustomOverlay({});
-    let infowindow = new window.kakao.maps.InfoWindow({ removable: true });
-
-    // const displayArea = () => {
-
-    //   let polygon = new window.kakao.maps.Polygon({
-    //     map: map,
-    //     path: area.path,
-    //     strokeWeight: 2,
-    //     strokeColor: "#004c80",
-    //     strokeOpacity: 0.8,
-    //     fillColor: "#fff",
-    //     fillOpacity: 0.7,
-    //   });
-
-    //   window.kakao.maps.event.addListener(
-    //     polygon,
-    //     "mouseover",
-    //     (mouseEvent: any) => {
-    //       polygon.setOptions({ fillColor: "#09f" });
-    //       customOverlay.setContent('<div class="area">' + area.name + "</div>");
-
-    //       customOverlay.setPosition(mouseEvent.latLng);
-    //       customOverlay.setMap(map);
-    //     }
-    //   );
-
-    //   window.kakao.maps.event.addListener(
-    //     polygon,
-    //     "mousemove",
-    //     (mouseEvent: any) => {
-    //       customOverlay.setPosition(mouseEvent.latLng);
-    //     }
-    //   );
-
-    //   window.kakao.maps.event.addListener(polygon, "mouseout", () => {
-    //     polygon.setOptions({ fillColor: "#fff" });
-    //     customOverlay.setMap(null);
-    //   });
-
-    //   window.kakao.maps.event.addListener(
-    //     polygon,
-    //     "click",
-    //     (mouseEvent: any) => {
-    //       var content =
-    //         '<div class="info">' +
-    //         '   <div class="title">' +
-    //         area.name +
-    //         "</div>" +
-    //         '   <div class="size">총 면적 : 약 ' +
-    //         Math.floor(polygon.getArea()) +
-    //         " m<sup>2</sup></div>" +
-    //         "</div>";
-
-    //       infowindow.setContent(content);
-    //       infowindow.setPosition(mouseEvent.latLng);
-    //       infowindow.setMap(map);
-    //     }
-    //   );
-    // };
-
-    // console.log(areas[0].path[0]); //La
-    // for (let i = 0, len = areas.length; i < len; i++) {
-    //   displayArea(areas[i]);
-    // }
-
-    // function displayArea(area: any) {
-    //   let polygon = new window.kakao.maps.Polygon({
-    //     map: map,
-    //     path: area.path,
-    //     strokeWeight: 2,
-    //     strokeColor: "#004c80",
-    //     strokeOpacity: 0.8,
-    //     fillColor: "#fff",
-    //     fillOpacity: 0.7,
-    //   });
-
-    //   window.kakao.maps.event.addListener(
-    //     polygon,
-    //     "mouseover",
-    //     (mouseEvent: any) => {
-    //       polygon.setOptions({ fillColor: "#09f" });
-    //       customOverlay.setContent('<div class="area">' + area.name + "</div>");
-
-    //       customOverlay.setPosition(mouseEvent.latLng);
-    //       customOverlay.setMap(map);
-    //     }
-    //   );
-
-    //   window.kakao.maps.event.addListener(
-    //     polygon,
-    //     "mousemove",
-    //     (mouseEvent: any) => {
-    //       customOverlay.setPosition(mouseEvent.latLng);
-    //     }
-    //   );
-
-    //   window.kakao.maps.event.addListener(polygon, "mouseout", () => {
-    //     polygon.setOptions({ fillColor: "#fff" });
-    //     customOverlay.setMap(null);
-    //   });
-
-    //   window.kakao.maps.event.addListener(
-    //     polygon,
-    //     "click",
-    //     (mouseEvent: any) => {
-    //       var content =
-    //         '<div class="info">' +
-    //         '   <div class="title">' +
-    //         area.name +
-    //         "</div>" +
-    //         '   <div class="size">총 면적 : 약 ' +
-    //         Math.floor(polygon.getArea()) +
-    //         " m<sup>2</sup></div>" +
-    //         "</div>";
-
-    //       infowindow.setContent(content);
-    //       infowindow.setPosition(mouseEvent.latLng);
-    //       infowindow.setMap(map);
-    //     }
-    //   );
-    // }
+    
+  
 
     setKakaoMap(map); //map useEffect 밖에서 쓰려고 담은 것.
 
@@ -280,14 +174,6 @@ const Map = () => {
     marker.setMap(map);
   }, [mapTypes]);
 
-  // console.log(data);
-  // for (let i = 0; i < data.length; i++) {
-  //   console.log(data[i].LOCATION_DATA);
-  //   let a = data[i].LOCATION_DATA.substring(9);
-  //   console.log(a);
-  // }
-
-  // console.log(kakaoMap);
 
   //지도 타입 바뀌는 props 값 정해 놓은 것.
   const btnSet: btnSet[] = [
@@ -296,24 +182,64 @@ const Map = () => {
     { value: "roadview", con: "로드뷰" },
   ];
 
-  let areas = [];
-  let desc = "";
-  let path = [];
+  //-------------폴리건 데이터 카카오 식에 맞게 추가하는 부분 ----------------------------
+  let customOverlay = new window.kakao.maps.CustomOverlay({})
+  let infowindow = new window.kakao.maps.InfoWindow({removable: true});
 
-  // for (let i = 0; i < data.length; i++) {
-  //   areas.push(new window.kakao.maps.LatLng(data[i][1], data[i][0]));
-  // }
-  // console.log(areas);
+  // console.log(DataDesc)
+  let area = [];
 
-  // let polygon = new window.kakao.maps.Polygon({
-  //   path: areas,
-  //   strokeWeight: 2,
-  //   strokeColor: "red",
-  //   strokeOpacity: 0.8,
-  //   fillColor: "red",
-  //   fillOpacity: 0.7,
-  // });
-  // polygon.setMap(kakaoMap);
+  //// 지도에 영역데이터를 폴리곤으로 표시
+  for (let i = 0; i < areas.length; i++) {
+    area.push(new window.kakao.maps.LatLng(areas[i].Ma, areas[i].La));
+  }
+  // console.log(area[0].Ma, area[0].La);
+
+  // 다각형을 생상하고 이벤트를 등록하는 함수
+  function dispalyArea(area:any){
+    // 다각형을 생성
+    let polygon = new window.kakao.maps.Polygon({
+      path: area,
+      strokeWeight: 2,
+      strokeColor: "#004c80",
+      strokeOpacity: 0.8,
+      fillColor: "#fff",
+      fillOpacity: 0.7,
+    });
+    polygon.setMap(kakaoMap);
+
+    // 다각형에 mouseover 이벤트를 등록하고 이벤트가 발생하면 폴리곤의 채움색을 변경
+    // 지역명을 표시하는 커스텀오버레이를 지도위에 표시
+    window.kakao.maps.event.addListener(polygon, 'mouseover', function(mouseEvent:any) {
+      polygon.setOptions({fillColor: '#09f'});
+      customOverlay.setContent('<div class="area">' + DataDesc + '</div>');
+      
+      customOverlay.setPosition(mouseEvent.latLng); 
+      customOverlay.setMap(kakaoMap);
+    });
+
+    // 다각형에 mousemove 이벤트를 등록하고 이벤트가 발생하면 커스텀 오버레이의 위치를 변경
+    window.kakao.maps.event.addListener(polygon, 'mousemove', function(mouseEvent:any) {
+        customOverlay.setPosition(mouseEvent.latLng); 
+    });
+
+    // 다각형에 click 이벤트를 등록하고 이벤트가 발생하면 다각형의 이름과 면적을 인포윈도우에 표시
+    window.kakao.maps.event.addListener(polygon, 'click', function(mouseEvent:any) {
+        var content = '<div class="info">' + 
+                    '   <div class="title">' + DataDesc + '</div>' +
+                    '   <div class="size">총 면적 : 약 ' + Math.floor(polygon.getArea()) + ' m<sup>2</sup></div>' +
+                    '</div>';
+
+        infowindow.setContent(content); 
+        infowindow.setPosition(mouseEvent.latLng); 
+        infowindow.setMap(kakaoMap);
+    });
+  
+
+  }
+  dispalyArea(area)
+  
+  
 
   // console.log(data); useEffect 밖에서 api 데이터 찍어야 나옴. 안에서는 null값 나옴
   // let position = [];
