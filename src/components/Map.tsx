@@ -117,6 +117,40 @@ const Map = () => {
       // });
       // polygon.setMap(map);
     });
+    axios.get(`http://127.0.0.1:5000/hazard/line`).then((response) =>{
+      console.log(response.data);
+      let LDataDesc = response.data
+      console.log(LDataDesc[0].DATA_DESC)
+      let Lareas = [];
+      let Ldesc = []
+      let Lpath = [];
+
+      for (let i = 0; i < response.data.length; i++) {
+        console.log(response.data[i].LOCATION_DATA);
+        let Lslice = response.data[i].LOCATION_DATA.slice(
+          6,
+          response.data[i].LOCATION_DATA.length - 2
+        );
+        console.log(Lslice)
+        let Lsplit = Lslice.split(",");
+        console.log(Lsplit);  // 여기를 하나의 배열로 담아야 함. 배열 묶음 여러개 필요 (line 배열 0번 LOCATION_DATA LINE 좌표 전체 하나로 묶기)
+
+        // for (let j = 0; j < Lsplit.length; j++) {
+        //   let LsplitTwo = Lsplit[j].split(" ");
+        //   // console.log(c);
+        //   Lpath.push(LsplitTwo);
+        // }
+        // console.log(Lpath);
+
+      }
+      
+      // for (let i = 0; i < Lpath.length; i++) {
+      //   Lareas.push(new window.kakao.maps.LatLng(Lpath[i][1], Lpath[i][0]));
+      // }
+      // console.log(Lareas) 
+
+
+    });
 
     // console.log(data);
 
