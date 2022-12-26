@@ -1,133 +1,132 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
-import Button from "@/common/Button";
-import Search from "@/common/Search";
+import { Search, SingleSearch } from "@/common/Search";
 import Button_R from "@/common/Button_R";
-import Main from "@/common/main";
+import "./sectionTable.css";
 
-const button_item = [
-    {
-        src: "asset/icon_cctv.png",
-        name: "CCTV",
-    },
-    {
-        src: "asset/icon_conflagration.png",
-        name: "돌발정보",
-    },
-    {
-        src: "asset/icon_safe.png",
-        name: "보호구역",
-    },
-    {
-        src: "asset/icon_forecast.png",
-        name: "날씨상황",
-    },
-    {
-        src: "asset/icon_traffic.png",
-        name: "교통상황",
-    },
-    {
-        src: "asset/icon_parkinglot.png",
-        name: "주차장",
-    },
-];
-
-const SectionTable = () => {
+const SectionTable = ({ setSearchPlace }: any) => {
     const [isCheck, setIsCheck] = useState<boolean>(true);
-    console.log(isCheck);
+    const [inputText, setInputText] = useState("");
+
+    const onChangeWhere = (e: any) => {
+        setInputText(e.target.value);
+    };
+
+    // inputeText에 값을 searchPlace에 값 받음
+    const submitWhere = (e: any) => {
+        e.preventDefault();
+        setSearchPlace(inputText);
+        setInputText("");
+    };
 
     return (
-        <>
-            <SectionSet>
-                <Button_RDiv>
-                    <Button_R
-                        icon="/asset/icon_search.png"
-                        contents="검색"
-                        onClick={() => {
-                            setIsCheck(true);
-                        }}
-                    ></Button_R>
-                    <Button_R
-                        icon="/asset/icon_search.png"
-                        contents="길찾기"
-                        onClick={() => {
-                            setIsCheck(false);
-                        }}
-                    ></Button_R>
-                </Button_RDiv>
-
+        <MainBox>
+            <div>
+                <Button_R
+                    icon="/asset/icon_search.png"
+                    contents="검색"
+                    onClick={() => {
+                        setIsCheck(true);
+                    }}
+                ></Button_R>
+                <Button_R
+                    icon="/asset/icon_search.png"
+                    contents="길찾기"
+                    onClick={() => {
+                        setIsCheck(false);
+                    }}
+                ></Button_R>
+            </div>
+            <div>
                 {isCheck ? (
-                    <Search placeholder="어디로 갈까요?"></Search>
+                    <>
+                        <SingleSearch
+                            onSubmit={submitWhere}
+                            placeholder="어디로 갈까요?"
+                            onChange={onChangeWhere}
+                            value={inputText}
+                        />
+                        <SearchResult>
+                            <div id="menu_wrap" className="scroll-wrapper">
+                                <ul id="placesList"></ul>
+                            </div>
+                            <div id="pagination"></div>
+                        </SearchResult>
+                    </>
                 ) : (
                     <>
-                        <Search placeholder="출발지 검색"></Search>{" "}
-                        <Search placeholder="도착지 검색"></Search>{" "}
+                        <Search placeholder="출발지 검색"></Search>
+                        <Search placeholder="도착지 검색"></Search>
                         <form>
                             <PathButton>경로검색</PathButton>
                         </form>
+                        <SearchResult />
                     </>
                 )}
-
-                <Main></Main>
-
-                <ButtonDiv>
-                    {button_item.map((value, index) => {
-                        return (
-                            <Button
-                                key={index}
-                                icon={value.src}
-                                name={value.name}
-                            ></Button>
-                        );
-                    })}
-                    {/* <Button icon="asset/icon_cctv.png"></Button>
-          <Button icon="asset/icon_conflagration.png"></Button>
-          <Button icon="asset/icon_safe.png"></Button>
-          <Button icon="asset/icon_forecast.png"></Button>
-          <Button icon="asset/icon_traffic.png"></Button>
-          <Button icon="asset/icon_parkinglot.png"></Button> */}
-                </ButtonDiv>
-            </SectionSet>
-        </>
+            </div>
+        </MainBox>
     );
 };
 
-const SectionSet = styled.section`
-    width: 20vw;
-    height: 100vh;
-    background-color: #e7e7e7;
+const MainBox = styled.div`
+    width: 400px;
+    height: 650px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
+    padding: 0 10px 0 10px;
+    & > div:nth-child(1) {
+        width: 230px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+    }
+    & > div:nth-child(2) {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 `;
-
-const Button_RDiv = styled.div`
-    width: 230px;
-    height: 40px;
+const SearchResult = styled.div`
+    width: 350px;
+    height: 450px;
     display: flex;
+    background-color: #fff;
+    border-radius: 10px;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-around;
-`;
-
-const ButtonDiv = styled.div`
-    width: 218px;
-    height: 190px;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-around;
+    margin-top: 20px;
+    box-shadow: 0 4px 4px #00000025;
+    & > div:nth-child(1) {
+        width: 320px;
+        height: 430px;
+        margin-top: 10px;
+        padding: 5px;
+        overflow-y: auto;
+        background: rgba(255, 255, 255);
+        font-size: 12px;
+    }
 `;
 
 const PathButton = styled.button`
-    width: 70px;
-    height: 25px;
+    width: 60px;
+    height: 22px;
+    padding: 3px;
+    margin-bottom: 7px;
     background-color: #1f68f6;
     color: #ffffff;
     border: 1px solid #1f68f6;
     border-radius: 0.5rem;
     margin-left: 11rem;
+    font-size: 10px;
+    box-sizing: 0px 4px 4px #00000050;
+    &:hover {
+        cursor: pointer;
+        background-color: #ffffff;
+        color: #1f68f6;
+    }
 `;
 
 export default SectionTable;

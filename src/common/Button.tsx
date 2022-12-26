@@ -1,13 +1,30 @@
 import styled from "styled-components";
 
-const Button = ({ icon, name }: { icon: string; name: string }) => {
+const Button = ({
+  active, 
+  icon, 
+  name, 
+  onClick,
+}: { 
+  active: boolean;
+  icon: string; 
+  name: string;
+  onClick: () => void;
+}) => {
+  const activeStyle = {
+    backgroundColor: '#1f68f6',
+    color: '#ffffff'
+  };
+  const style = {
+    cursor: 'pointer'
+  }
   return (
-    <>
-      <ButtonWarp>
-        <img src={icon} alt="icon"></img>
-        <p>{name}</p>
-      </ButtonWarp>
-    </>
+    <ButtonWarp 
+      style={active ? { ...style, ...activeStyle } : style}
+      onClick={onClick}>
+      <img src={icon} alt="icon"></img>
+      <p>{name}</p>
+    </ButtonWarp>
   );
 };
 
