@@ -20,6 +20,7 @@ const Button_R = ({
 };
 
 const Button_RWrap = styled.div`
+<<<<<<< HEAD
   width: 100px;
   height: 30px;
   padding: 8px;
@@ -37,6 +38,18 @@ const Button_RWrap = styled.div`
     cursor: pointer;
     box-shadow: 0 0 6px #1f68f650;
   }
+=======
+width: 100px;
+height: 30px;
+background-color: #F8F8F8;
+color: #1F68F6;
+border: 1px solid #F8F8F8;
+border-radius: 1rem;
+display: flex;
+align-items:center;
+justify-content: space-evenly;
+font-weight: bold;
+>>>>>>> 048f0b5241683e1ad712fc421008c74cbf827989
 `;
 
 export default Button_R;
