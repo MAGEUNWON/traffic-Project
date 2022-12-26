@@ -69,7 +69,7 @@ const FunctionMap = ({ value, searchplace }: any) => {
           return imageSrc[value];
       }
     };
-    const imageSize = new kakao.maps.Size(22, 22);
+    const imageSize = new kakao.maps.Size(50, 50);
     const markerImage = new kakao.maps.MarkerImage(imgSwitch(), imageSize);
 
     const marker = new kakao.maps.Marker({

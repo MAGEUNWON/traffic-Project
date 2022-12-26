@@ -12,6 +12,8 @@ api_keyI = os.environ.get("api_keyI")
 api_keyP = os.environ.get("api_keyP")
 #화연
 open_api_key = os.environ.get("API_KEY_POLICE")
+#연주
+
 
 
 class ApiRoute():
@@ -62,7 +64,7 @@ class ApiRoute():
         def safezone_api():
             json_data = []
             parameters = {"key": open_api_key, "sidoCd": 30}
-            requestData = requests.get('http://www.utic.go.kr/guide/getSafeOpenJson.    do', params=parameters)
+            requestData = requests.get('http://www.utic.go.kr/guide/getSafeOpenJson.do', params=parameters)
             jsonData = None
 
             if requestData.status_code == 200 :
