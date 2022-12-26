@@ -2,6 +2,7 @@ import { Children, useRef, useState } from "react";
 
 
 export const parkingEvent = (data: any, map: any) => {
+    let parkdata:any = []
     for (let i = 0; i < data.length; i++) {
         let position = new window.kakao.maps.LatLng(data[i].lat, data[i].lon);
         const imageSize = new window.kakao.maps.Size(16, 20);
@@ -13,6 +14,7 @@ export const parkingEvent = (data: any, map: any) => {
             // image: new kakao.maps.MarkerImage(constructionSrc, imageSize),
             image: new window.kakao.maps.MarkerImage(imgSrc, imageSize),
         });
+        parkdata.push(parkingMarker)
 
         const content = `
         <div class="content-box">
@@ -25,6 +27,11 @@ export const parkingEvent = (data: any, map: any) => {
             position: position,
             content: content,
         });
+        const setMarkers=(map:any)=> {            
+            for (var i = 0; i < parkdata.length; i++) {
+                parkdata[i].setMap(map);
+            }            
+        } 
 
         // 돌발정보 마커에 마우스오버하면, 해당 돌발 상황 정보 오버레이가 보인다.
         window.kakao.maps.event.addListener(
@@ -41,8 +48,15 @@ export const parkingEvent = (data: any, map: any) => {
             "mouseout",
             function () {
                 overlay.setMap(null);
-            }
+            }            
         );
+        window.kakao.maps.event.addListener(
+            map,
+            "click",
+            ()=>{
+                setMarkers(null)
+            }
+        )
     }
 };
 
