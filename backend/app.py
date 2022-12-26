@@ -1,13 +1,17 @@
-from flask import Flask, jsonify, request
-from flask_cors import CORS 
-from config.db import DataRoute
-from config.api import ApiRoute
-import requests
 import json
-import xmltodict
 import os
+
+import requests
+import xmltodict
+from api import DataAPI
+from config.api import ApiRoute
+from config.db import DataRoute
+from flask import Flask, jsonify, request
+from flask_cors import CORS
+
 # from config import db
 
+# from config import db
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
@@ -247,6 +251,40 @@ def dirCall():
 #------------------------------------------------------------------
 
 
+
+
+# CCTV
+@app.route('/cctv')
+def daejeon():
+    db_class  = DataRoute()
+    sql  = f"SELECT * From CCTV"
+    row = db_class.executeAll(sql)
+
+    return jsonify(row)
+    
+# safezone
+@app.route('/safezone')
+def safe_zone_db():
+    db_class = DataRoute()
+    sql = f"SELECT * FROM safezone_db"
+    row = db_class.executeAll(sql)
+    
+    return jsonify(row)
+
+# parkinglot
+@app.route('/parkinglot')
+def parking_lot_db():
+    db_class = DataRoute()
+    sql = 'SELECT * FROM parking_lot'
+    row = db_class.executeAll(sql)
+
+    return row
+
+# accident
+@app.route('/accident')
+def accident():
+    data = DataAPI.accident_api()
+    return data
 
 
 

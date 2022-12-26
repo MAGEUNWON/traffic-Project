@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from "react";
 //useEffect에서 설정한 함수를 컴포넌트가 화면에 맨 처음 렌더링될 때만 실행하고, 업데이트될 때는 실행하지 않으려면 함수의 두 번째 파라미터로 비어 있는 배열을 넣어 주면 됨.
 //특정 값이 변경 될 때만 호출하고 싶은 경우에는 useEffect의 두 번째 파라미터로 전달되는 배열 안에 검사하고 싶은 값을 넣어주면 됨.
 import styled from "styled-components";
-import axios from "axios";
+import FunctionSearch from "./FunctionSearch";
 
 declare global {
   interface Window {
@@ -18,9 +18,8 @@ interface btnSet {
   [index: string]: string;
 }
 
-const Map = () => {
+const Map = ({ searchplace }: any) => {
   const [mapTypes, SetMapTypes] = useState<string>("Roadmap");
-  const [data, setData] = useState(null);
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     SetMapTypes(e.currentTarget.value);
@@ -34,10 +33,10 @@ const Map = () => {
     // console.log(maptype)
     console.log("렌더링 완료"); //useEffect는 React.StrictMode가 적용된 개발환경에서는 콘솔이 두번씩 찍힘.
 
-    axios.get(`http://127.0.0.1:5000/hazard`).then((response) => {
-      console.log(response.data);
-      setData(response.data);
-    });
+    // axios.get(`http://127.0.0.1:5000/hazard`).then((response) => {
+    //   console.log(response.data);
+    //   setData(response.data);
+    // });
 
     let container = document.getElementById("map") as HTMLElement; //지도를 담을 영역의 DOM 레퍼런스
     //카카오 객체가 window 하위 객체라는 것을 정의해야 하므로 window.kakao로 변경해야 함
@@ -94,9 +93,9 @@ const Map = () => {
     });
     //마커가 지도 위에 표시되도록 설정
     marker.setMap(map);
-  }, [mapTypes]);
 
-  console.log(data);
+    FunctionSearch(searchplace, map);
+  }, [mapTypes, searchplace]);
 
   const btnSet: btnSet[] = [
     { value: "Roadmap", con: "지도" },
@@ -122,7 +121,7 @@ const Map = () => {
 
 const ButtonSet = styled.div`
   display: flex;
-  width: 250px;
+  width: 200px;
   height: 30px;
   justify-content: space-evenly;
   position: absolute;
@@ -132,11 +131,19 @@ const ButtonSet = styled.div`
 `;
 
 const Button = styled.button`
-  width: 60px;
-  height: 50px;
-  background-color: #fff;
-  border: 1px; solid black;
+  height: 25px;
+  background-color: #1f68f6;
+  color: #fff;
+  border: none;
   border-radius: 0.5rem;
+  font-size: 13px;
+  padding: 0 7px 0 7px;
+  box-shadow: 0 2px 3px #00000050;
+  &:hover {
+    cursor: pointer;
+    background-color: #fff;
+    color: #1f68f6;
+  }
 `;
 
 export default Map;
