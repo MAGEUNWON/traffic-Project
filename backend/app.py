@@ -27,7 +27,7 @@ def daejeon():
 @app.route('/safezone')
 def safe_zone_db():
     db_class = DataRoute()
-    sql = f"SELECT * FROM safezone_db"
+    sql = f"SELECT * FROM safezone"
     row = db_class.executeAll(sql)
     
     return jsonify(row)
