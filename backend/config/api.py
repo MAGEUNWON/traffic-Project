@@ -5,15 +5,17 @@ import xmltodict
 import json
 
 load_dotenv()
+#근원
 api_key = os.environ.get("api_key")
 api_keyI = os.environ.get("api_keyI")
 api_keyP = os.environ.get("api_keyP")
+#화연
+open_api_key = os.environ.get("API_KEY_POLICE")
 
 
 class ApiRoute():
 
-        
-
+        #근원
         def dajuen_Api(self):
             
             api_key_decode = requests.utils.unquote(api_key) #, "UTF-8" 넣어줘도 나오고 안넣어줘도 나옴
@@ -40,34 +42,6 @@ class ApiRoute():
             # print(dajeunJson)
             return dajeunJson
 
-
-        def Unexpected_Api(self):
-            
-            # url = 'http://www.utic.go.kr/etc/telMap.do?'
-            # 돌발 정보 데이터
-            url = 'http://www.utic.go.kr/guide/imsOpenData.do?'
-            req = requests.get(f'{url}key={api_keyP}')
-
-            xPars = xmltodict.parse(req.text)
-            jsonDump = json.dumps(xPars)
-            jsonBody = json.loads(jsonDump)
-            event = jsonBody['result']['record']
-
-            address = []
-            for i in range(len(event)):
-                if "대전" in event[i]['addressJibun']: #if A in B문법 : B안에 A가 있으면 참, 없으면 거짓(B에는 리스트, 튜플, 문자열을 사용할 수 있음), if A not in B로도 가능
-                    address.append(event[i]) 
-            # print(address)
-            return address
-            
-        def SafeData_Api(self):
-
-            url = 'http://www.utic.go.kr/guide/tsdmsOpenData.do?'
-            req = requests.get(f'{url}key={api_keyP}')
-            return req.text
-
-
-
             # return address
         def danger_Api(self):
             url = 'http://www.utic.go.kr/guide/getRoadAccJson.do?'
@@ -82,3 +56,34 @@ class ApiRoute():
                 # print(address)
             return data
             # return address
+        
+        #화연
+        def safezone_api():
+            json_data = []
+            parameters = {"key": open_api_key, "sidoCd": 30}
+            requestData = requests.get('http://www.utic.go.kr/guide/getSafeOpenJson.    do', params=parameters)
+            jsonData = None
+
+            if requestData.status_code == 200 :
+                jsonData = requestData.json()
+                jsonItems = jsonData['items']
+
+                for item in jsonItems:
+                    json_data.append(item)
+
+            return json_data
+    
+        def accident_api():
+            daejeon_data = []
+            url = f'http://www.utic.go.kr/guide/imsOpenData.do?key=' + open_api_key
+            resonse = requests.get(url)
+            xmlData = resonse.text
+            jsonData = json.dumps(xmltodict.parse(xmlData))
+            loadJson = json.loads(jsonData)
+            data = loadJson['result']['record']
+            for i in range(len(data)):
+                if '대전' in data[i]['addressJibun']:
+                    daejeon_data.append(data[i])
+
+            return daejeon_data
+
