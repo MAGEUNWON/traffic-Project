@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import styled from "styled-components";
 import Button from "@/common/Button";
 import {Search} from "@/common/Search";
@@ -6,16 +6,24 @@ import Button_R from "@/common/Button_R";
 import Main from "@/common/main";
 import { parkingEvent, markerEvent, cctvFc } from "@/components/buttonFuction";
 
-const SectionTable = ({ parkingData, accidentData, datas, map }: any) => {
+const SectionTable = ({ parkingData, accidentData, datas, map,mark }: any) => {
     console.log(datas, "cctv 데이터입니다!");
     const [isCheck, setIsCheck] = useState<boolean>(true);
+    const [test,setTest] = useState<boolean>(true);
+    
+    mark = isCheck  
 
+    console.log(mark)
+    
     const button_item = [
         {
             src: "asset/icon_cctv.png",
             name: "CCTV",
-            onClick: () => {
-                cctvFc(datas, map);
+            onClick: () => { 
+                
+                cctvFc(datas, map, mark);
+                
+                
             },
         },
         {
@@ -55,7 +63,7 @@ const SectionTable = ({ parkingData, accidentData, datas, map }: any) => {
             },
         },
     ];
-    console.log(isCheck);
+    
 
     return (
         <>

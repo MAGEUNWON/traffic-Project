@@ -66,9 +66,9 @@ export const markerEvent = (data: any, map: any) => {
             // image: new kakao.maps.MarkerImage(constructionSrc, imageSize),
             image: data[i].incidentTitle?.includes("[공사]")
                 ? new window.kakao.maps.MarkerImage(
-                      constructionSrc,
-                      constructionSize
-                  )
+                    constructionSrc,
+                    constructionSize
+                )
                 : data[i].incidentTitle?.includes("[사고]")
                 ? new window.kakao.maps.MarkerImage(cautionSrc, imageSize)
                 : new window.kakao.maps.MarkerImage(stopSrc, imageSize),
@@ -76,8 +76,8 @@ export const markerEvent = (data: any, map: any) => {
 
         const content = `
         <div class="content-box">
-          <span>${data[i].addressJibun}</span>
-          <span>${data[i].incidentTitle}</span>
+            <span>${data[i].addressJibun}</span>
+            <span>${data[i].incidentTitle}</span>
         </div>
       `;
         // 돌발 상황 정보 오버레이 생성
@@ -108,7 +108,7 @@ export const markerEvent = (data: any, map: any) => {
 
 // -------------------------------------------------------
 
-export const cctvFc = (datas: any, map: any) => {        
+export const cctvFc = (datas: any, map: any,mark:any) => {   
         let ImageSrc =
         "https://t1.daumcdn.net/localimg/localimages/07/2018/pc/img/marker_cctv.png",
         imageSize = new window.kakao.maps.Size(24, 27),
@@ -135,12 +135,12 @@ export const cctvFc = (datas: any, map: any) => {
                     ImageSrc,
                     imageSize,
                     imageOption
-                ),
-            });
-            markersave.push(marker);
-            console.log(markersave)
+                    ),
+                });
+                markersave.push(marker);
             
-            let iwCotent = `<div style="padding:5px;">${name}</div><iframe width="330" height ="280" src = "${url}"></iframe><div style="font-size:5px;background-color:#333;color:#fff">경찰청(UTIC)(LIVE)제공</div>`,
+            
+            let iwCotent = `<div style="padding:5px;">${name}</div><iframe width="330" height ="280" style="border:none" src = "${url}"></iframe><div style="font-size:5px;background-color:#333;color:#fff">경찰청(UTIC)(LIVE)제공</div>`,
             iwPosition = new window.kakao.maps.LatLng(ycode, xcode),
             iwRemoveable = true;
             
@@ -150,7 +150,12 @@ export const cctvFc = (datas: any, map: any) => {
                 removable: iwRemoveable,
             });
             info.push(infowindow);
-            
+
+            const setMarkers=(map:any)=> {            
+                for (var i = 0; i < markersave.length; i++) {
+                    markersave[i].setMap(map);
+                }            
+            }            
             const close = () => {
                 for (let i = 0; i < info.length; i++) {
                     info[i].close();
@@ -160,25 +165,22 @@ export const cctvFc = (datas: any, map: any) => {
                 close();
                 infowindow.open(map, marker);
                 
-            });
-            
+            });            
             window.kakao.maps.event.addListener(map, "click", () => {
+                setMarkers(null)
                 close();
+                // console.log(markersave)
             });
             
+            // const hideMarkers=()=> {
+            //     setMarkers(null);
+            //     }         
             
-            
+            // console.log(mark)
+            // if(mark===false){
+            //     setMarkers(null)
+            //     console.log(markersave)
+            // }
         }   
-        const setMarkers=(map:any)=> {            
-            for (var i = 0; i < markersave.length; i++) {
-                markersave[i].setMap(map);
-            }            
-        }
-        const showMarkers=()=> {
-            setMarkers(map)    
-        }
-        const hideMarkers=()=> {
-            setMarkers(null);
-            }         
     }
         

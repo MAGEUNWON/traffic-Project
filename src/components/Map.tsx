@@ -302,7 +302,7 @@ const Map = ({ parkingData, accidentData, datas }: any) => {
                                                         <p>노드ID: ${markerArr[i].node_id}</p>
                                                         <p>노드유형: ${markerArr[i].node_type}</p>
                                                         <p>회전제한유무:${markerArr[i].turn_p}</p>
-                                                     </div>`,
+                                                    </div>`,
                                         removable: true,
                                     });
                                 }
