@@ -139,9 +139,30 @@ const Map = () => {
             arr4[index].push(value[i].split(" "));
           }
         });
-        // console.log(arr3);
         console.log(arr4);
-        setLarr(arr4);
+        // console.log(arr4[0][0][1], arr4[0][0][0]);
+
+        let Larr:any = []
+
+        for (let i = 0; i < arr4.length; i++) {
+          // console.log(arr4[i]);
+          let arr:any = []
+
+          let sLarr = arr4[i];
+          for (let j =0; j<sLarr.length; j++){
+
+            arr.push(new window.kakao.maps.LatLng(sLarr[j][1], sLarr[j][0]));
+          }
+          // console.log(arr)
+          Larr.push(arr)
+          // linePath.push(new window.kakao.maps.LatLng(arr))
+          // sLarr.forEach((value: any, index: number) => {
+          //   console.log(value[i], index);
+          // });
+        }
+        console.log(Larr)
+
+        setLarr(Larr);
         // -----------------------------------------
         // console.log(response.data);
         // let LData = response.data;
@@ -391,28 +412,47 @@ const Map = () => {
 
   console.log(Larr);
   // console.log(Larr[0]);
+  let linePath:any = []
 
-  // for (let i = 0; i < Larr.length; i++) {
-  //   console.log(Larr[i][0]);
-  //   // let sLarr = [Larr[i]];
-  //   // sLarr.forEach((value: any, index: number) => {
-  //   //   console.log(value[i], index);
-  //   // });
+  for (let i = 0; i < Larr.length; i++) {
+    console.log(Larr[i][0])
+    linePath.push(new window.kakao.maps.LatLng(Larr[i][0], Larr[i][1]));
+  }
+  console.log(linePath) // 아니 왜 안들어가냐고
+
+  var polyline = new window.kakao.maps.Polyline({
+    path: linePath, // 선을 구성하는 좌표배열 입니다
+    strokeWeight: 100, // 선의 두께 입니다
+    strokeColor: '#000000', // 선의 색깔입니다
+    strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+    strokeStyle: 'solid' // 선의 스타일입니다
+});
+
+// 지도에 선을 표시합니다 
+polyline.setMap(kakaoMap);  
+
+
+  // let Line: any = [];
+  // Larr.forEach((value: [], index: number) => {
+  //   // console.log(value, index);
+  //   let arr: any = [];
+  //   for (let i = 0; i < value.length; i++) {
+  //     // console.log(value.length);
+  //     // console.log(value[i][1], value[i][0]);
+  //     arr.push(value[i][1], value[i][0]);
+  //   }
+  //   console.log(arr);
+  //   Line.push(arr);
+  // });
+  // console.log(Line);
+
+  // let LineArr = []
+
+  // for(let i =0; i< Larr.length; i++){
+  //   // console.log(Larr[i][0])
+  //   // console.log(new window.kakao.maps.LatLng(Larr[i][1].Ma,Larr[i][0].La))
   // }
-  let Line: any = [];
-  Larr.forEach((value: [], index: number) => {
-    // console.log(value, index);
-    let arr: any = [];
-    for (let i = 0; i < value.length; i++) {
-      // console.log(value.length);
-      // console.log(value[i][1], value[i][0]);
-      arr.push(value[i][1], value[i][0]);
-    }
-    // console.log(arr);
-    Line.push(arr);
-  });
-  console.log(Line);
-
+  
   // let linePath =
   // let Line: any[] = [];
   // Larr.forEach((value: [], index: number) => {
