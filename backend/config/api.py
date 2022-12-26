@@ -67,7 +67,7 @@ class ApiRoute():
             return req.text
 
 
-       
+
             # return address
         def danger_Api(self):
             url = 'http://www.utic.go.kr/guide/getRoadAccJson.do?'

@@ -34,7 +34,7 @@ def daejeon():
 def dajuen_Api():
     data = ApiRoute()
     result = data.dajuen_Api()
-   
+
     return result
 
 
@@ -92,7 +92,7 @@ def accident():
     for i in range(len(data)):
         if '대전' in data[i]['addressJibun']:
             daejeon_data.append(data[i])
-   
+
     return daejeon_data
 #------------------------------------------------------------------
 
