@@ -11,7 +11,7 @@ api_key = os.environ.get("api_key")
 api_keyI = os.environ.get("api_keyI")
 api_keyP = os.environ.get("api_keyP")
 #화연
-open_api_key = os.environ.get("API_KEY_POLICE")
+open_api_key = os.environ.get("api_keyP")
 
 
 class ApiRoute():
