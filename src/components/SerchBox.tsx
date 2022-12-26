@@ -10,6 +10,20 @@ const SerchBox = ({ kakaoMap }: any) => {
     const [isCheck, setIsCheck] = useState<boolean>(true);
     const [inputText, setInputText] = useState("");
     const [searchplace, setSearchPlace] = useState("");
+    const [address, setAddress] = useState<any>([]);
+    const [trafficData, setTrafficData] = useState<any>([]);
+    let polyline: any = [];
+
+    useEffect(() => {
+        console.log(polyline);
+
+        if (isCheck) {
+            polyline.map((el: any) => {
+                console.log(el, "호호홓");
+            });
+        }
+    }, [isCheck]);
+
     useEffect(() => {
         // ! 장소 검색
         interface placeType {
@@ -237,8 +251,6 @@ const SerchBox = ({ kakaoMap }: any) => {
     }, [searchplace]);
     // 목적지 검색창에 입력하는 input창에 입력하면 input값을 inputText에 담기
 
-    useEffect(() => {}, []);
-
     const onChangeWhere = (e: any) => {
         setInputText(e.target.value);
     };
@@ -249,12 +261,14 @@ const SerchBox = ({ kakaoMap }: any) => {
         setSearchPlace(inputText);
         setInputText("");
     };
+
     const searchButton = [
         {
             icon: "/asset/icon_search.png",
             contents: "검색",
             onClick: (kakaoMap: any) => {
-                setIsCheck(true);
+                setIsCheck(() => true);
+
                 // polygon.setMap(null);
             },
         },
@@ -279,12 +293,12 @@ const SerchBox = ({ kakaoMap }: any) => {
                         });
                     });
 
-                    let polyline: any = [];
                     let markerArr: any[] = [];
                     let start = new window.kakao.maps.Marker({});
                     let end = new window.kakao.maps.Marker({});
                     let pline: any = [];
                     let markerObject = [start, end];
+                    let address: any[] = [];
 
                     for (let i = 0; i < line.length; i++) {
                         //i번째 정보를 가져옵니다.
@@ -311,6 +325,46 @@ const SerchBox = ({ kakaoMap }: any) => {
 
                                 let latlng = e.latLng;
 
+                                let geocoder =
+                                    new window.kakao.maps.services.Geocoder();
+
+                                let coord = new window.kakao.maps.LatLng(
+                                    latlng.Ma,
+                                    latlng.La
+                                );
+
+                                let callback = function (
+                                    result: object[],
+                                    status: string
+                                ) {
+                                    if (
+                                        status ===
+                                        window.kakao.maps.services.Status.OK
+                                    ) {
+                                        if (address.length === 2) {
+                                            address.pop();
+                                            address.push(...result);
+                                            setAddress(() => {
+                                                return { ...address };
+                                            });
+                                        } else if (address.length === 1) {
+                                            address.push(...result);
+                                            setAddress(() => {
+                                                return { ...address };
+                                            });
+                                        } else {
+                                            address.push(...result);
+                                            setAddress(address);
+                                        }
+                                    }
+                                };
+
+                                geocoder.coord2Address(
+                                    coord.getLng(),
+                                    coord.getLat(),
+                                    callback
+                                );
+
                                 if (markerArr.length === 0) {
                                     markerArr.push(response.data[i]);
                                     start.setPosition(latlng);
@@ -327,6 +381,25 @@ const SerchBox = ({ kakaoMap }: any) => {
                                         }
                                     );
                                     let path: any = [];
+                                    let saveTraffic: any = {
+                                        linkLength: 0,
+                                        speed: 0,
+                                        travelT: 0,
+                                    };
+
+                                    getData.data.trafficData.forEach(
+                                        (el: any, i: any) => {
+                                            if (el.linkLength !== "정보없음") {
+                                                saveTraffic.linkLength +=
+                                                    el.linkLength;
+                                                saveTraffic.speed += el.speed;
+                                                saveTraffic.travelT +=
+                                                    el.travelT;
+                                            }
+                                        }
+                                    );
+
+                                    setTrafficData([saveTraffic]);
 
                                     getData.data.finalData.filter(
                                         (item: any, i: number, arr: any) => {
@@ -345,7 +418,7 @@ const SerchBox = ({ kakaoMap }: any) => {
                                         }
                                     );
 
-                                    path.kakaoMap((el: any, i: number) => {
+                                    path.map((el: any, i: number) => {
                                         let color = "black";
                                         if (
                                             getData.data.trafficData[i]
@@ -366,7 +439,7 @@ const SerchBox = ({ kakaoMap }: any) => {
 
                                         pline.push(
                                             new window.kakao.maps.Polyline({
-                                                kakaoMap: kakaoMap, //지도에 선을 표시합니다.
+                                                map: kakaoMap, //지도에 선을 표시합니다.
                                                 path: el, // 선을 구성하는 좌표배열 입니다
                                                 strokeWeight: 10, // 선의 두께 입니다
                                                 strokeColor: color, // 선의 색깔입니다
@@ -379,9 +452,6 @@ const SerchBox = ({ kakaoMap }: any) => {
                                             pline[i],
                                             "click",
                                             (e: any) => {
-                                                console.log(
-                                                    getData.data.trafficData
-                                                );
                                                 new window.kakao.maps.InfoWindow(
                                                     {
                                                         map: kakaoMap, // 인포윈도우가 표시될 지도
@@ -408,7 +478,7 @@ const SerchBox = ({ kakaoMap }: any) => {
                                         );
                                     });
                                 } else if (markerArr.length > 1) {
-                                    pline.kakaoMap((el: any, i: any) =>
+                                    pline.map((el: any, i: any) =>
                                         pline[i].setMap(null)
                                     );
                                     pline = [];
@@ -426,6 +496,26 @@ const SerchBox = ({ kakaoMap }: any) => {
 
                                     let path: any = [];
 
+                                    let saveTraffic: any = {
+                                        linkLength: 0,
+                                        speed: 0,
+                                        travelT: 0,
+                                    };
+                                    setTrafficData([saveTraffic]);
+
+                                    getData.data.trafficData.forEach(
+                                        (el: any) => {
+                                            if (el.linkLength !== "정보없음") {
+                                                saveTraffic.linkLength +=
+                                                    el.linkLength;
+                                                saveTraffic.speed += el.speed;
+                                                saveTraffic.travelT +=
+                                                    el.travelT;
+                                            }
+                                        }
+                                    );
+
+                                    // 두번이상 클릭일떄
                                     getData.data.finalData.filter(
                                         (item: any, i: number, arr: any) => {
                                             if (arr.length - 1 === i)
@@ -443,7 +533,7 @@ const SerchBox = ({ kakaoMap }: any) => {
                                         }
                                     );
 
-                                    path.kakaoMap((el: any, index: number) => {
+                                    path.map((el: any, index: number) => {
                                         let color = "black";
                                         if (
                                             getData.data.trafficData[index]
@@ -470,36 +560,6 @@ const SerchBox = ({ kakaoMap }: any) => {
                                                 strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
                                                 strokeStyle: "solid", // 선의 스타일입니다
                                             })
-                                        );
-                                        window.kakao.maps.event.addListener(
-                                            pline[index],
-                                            "click",
-                                            (e: any) => {
-                                                new window.kakao.maps.InfoWindow(
-                                                    {
-                                                        map: kakaoMap, // 인포윈도우가 표시될 지도
-                                                        position:
-                                                            new window.kakao.maps.LatLng(
-                                                                e.latLng.Ma,
-                                                                e.latLng.La
-                                                            ),
-
-                                                        content: `<div style='width:180px; height:auto'>
-                                                        <div>
-                                                            <p>시작노드: ${getData.data.trafficData[i].startNodeName}</p>
-                                                            <p>종료노드: ${getData.data.trafficData[i].endNodeName}</p>
-                                                            <p>링크ID: ${getData.data.trafficData[i].linkID}</p>
-                                                            <p>길이: ${getData.data.trafficData[i].linkLength}</p>
-                                                            <p>도로이름: ${getData.data.trafficData[i].roadName}</p>
-                                                            <p>속도: ${getData.data.trafficData[i].speed}</p>
-                                                            <p>교통량: ${getData.data.trafficData[i].travelT}</p>
-                                                            <p>방향: ${getData.data.trafficData[i].udType}</p>
-                                                        </div>`,
-
-                                                        removable: true,
-                                                    }
-                                                );
-                                            }
                                         );
                                     });
                                 }
@@ -536,6 +596,9 @@ const SerchBox = ({ kakaoMap }: any) => {
             },
         },
     ];
+
+    console.log(trafficData);
+
     return (
         <MainBox>
             <div>
@@ -570,50 +633,13 @@ const SerchBox = ({ kakaoMap }: any) => {
                     <form
                         onSubmit={(e: any) => {
                             e.preventDefault();
-                            console.log(e);
-                            console.log(e.target[0].value);
-                            console.log(e.target[2].value);
-
-                            let ps = new window.kakao.maps.services.Places();
-
-                            // 키워드로 장소를 검색합니다
-                            ps.keywordSearch(e.target[0].value, placesSearchCB);
-
-                            // 키워드 검색 완료 시 호출되는 콜백함수 입니다
-                            function placesSearchCB(
-                                data: any[],
-                                status: string,
-                                pagination: Object
-                            ) {
-                                if (
-                                    status ===
-                                    window.kakao.maps.services.Status.OK
-                                ) {
-                                    // console.log(data);
-                                    // console.log(data);
-                                    // let circle = new window.kakao.maps.Circle({
-                                    //     center: new window.kakao.maps.LatLng(
-                                    //         data[0].y,
-                                    //         data[0].x
-                                    //     ), // 원의 중심좌표 입니다
-                                    //     radius: 500, // 미터 단위의 원의 반지름입니다
-                                    //     strokeWeight: 5, // 선의 두께입니다
-                                    //     strokeColor: "#75B8FA", // 선의 색깔입니다
-                                    //     strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-                                    //     strokeStyle: "dashed", // 선의 스타일 입니다
-                                    //     fillColor: "#CFE7FF", // 채우기 색깔입니다
-                                    //     fillOpacity: 0.7, // 채우기 불투명도 입니다
-                                    // });
-                                    // 지도에 원을 표시합니다
-                                    // circle.setMap(kakaoMap);
-                                }
-                            }
                         }}
                     >
-                        {["start", "end"].map((el) => {
+                        {["start", "end"].map((el, i) => {
                             return (
                                 <div key={el}>
                                     <Search
+                                        address={address[i]}
                                         placeholder={
                                             el === "start"
                                                 ? "출발지 검색"
@@ -624,13 +650,44 @@ const SerchBox = ({ kakaoMap }: any) => {
                             );
                         })}
                         <PathButton>경로검색</PathButton>
-                        <SearchResult />
+                        <SearchResult>
+                            {trafficData.map((el: any, i: number) => {
+                                return (
+                                    <div key={i}>
+                                        <TrafficWrap>
+                                            <div>시간:{el.travelT}초</div>
+                                            <div>
+                                                전체길이:
+                                                {Math.round(el.linkLength)}m
+                                            </div>
+                                        </TrafficWrap>
+                                        <div>
+                                            <TrafficButton>출발</TrafficButton>
+                                            {address[0].address.address_name}
+                                        </div>
+
+                                        <div>
+                                            <TrafficButton> 도착</TrafficButton>
+                                            {address[1].address.address_name}
+                                        </div>
+
+                                        {/* <div>평균속도:{el.speed}</div> */}
+                                    </div>
+                                );
+                            })}
+                        </SearchResult>
                     </form>
                 )}
             </div>
         </MainBox>
     );
 };
+
+const TrafficWrap = styled.div`
+    border-bottom: 1px solid #505050;
+    padding: 10px;
+    margin-bottom: 15px;
+`;
 
 const MainBox = styled.div`
     width: 400px;
@@ -685,6 +742,25 @@ const PathButton = styled.button`
     border-radius: 0.5rem;
     margin-left: 11rem;
     font-size: 10px;
+    box-sizing: 0px 4px 4px #00000050;
+    &:hover {
+        cursor: pointer;
+        background-color: #ffffff;
+        color: #1f68f6;
+    }
+`;
+
+const TrafficButton = styled.button`
+    width: 60px;
+    height: 22px;
+    padding: 3px;
+    margin-bottom: 7px;
+    background-color: #1f68f6;
+    color: #ffffff;
+    border: 1px solid #1f68f6;
+    border-radius: 0.5rem;
+    margin-right: 5px;
+    font-size: 12px;
     box-sizing: 0px 4px 4px #00000050;
     &:hover {
         cursor: pointer;

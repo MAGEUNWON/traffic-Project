@@ -70,51 +70,6 @@ const SectionTable = ({ parkingData, accidentData, datas, map }: any) => {
                         );
                     })}
                 </ButtonDiv>
-
-                {/* {isCheck ? (
-                    <Search placeholder="어디로 갈까요?"></Search>
-                ) : (
-                    <form
-                        onSubmit={(e: any) => {
-                            e.preventDefault();
-                            console.log(e.target[0].value);
-                            console.log(e.target[1].value);
-                            let ps = new window.kakao.maps.services.Places();
-
-                            // 키워드로 장소를 검색합니다
-                            ps.keywordSearch(e.target[0].value, placesSearchCB);
-
-                            function placesSearchCB(
-                                data: any,
-                                status: any,
-                                pagination: any
-                            ) {
-                                if (status === "OK") {
-                                    console.log(data);
-                                    data.map((el: any) => {
-                                        console.log(el);
-                                    });
-                                }
-                            }
-                        }}
-                    >
-                        {["start", "end"].map((el, i) => {
-                            return (
-                                <div key={i}>
-                                    <Search
-                                        placeholder={
-                                            el === "start"
-                                                ? "출발지 검색"
-                                                : "도착지 검색"
-                                        }
-                                    ></Search>
-                                </div>
-                            );
-                        })}
-
-                        <PathButton>경로검색</PathButton>
-                    </form>
-                )} */}
             </SectionSet>
         </>
     );
@@ -149,13 +104,13 @@ const ButtonDiv = styled.div`
 `;
 
 const PathButton = styled.button`
-  width: 70px;
-  height: 25px;
-  background-color: #1f68f6;
-  color: #ffffff;
-  border 1px solid #1f68f6;
-  border-radius: 0.5rem;
-  margin-left: 11rem;
+    width: 70px;
+    height: 25px;
+    background-color: #1f68f6;
+    color: #ffffff;
+    border: 1px solid #1f68f6;
+    border-radius: 0.5rem;
+    margin-left: 11rem;
 `;
 
 export default SectionTable;

@@ -408,11 +408,11 @@ const ButtonSet = styled.div`
 `;
 
 const Button = styled.button`
-  width: 60px;
-  height: 50px;
-  background-color: #fff;
-  border: 1px; solid black;
-  border-radius: 0.5rem;
+    width: 60px;
+    height: 50px;
+    background-color: #fff;
+    border: 1px solid black;
+    border-radius: 0.5rem;
 `;
 
 export default Map;
