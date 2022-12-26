@@ -1,4 +1,4 @@
-from api import DataAPI
+from config.api import ApiRoute
 from config.db import DataRoute
 from flask import Flask, jsonify
 from flask_cors import CORS
@@ -20,7 +20,7 @@ def daejeon():
     db_class  = DataRoute()
     sql  = f"SELECT * From CCTV"
     row = db_class.executeAll(sql)
-
+    print(row,"얍!")
     return jsonify(row)
     
 # safezone
@@ -29,7 +29,7 @@ def safe_zone_db():
     db_class = DataRoute()
     sql = f"SELECT * FROM safezone_db"
     row = db_class.executeAll(sql)
-    
+    print(row)
     return jsonify(row)
 
 # parkinglot
@@ -44,7 +44,8 @@ def parking_lot_db():
 # accident
 @app.route('/accident')
 def accident():
-    data = DataAPI.accident_api()
+    data = ApiRoute.accident_api()
+    print(data)
     return data
 
 
