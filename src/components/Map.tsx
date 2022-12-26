@@ -27,7 +27,7 @@ const Map = () => {
   const [kakaoMap, setKakaoMap] = useState(); //map 밖에서 쓰려고 담는 용도
   const [areas, setArea] = useState<any>([{}]); // polygon 좌표 담는 용도
   const [DataDesc, setDataDesc] = useState<any>([{}]); // polygon 상세내용 담는 용도
-  const [Lpath, setLpath] = useState<any>([{}]);
+  const [Larr, setLarr] = useState<any>([{}]);
   const [Ldesc, setLdesc] = useState<any>([{}]);
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -140,25 +140,45 @@ const Map = () => {
         console.log(Lslice);
         let LSplit = Lslice.split(",");
         // console.log(LSplit[i].split(" ")); // 여기를 하나의 배열로 담아야 함. 배열 묶음 여러개 필요 (line 배열 0번 LOCATION_DATA LINE 좌표 전체 하나로 묶기)
-        console.log(LSplit);
+        console.log(LSplit[0]);
 
         Lpath.push(LSplit);
         // console.log(Lpath);
         // console.log(i, "숫자");
 
-        LSplit.map((el: string, index: number) => {
-          console.log(el);
-          let arr = [];
-          arr.push(el.split(" "));
+        // LSplit.map((el: string, index: number) => {
+        //   console.log(el);
+        //   let arr = [];
+        //   arr.push(el.split(" "));
+        //   console.log(arr);
 
-          console.log(index, LSplit.length - 1);
-          if (index === LSplit.length - 1) {
-            LpathTwo.push(arr);
+        //   console.log(index, LSplit.length - 1);
+        //   if (index === LSplit.length - 1) {
+        //     LpathTwo.push(arr);
+        //   }
+        // });
+
+        // console.log(LpathTwo);
+        // console.log(Lpath);
+
+        // let arr = [];
+        for (let i = 0; i < Lpath.length; i++) {
+          // console.log(LSplit[i]);
+          let Larr = [];
+          for (let j = 0; j < Lpath[i].length; j++) {
+            // console.log(Lpath[i][j].split(" "));
+            Larr.push(Lpath[i][j].split(" "));
           }
-        });
+          // LpathTwo.push(arr);
+          console.log(Larr);
+          setLarr(Larr);
+          // Lareas.push(arr);
+          // console.log(Lareas);
+        }
+        // setLarr(Larr);
 
-        console.log(LpathTwo);
-
+        // console.log(arr);
+        // console.log(Lareas);
         // for (let j = 0; j < LSplit.length; j++) {
         //   console.log(LSplit.length, "bbbb");
         //   console.log(j, "aa");
@@ -341,6 +361,16 @@ const Map = () => {
     );
   }
   dispalyArea(area);
+
+  console.log(Larr);
+
+  // for (let i = 0; i < areas.length; i++) {
+  //   console.log(
+  //     area.push(new window.kakao.maps.LatLng(Lpath[i].Ma, Lpath[i].La))
+  //   );
+  // }
+
+  // let linePath = [new window.kakao.maps.LatLng()];
 
   // console.log(data); useEffect 밖에서 api 데이터 찍어야 나옴. 안에서는 null값 나옴
   // let position = [];
