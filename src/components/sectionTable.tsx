@@ -20,10 +20,7 @@ const SectionTable = ({ parkingData, accidentData, datas, map,mark }: any) => {
             src: "asset/icon_cctv.png",
             name: "CCTV",
             onClick: () => { 
-                
                 cctvFc(datas, map, mark);
-                
-                
             },
         },
         {
