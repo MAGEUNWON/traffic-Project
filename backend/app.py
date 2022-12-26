@@ -1,4 +1,4 @@
-# from getData import GetPublicData
+from api import DataAPI
 from config.db import DataRoute
 from flask import Flask, jsonify
 from flask_cors import CORS
@@ -17,11 +17,11 @@ def test():
 # CCTV
 @app.route('/cctv')
 def daejeon():
-        db_class  = DataRoute()
-        sql  = f"SELECT * From CCTV"
-        row = db_class.executeAll(sql)
+    db_class  = DataRoute()
+    sql  = f"SELECT * From CCTV"
+    row = db_class.executeAll(sql)
 
-        return jsonify(row)
+    return jsonify(row)
     
 # safezone
 @app.route('/safezone')
@@ -33,29 +33,20 @@ def safe_zone_db():
     return jsonify(row)
 
 # parkinglot
-@app.route('/parkinglot', methods=['GET'])
-def parking_lot():
-    dbdate = DataRoute()
+@app.route('/parkinglot')
+def parking_lot_db():
+    db_class = DataRoute()
     sql = 'SELECT * FROM parking_lot'
-    row = dbdate.executeAll(sql)
+    row = db_class.executeAll(sql)
 
     return row
 
 # accident
-# @app.route("/accident")
-# def accident():
-#     daejeon_data = []
-#     url = f'http://www.utic.go.kr/guide/imsOpenData.do?key={os.getenv("POLICE_KEY")}'
-#     resonse = requests.get(url)
-#     xmlData = resonse.text
-#     jsonData = json.dumps(xmltodict.parse(xmlData))
-#     loadJson = json.loads(jsonData)
-#     data = loadJson['result']['record']
-#     for i in range(len(data)):
-#         if '대전' in data[i]['addressJibun']:
-#             daejeon_data.append(data[i])
+@app.route('/accident')
+def accident():
+    data = DataAPI.accident_api()
+    return data
 
-#     return daejeon_data
 
 
 if __name__ == '__main__':

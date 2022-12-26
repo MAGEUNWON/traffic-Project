@@ -41,26 +41,36 @@ const FunctionMap = ({value}: any) => {
   }, [getValue.current]);
 
   type imgType = {
-    [key: string]: string;
+    [key: string]: string | Array<string>;
   }
 
   const imageSrc: imgType = {
     "cctv": "/asset/cctv.png",
+    "accident": ["/asset/caution.png", "/asset/construction.png", "/asset/stop.png"],
     "safezone": "/asset/safezone.png",
     "parkinglot": "/asset/parkinglot.png",
   }
 
   for (let i = 0; i < data.length; i++) {
-
-    const imageSize = new kakao.maps.Size(26, 31);
-    const markerImage = new kakao.maps.MarkerImage(imageSrc[value], imageSize);
+    const imgSwitch = () => {
+      switch (data[i]['incidenteTypeCd']){
+        case "1":
+          return imageSrc[value][0];
+        case "2":
+          return imageSrc[value][1];
+        case "3":
+          return imageSrc[value][2];
+        default :
+          return imageSrc[value];  
+      }
+    }
+    const imageSize = new kakao.maps.Size(22, 22);
+    const markerImage = new kakao.maps.MarkerImage(imgSwitch(), imageSize);
 
     const marker = new kakao.maps.Marker({
-      map: mapData, // 마커를 표시할 지도
-      position: new kakao.maps.LatLng(data[i]['YCODE'], data[i]['XCODE']), // 마커를 표시할 위치
-      // title: (`${data[i]['FCLTY_NM']}\n제한속도 : ${data[i]['MAX_SPD']}`), 
-      // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됨
-      image: markerImage // 마커 이미지
+      map: mapData, 
+      position: new kakao.maps.LatLng(data[i]['locationDataY'], data[i]['locationDataX']), 
+      image: markerImage      
     });
   }
 
