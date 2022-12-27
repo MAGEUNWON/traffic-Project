@@ -32,7 +32,7 @@ def daejeon():
 # -----------------------------------------
 
 
-# 
+# 팀장님
 # @app.route('/dajeun', methods=['GET'])
 # def dajuen_Api():
 #     data = ApiRoute()
@@ -50,7 +50,7 @@ def danger_Api():
 @app.route('/hazard', methods=['GET'])
 def execute():
     db_class = DataRoute()  #얘가 변수 query인듯?
-    sql  = f"SELECT * FROM traffic.danger" #danger 테이블 내용 다 가져와라
+    sql  = f"SELECT * FROM danger" #danger 테이블 내용 다 가져와라
     # sql  = f"SELECT LOCATION_DATA FROM danger" #location 좌표만 가져옴
     row = db_class.executeAll(sql) #executeAll은 전체 내용 다 가져오라는 명령문
     print(row)
@@ -59,7 +59,7 @@ def execute():
 @app.route('/hazard/<polygon>', methods=['GET'])
 def Polygon(polygon):
     db_class = DataRoute()
-    sql  = f"SELECT LOCATION_DATA, DATA_DESC FROM traffic.danger WHERE LOCATION_DATA Like '%%{polygon}%%'" #location 좌표만 가져옴
+    sql  = f"SELECT LOCATION_DATA, DATA_DESC FROM danger WHERE LOCATION_DATA Like '%%{polygon}%%'" #location 좌표만 가져옴
     row = db_class.executeAll(sql) #executeAll은 전체 내용 다 가져오라는 명령문
 
     data_stack = list()
@@ -71,7 +71,7 @@ def Polygon(polygon):
 @app.route('/hazard/<line>', methods=['GET'])
 def Line(line):
     db_class = DataRoute()
-    sql  = f"SELECT LOCATION_DATA FROM traffic.danger WHERE LOCATION_DATA Like '%%{line}%%'" #location 좌표만 가져옴
+    sql  = f"SELECT LOCATION_DATA FROM danger WHERE LOCATION_DATA Like '%%{line}%%'" #location 좌표만 가져옴
     row = db_class.executeAll(sql) #executeAll은 전체 내용 다 가져오라는 명령문
     print(row)
     return jsonify(row)
@@ -79,14 +79,14 @@ def Line(line):
 @app.route('/hazard/<point>', methods=['GET'])
 def Point(point):
     db_class = DataRoute()
-    sql  = f"SELECT LOCATION_DATA FROM traffic.danger WHERE LOCATION_DATA Like '%%{point}%%'" #location 좌표만 가져옴
+    sql  = f"SELECT LOCATION_DATA FROM danger WHERE LOCATION_DATA Like '%%{point}%%'" #location 좌표만 가져옴
     row = db_class.executeAll(sql) #executeAll은 전체 내용 다 가져오라는 명령문
     print(row)
     return jsonify(row)
 # ----------------------------------------------------------------
 
 
-#
+#연주
 
 # parkinglot
 @app.route('/parkinglot')
@@ -105,7 +105,7 @@ def accident():
     return data
 #------------------------------------------------------------------
 
-#
+#화연 
 # safezone
 @app.route('/safezone')
 def safe_zone_db():
@@ -119,7 +119,7 @@ def safe_zone_db():
 #------------------------------------------------------------------
 
 
-#
+#상호 
 
 @app.route('/dot') # 접속하는 url
 def dot():
@@ -206,6 +206,8 @@ def dirCall():
 
 
 #------------------------------------------------------------------
+
+
 
 
 

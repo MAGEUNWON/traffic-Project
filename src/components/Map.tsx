@@ -4,6 +4,7 @@ import React, { useEffect, useState, useRef, forwardRef } from "react";
 //특정 값이 변경 될 때만 호출하고 싶은 경우에는 useEffect의 두 번째 파라미터로 전달되는 배열 안에 검사하고 싶은 값을 넣어주면 됨.
 import styled from "styled-components";
 import FunctionSearch from "./FunctionSearch";
+import axios from "axios";
 
 declare global {
     interface Window {
@@ -18,8 +19,14 @@ interface btnSet {
     [index: string]: string;
 }
 
-const Map = forwardRef(({ searchplace, mapRef }: any) => {
-    const [mapTypes, SetMapTypes] = useState<string>("Roadmap");
+const Map = ({ searchplace }: any) => {
+    const [mapTypes, SetMapTypes] = useState<string>("Roadmap"); //지도 타입 바뀌는 용도
+    const [data, setData] = useState<any>([{}]); //api 담을 용도
+    const [kakaoMap, setKakaoMap] = useState(); //map 밖에서 쓰려고 담는 용도
+    const [areas, setArea] = useState<any>([{}]); // polygon 좌표 담는 용도
+    const [DataDesc, setDataDesc] = useState<any>([{}]); // polygon 상세내용 담는 용도
+    const [Larr, setLarr] = useState<any>([{}]);
+    const [Ldesc, setLdesc] = useState<any>([{}]);
 
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         SetMapTypes(e.currentTarget.value);
@@ -33,11 +40,6 @@ const Map = forwardRef(({ searchplace, mapRef }: any) => {
         // console.log(maptype)
         console.log("렌더링 완료"); //useEffect는 React.StrictMode가 적용된 개발환경에서는 콘솔이 두번씩 찍힘.
 
-        // axios.get(`http://127.0.0.1:5000/hazard`).then((response) => {
-        //   console.log(response.data);
-        //   setData(response.data);
-        // });
-
         let container = document.getElementById("map") as HTMLElement; //지도를 담을 영역의 DOM 레퍼런스
         //카카오 객체가 window 하위 객체라는 것을 정의해야 하므로 window.kakao로 변경해야 함
         let options = {
@@ -47,14 +49,106 @@ const Map = forwardRef(({ searchplace, mapRef }: any) => {
 
         let map = new window.kakao.maps.Map(container, options);
 
-        // let mapTypeControl = new window.kakao.maps.mapTypeControl();
-        // map.addControl(mapTypeControl, window.kakao.maps.ControlPosiiton.TOPRIGHT);
+        axios.get(`http://127.0.0.1:5000/hazard/polygon`).then((response) => {
+            // console.log(response.data[0].ADDRESS_JIBUN);
+            setData(response.data);
+            // console.log(response.data[46].DATA_DESC) // POLYGON 상세 내용
+            // console.log(response.data[46]); //POLYGON 좌표
+            let DataDesc = response.data[46].DATA_DESC;
+            let LoSlice = response.data[46].LOCATION_DATA.slice(
+                9,
+                response.data[46].LOCATION_DATA.length - 2
+            );
+            // console.log(a);
+            let LoSplit = LoSlice.split(",");
+            console.log(LoSplit); //polygon 46번째만 가져와서 배열에 넣음.
 
-        // maptype === 'traffic'?  window.kakao.maps.MapTypeId.TRAFFIC:null
-        // maptype === 'roadview'?  window.kakao.maps.MapTypeId.ROADVIEEW:null
-        // maptype === 'use_district'?  window.kakao.maps.MapTypeId.USE_DISTRICT:null
+            let areas = [];
+            let path = [];
+            for (let j = 0; j < LoSplit.length; j++) {
+                console.log(LoSplit[j]);
+                let LoSplitTwo = LoSplit[j].split(" ");
+                console.log(LoSplitTwo);
+                path.push(LoSplitTwo);
+            }
+            console.log(path);
+            // areas.push(path);
+            console.log(path[0][1], path[0][0]); //polygon 46번째 좌표만 가져와서 배열에 넣고 46번째 배열들만 다시 배열에 담음
 
-        //버튼 클릭하면 호출 (clickEvent)
+            for (let i = 0; i < path.length; i++) {
+                areas.push(
+                    new window.kakao.maps.LatLng(path[i][1], path[i][0])
+                );
+            }
+            console.log(areas); //pa?
+            setArea(areas); //areas usesStae에 담음.
+            setDataDesc(DataDesc);
+        });
+
+        axios
+            .get(`http://127.0.0.1:5000/hazard/line`)
+            .then((response) => {
+                let Data = response.data;
+                let dataReplace: any = [];
+                let dataSplit: any = [];
+                let LData: any = [];
+                let str = /[LINE()"]/gim;
+                Data.forEach((value: any) => {
+                    dataReplace.push(value.LOCATION_DATA.replace(str, ""));
+                });
+                dataReplace.forEach((value: any) => {
+                    dataSplit.push(value.split(","));
+                });
+                dataSplit.forEach((value: any, index: any) => {
+                    LData[index] = [];
+                    for (let i = 0; i < value.length; i++) {
+                        LData[index].push(value[i].split(" "));
+                    }
+                });
+                console.log(LData);
+                // console.log(LData[0][0][1], LData[0][0][0]);
+
+                let Larr: any = [];
+
+                for (let i = 0; i < LData.length; i++) {
+                    // console.log(arr4[i]);
+                    let arr: any = [];
+                    let sLarr = LData[i];
+                    // console.log(sLarr);
+                    for (let j = 0; j < sLarr.length; j++) {
+                        // console.log(sLarr[j][1], sLarr[j][0]);
+                        arr.push(
+                            new window.kakao.maps.LatLng(
+                                sLarr[j][1],
+                                sLarr[j][0]
+                            )
+                        );
+                    }
+                    // console.log(arr);
+                    Larr.push(arr);
+                    // linePath.push(new window.kakao.maps.LatLng(arr))
+                    // sLarr.forEach((value: any, index: number) => {
+                    //   console.log(value[i], index);
+                    // });
+                }
+                console.log(Larr);
+
+                setLarr(Larr);
+
+                //------------------------DATA 상세 정보 구간 -----------------------
+                let Ldesc = [];
+                // console.log(Data[0].DATA_DESC);
+                for (let k = 0; k < Data.length; k++) {
+                    let Desc = Data[k].DATA_DESC;
+                    console.log(Desc);
+                    Ldesc.push(Desc);
+                }
+                // console.log(Ldesc[0]);
+
+                setLdesc(Ldesc);
+            })
+            .catch((e) => console.log(e));
+
         let currentTypeId;
         let changeMapType;
 
@@ -96,6 +190,7 @@ const Map = forwardRef(({ searchplace, mapRef }: any) => {
         });
         //마커가 지도 위에 표시되도록 설정
         marker.setMap(map);
+        setKakaoMap(() => map);
 
         FunctionSearch(searchplace, map);
     }, [mapTypes, searchplace]);
@@ -105,6 +200,213 @@ const Map = forwardRef(({ searchplace, mapRef }: any) => {
         { value: "Skyview", con: "스카이뷰" },
         { value: "roadview", con: "로드뷰" },
     ];
+
+    useEffect(() => {
+        // console.log(DataDesc)
+
+        if (!kakaoMap) return;
+
+        let customOverlay = new window.kakao.maps.CustomOverlay({});
+        let infowindow = new window.kakao.maps.InfoWindow({ removable: true });
+
+        let area = [];
+
+        //// 지도에 영역데이터를 폴리곤으로 표시
+        for (let i = 0; i < areas.length; i++) {
+            // console.log(areas[i].Ma, areas[i].La);
+            area.push(new window.kakao.maps.LatLng(areas[i].Ma, areas[i].La));
+        }
+        // console.log(area[0].Ma, area[0].La);
+        console.log(area, "아리아!");
+
+        // 다각형을 생상하고 이벤트를 등록하는 함수
+        function dispalyArea(area: any, kakaoMap: any) {
+            // 다각형을 생성
+            let polygon = new window.kakao.maps.Polygon({
+                path: area,
+                strokeWeight: 30,
+                strokeColor: "#004c80",
+                strokeOpacity: 0.8,
+                fillColor: "#004c80",
+                fillOpacity: 0.7,
+            });
+
+            console.log(polygon, "폴리건!");
+            polygon.setMap(kakaoMap);
+
+            // 다각형에 mouseover 이벤트를 등록하고 이벤트가 발생하면 폴리곤의 채움색을 변경
+            // 지역명을 표시하는 커스텀오버레이를 지도위에 표시
+            window.kakao.maps.event.addListener(
+                polygon,
+                "mouseover",
+                function (mouseEvent: any) {
+                    polygon.setOptions({ fillColor: "#09f" });
+                    customOverlay.setContent(
+                        '<div class="area">' + DataDesc + "</div>"
+                    );
+
+                    customOverlay.setPosition(mouseEvent.latLng);
+                    customOverlay.setMap(kakaoMap);
+                }
+            );
+
+            // 다각형에 mousemove 이벤트를 등록하고 이벤트가 발생하면 커스텀 오버레이의 위치를 변경
+            window.kakao.maps.event.addListener(
+                polygon,
+                "mousemove",
+                function (mouseEvent: any) {
+                    customOverlay.setPosition(mouseEvent.latLng);
+                }
+            );
+
+            // 다각형에 click 이벤트를 등록하고 이벤트가 발생하면 다각형의 이름과 면적을 인포윈도우에 표시
+            window.kakao.maps.event.addListener(
+                polygon,
+                "click",
+                function (mouseEvent: any) {
+                    var content =
+                        '<div class="info">' +
+                        '   <div class="title">' +
+                        DataDesc +
+                        "</div>" +
+                        '   <div class="size">총 면적 : 약 ' +
+                        Math.floor(polygon.getArea()) +
+                        " m<sup>2</sup></div>" +
+                        "</div>";
+
+                    infowindow.setContent(content);
+                    infowindow.setPosition(mouseEvent.latLng);
+                    infowindow.setMap(kakaoMap);
+                }
+            );
+        }
+        dispalyArea(area, kakaoMap);
+    }, [areas, kakaoMap]);
+
+    useEffect(() => {
+        let customOverlay = new window.kakao.maps.CustomOverlay({});
+        let infowindow = new window.kakao.maps.InfoWindow({ removable: true });
+
+        let linePath: any = [];
+
+        for (let i = 0; i < Larr.length; i++) {
+            // console.log(Larr[i]);
+            let arr: any = [];
+            let s = Larr[i];
+            // console.log(s);
+            for (let j = 0; j < s.length; j++) {
+                // console.log(s[j]);
+                arr.push(new window.kakao.maps.LatLng(s[j].Ma, s[j].La));
+            }
+            linePath.push(arr);
+            // console.log(arr);
+        }
+        // console.log(linePath);
+        console.log(Ldesc.indexOf("결빙구간"));
+        let test: any = [];
+        function dispalyLine(linePath: any, kakaoMap: any) {
+            for (let i = 0; i < Ldesc.length; i++) {
+                console.log(i, "반복문 횟수!");
+
+                var polyline = new window.kakao.maps.Polyline({
+                    path: linePath[i], // 선을 구성하는 좌표배열 입니다
+                    strokeWeight: 5, // 선의 두께 입니다
+                    strokeColor: "red", // 선의 색깔입니다
+                    strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+                    strokeStyle: "solid", // 선의 스타일입니다
+                });
+                // 지도에 선을 표시합니다
+                polyline.setMap(kakaoMap);
+
+                const imageSize = new window.kakao.maps.Size(25, 25);
+                const falling = "/asset/falling.png";
+                const freezing = "/asset/freezing.png";
+                const foggy = "/asset/foggy.png";
+                const slope = "/asset/slope.png";
+                const slippery = "/asset/slippery.png";
+                const curve = "/asset/curve.png";
+                const winding = "/asset/winding-road.png";
+
+                // if (Ldesc[i] === "결빙구간") {
+                //   console.log("결빙");
+                // } else if (Ldesc[i] === "추락위험 구간") {
+                //   console.log("추락");
+                // } else {
+                //   console.log("no");
+                // }
+                // console.log(Ldesc[i]);
+                // console.log(Ldesc.includes("결빙구간"));
+                const accidentMarker = new window.kakao.maps.Marker({
+                    map: kakaoMap,
+                    position: linePath[i][1], // 마커를 표시할 위치
+                    image:
+                        Ldesc[i] === "결빙구간"
+                            ? new window.kakao.maps.MarkerImage(
+                                  freezing,
+                                  imageSize
+                              )
+                            : Ldesc[i] === "추락위험 구간"
+                            ? new window.kakao.maps.MarkerImage(
+                                  falling,
+                                  imageSize
+                              )
+                            : Ldesc[i] === "급경사 구간"
+                            ? new window.kakao.maps.MarkerImage(
+                                  slope,
+                                  imageSize
+                              )
+                            : Ldesc[i] === "급커브 구간"
+                            ? new window.kakao.maps.MarkerImage(
+                                  curve,
+                                  imageSize
+                              )
+                            : Ldesc[i] === "고속도로 안개 다발구간"
+                            ? new window.kakao.maps.MarkerImage(
+                                  foggy,
+                                  imageSize
+                              )
+                            : Ldesc[i] ===
+                              "우로굽은도로구간 도로이탈 사고많은 곳 임"
+                            ? new window.kakao.maps.MarkerImage(
+                                  winding,
+                                  imageSize
+                              )
+                            : new window.kakao.maps.MarkerImage(
+                                  slippery,
+                                  imageSize
+                              ),
+                });
+
+                // var marker = new window.kakao.maps.Marker({
+                //   map: kakaoMap,
+                //   position: linePath[i][1], // 마커의 위치
+                //   image : markerImage
+                // });
+
+                window.kakao.maps.event.addListener(
+                    polyline,
+                    "mouseover",
+                    function (mouseEvent: any) {
+                        polyline.setOptions({ fillColor: "#09f" });
+                        // console.log(Ldesc.length);
+                        // console.log(Ldesc[0]);
+                        customOverlay.setContent("<div>" + Ldesc[i] + "</div>");
+                        customOverlay.setPosition(mouseEvent.latLng);
+                        customOverlay.setMap(kakaoMap);
+                    }
+                );
+            }
+        }
+
+        dispalyLine(linePath, kakaoMap);
+    }, [areas, kakaoMap]);
+
+    //--------------------------------- 여기까지 폴리건 부분-------------------------
+
+    //-----------------------LINE 부분---------------------------------------
+    console.log(Larr);
+    console.log(Ldesc);
+    // console.log(Larr[0]);
 
     return (
         <>
@@ -124,7 +426,7 @@ const Map = forwardRef(({ searchplace, mapRef }: any) => {
             </ButtonSet>
         </>
     );
-});
+};
 
 const ButtonSet = styled.div`
     display: flex;

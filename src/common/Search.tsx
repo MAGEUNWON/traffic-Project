@@ -1,10 +1,19 @@
 import styled from "styled-components";
 
-export const Search = ({ placeholder }: { placeholder: string }) => {
+export const Search = ({
+    placeholder,
+    address,
+}: {
+    placeholder: string;
+    address: any;
+}) => {
     return (
         <SingleBox>
             <form>
-                <input placeholder={placeholder} />
+                <input
+                    placeholder={placeholder}
+                    defaultValue={address?.address?.address_name || ""}
+                />
                 <button>
                     <img src="asset/icon_search2.png" />
                 </button>
