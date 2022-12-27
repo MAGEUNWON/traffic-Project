@@ -3,7 +3,6 @@ import os
 
 import requests
 import xmltodict
-from api import DataAPI
 from config.api import ApiRoute
 from config.db import DataRoute
 from flask import Flask, jsonify, request
@@ -22,24 +21,24 @@ def test():
     
     return "HELLO WROLED"
 
-# 두진
-@app.route('/daejeon')
+# CCTV
+@app.route('/cctv')
 def daejeon():
-        db_class  = DataRoute()
-        sql  = f"SELECT * From CCTV"
-        row = db_class.executeAll(sql)
-
-        return jsonify(row)
+    db_class  = DataRoute()
+    sql  = f"SELECT * From CCTV"
+    row = db_class.executeAll(sql)
+    return jsonify(row)
+    
 # -----------------------------------------
 
 
-# 팀장님
-@app.route('/dajeun', methods=['GET'])
-def dajuen_Api():
-    data = ApiRoute()
-    result = data.dajuen_Api()
+# 
+# @app.route('/dajeun', methods=['GET'])
+# def dajuen_Api():
+#     data = ApiRoute()
+#     result = data.dajuen_Api()
 
-    return result
+#     return result
 
 
 @app.route('/danger', methods=['GET'])
@@ -87,82 +86,40 @@ def Point(point):
 # ----------------------------------------------------------------
 
 
-#연주
+#
 
-@app.route('/parkinglot', methods=['GET'])
-def parking_lot():
-    dbdate = DataRoute()
+# parkinglot
+@app.route('/parkinglot')
+def parking_lot_db():
+    db_class = DataRoute()
     sql = 'SELECT * FROM parking_lot'
-    row = dbdate.executeAll(sql)
+    row = db_class.executeAll(sql)
 
     return row
 
-
-@app.route("/accident")
+# accident
+@app.route('/accident')
 def accident():
-    daejeon_data = []
-    url = f'http://www.utic.go.kr/guide/imsOpenData.do?key={os.getenv("POLICE_KEY")}'
-    resonse = requests.get(url)
-    xmlData = resonse.text
-    jsonData = json.dumps(xmltodict.parse(xmlData))
-    loadJson = json.loads(jsonData)
-    data = loadJson['result']['record']
-    for i in range(len(data)):
-        if '대전' in data[i]['addressJibun']:
-            daejeon_data.append(data[i])
-
-    return daejeon_data
+    data = ApiRoute.accident_api()
+    print(data)
+    return data
 #------------------------------------------------------------------
 
-#화연 
-@app.route('/safezone', methods=['GET'])
-def safe_zone():
-
-        parameters = {"key": os.environ.get("POLICE_KEY"), "sidoCd": 30}
-        requestData = requests.get('http://www.utic.go.kr/guide/getSafeOpenJson.do', params=parameters)
-        
-        jsonData = None
-        
-        if requestData.status_code == 200 :
-            jsonData = requestData.json()
-            jsonItems = jsonData['items']
-            
-            result_data = []
-            
-            for item in jsonItems:
-                result_data.append(
-                    {
-                    "보호구역ID": item['SNCT_SEQ'],
-                    "데이터기준일자": item['REG_DT'],
-                    "제한속도": item['MAX_SPD'],
-                    "지자체 입력 제한속도": item['MAX_SPD_ORG'],
-                    "CCTV설치대수": item['CCTV_CNT'],
-                    "대상시설명": item['FCLTY_NM'],
-                    "시도명": item['SIDO_NM'],
-                    "보호구역도로폭(m)": item['ROAD_WDT'],
-                    "CCTV설치여부": item['CCTV_YN'],
-                    "소재지도로명주소": item['ADDR'],
-                    "소재지지번주소": item['LADDR'],
-                    "관할경찰서명": item['POL_NM'],
-                    "시군구코드": item['SIGUN_CD'],
-                    "시군구명": item['SIGUN_NM'],
-                    "경도": item['X'],
-                    "위도": item['Y'],
-                    "관리기관명": item['GOV_NM'],
-                    "관리기관전화번호": item['GOV_TEL'],
-                    "시설종류": item ['FCLTY_TY'],
-                    "지오매트리정보": item['GEOM'],
-                    "데이터 구분": item['DATA_TYPE']
-                    }
-                )
-
-        return result_data
+#
+# safezone
+@app.route('/safezone')
+def safe_zone_db():
+    db_class = DataRoute()
+    sql = f"SELECT * FROM safezone_db"
+    row = db_class.executeAll(sql)
+    
+    return jsonify(row)
 
 
 #------------------------------------------------------------------
 
 
-#상호 
+#
 
 @app.route('/dot') # 접속하는 url
 def dot():
@@ -179,7 +136,7 @@ def dirCall():
         finalData = []
         trafficLink = []
         trafficData = []
-
+        print("aa")
         finalData.append(nodeData[0])
 
         
@@ -252,39 +209,6 @@ def dirCall():
 
 
 
-
-# CCTV
-@app.route('/cctv')
-def daejeon():
-    db_class  = DataRoute()
-    sql  = f"SELECT * From CCTV"
-    row = db_class.executeAll(sql)
-
-    return jsonify(row)
-    
-# safezone
-@app.route('/safezone')
-def safe_zone_db():
-    db_class = DataRoute()
-    sql = f"SELECT * FROM safezone_db"
-    row = db_class.executeAll(sql)
-    
-    return jsonify(row)
-
-# parkinglot
-@app.route('/parkinglot')
-def parking_lot_db():
-    db_class = DataRoute()
-    sql = 'SELECT * FROM parking_lot'
-    row = db_class.executeAll(sql)
-
-    return row
-
-# accident
-@app.route('/accident')
-def accident():
-    data = DataAPI.accident_api()
-    return data
 
 
 
