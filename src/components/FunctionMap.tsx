@@ -46,7 +46,7 @@ const FunctionMap = ({ value, searchplace }: any) => {
                         return imageSrc[value][0];
                     case "2":
                         return imageSrc[value][1];
-                    case "3":
+                    case "5":
                         return imageSrc[value][2];
                     default:
                         return imageSrc[value];
