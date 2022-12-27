@@ -28,25 +28,34 @@ const FunctionMap = ({ value, searchplace }: any) => {
     const [mapData, setMapData] = useState();
     const [data, setData] = useState<any>([{}]);
     const [markerArr, setMarkerArr] = useState<any>([]);
+    const [infoArr,setInfoArr] = useState<any>([]);
 
     const getValue = useRef(value);
     getValue.current = value;
 
     useEffect(() => {
+        //마커를 지우기 위한 null값 지정 맵함수
         markerArr.map((el: any) => {
             el.setMap(null);
         });
+        infoArr.map((el:any)=>{
+            el.setMap(null);
+        })
+
+
 
         let arr: any = [];
+        let info: any = [];
 
         for (let i = 0; i < data.length; i++) {
+            // 돌발 정보에 따른 이미지 스위칭
             const imgSwitch = () => {
                 switch (data[i]["incidenteTypeCd"]) {
                     case "1":
                         return imageSrc[value][0];
                     case "2":
                         return imageSrc[value][1];
-                    case "3":
+                    case "5":
                         return imageSrc[value][2];
                     default:
                         return imageSrc[value];
@@ -60,7 +69,7 @@ const FunctionMap = ({ value, searchplace }: any) => {
             );
             let column1: any;
             let column2: any;
-
+            //각 데이터마다 컬럼값이 다르기 때문에 이를 해결하고자 만든 조건문
             if (data[i]["lat"]) {
                 column1 = "lat";
                 column2 = "lon";
@@ -71,7 +80,7 @@ const FunctionMap = ({ value, searchplace }: any) => {
                 column1 = "YCODE";
                 column2 = "XCODE";
             }
-
+            //마커 생성
             let marker = new kakao.maps.Marker({
                 map: mapData,
                 position: new kakao.maps.LatLng(
@@ -80,9 +89,10 @@ const FunctionMap = ({ value, searchplace }: any) => {
                 ),
                 image: markerImage,
             });
-
+            //마커 초기화를 위한 마커 push
             arr.push(marker);
 
+            //CCTV
             if (data[i].CCTVID) {
                 let name = data[i].NAME;
                 let url = data[i].URL;
@@ -97,11 +107,13 @@ const FunctionMap = ({ value, searchplace }: any) => {
                     content: iwCotent,
                     removable: true,
                 });
-
+                info.push(infowindow)
+                
                 kakao.maps.event.addListener(marker, "click", () => {
                     infowindow.open(mapData, marker);
                 });
             } else if (data[i].lat) {
+                // 주차장
                 const content = `
                 <div style="
                 background-color: aliceblue;
@@ -121,8 +133,8 @@ const FunctionMap = ({ value, searchplace }: any) => {
                     content: content,
                 });
 
-                // 돌발정보 마커에 마우스오버하면, 해당 돌발 상황 정보 오버레이가 보인다.
-                window.kakao.maps.event.addListener(
+                // 주차장 마커에 마우스오버하면, 해당 주차장 정보 오버레이가 보인다.
+                kakao.maps.event.addListener(
                     marker,
                     "mouseover",
                     function () {
@@ -130,8 +142,8 @@ const FunctionMap = ({ value, searchplace }: any) => {
                     }
                 );
 
-                // 돌발정보 마커를 마우스오버 하면, 해당 돌발 상황 정보 오버레이가 사라진다.
-                window.kakao.maps.event.addListener(
+                // 주차장 마커를 마우스오버 하면, 해당 주차장 정보 오버레이가 사라진다.
+                kakao.maps.event.addListener(
                     marker,
                     "mouseout",
                     function () {
@@ -139,6 +151,8 @@ const FunctionMap = ({ value, searchplace }: any) => {
                     }
                 );
             } else if (data[i].GOV_NM) {
+
+                //보호구역
                 const content = `
                 <div style="
                 background-color: aliceblue;
@@ -149,6 +163,8 @@ const FunctionMap = ({ value, searchplace }: any) => {
                   <div>시설명: ${data[i]["LADDR"]}</div>
                 </div>
               `;
+
+              //보호구역 오버레이 설정
                 const overlay = new window.kakao.maps.CustomOverlay({
                     position: new window.kakao.maps.LatLng(
                         data[i].locationDataY,
@@ -157,8 +173,8 @@ const FunctionMap = ({ value, searchplace }: any) => {
                     content: content,
                 });
 
-                // 돌발정보 마커에 마우스오버하면, 해당 돌발 상황 정보 오버레이가 보인다.
-                window.kakao.maps.event.addListener(
+                // 보호구역 마커에 마우스오버하면, 해당 보호구역 정보 오버레이가 보인다.
+                kakao.maps.event.addListener(
                     marker,
                     "mouseover",
                     function () {
@@ -166,8 +182,8 @@ const FunctionMap = ({ value, searchplace }: any) => {
                     }
                 );
 
-                // 돌발정보 마커를 마우스오버 하면, 해당 돌발 상황 정보 오버레이가 사라진다.
-                window.kakao.maps.event.addListener(
+                // 보호구역 마커를 마우스오버 하면, 해당 보호구역 정보 오버레이가 사라진다.
+                kakao.maps.event.addListener(
                     marker,
                     "mouseout",
                     function () {
@@ -175,6 +191,7 @@ const FunctionMap = ({ value, searchplace }: any) => {
                     }
                 );
             } else if (data[i].addressJibunCd) {
+                //돌발정보
                 const content = `
                 <div style="
                 background-color: aliceblue;
@@ -185,6 +202,8 @@ const FunctionMap = ({ value, searchplace }: any) => {
                   <div>도로차수: ${data[i]["lane"]}</div>
                 </div>
               `;
+
+              //돌발정보 오버레이 설정
                 const overlay = new window.kakao.maps.CustomOverlay({
                     position: new window.kakao.maps.LatLng(
                         data[i].locationDataY,
@@ -193,15 +212,16 @@ const FunctionMap = ({ value, searchplace }: any) => {
                     content: content,
                 });
 
-                window.kakao.maps.event.addListener(
+                // 돌발정보 마커를 마우스오버 하면, 해당 돌발정보 정보 오버레이가 나타난다.                
+                kakao.maps.event.addListener(
                     marker,
                     "mouseover",
                     function () {
                         overlay.setMap(mapData);
                     }
                 );
-
-                window.kakao.maps.event.addListener(
+                // 돌발정보 마커를 마우스오버 하면, 해당 돌발정보 정보 오버레이가 사라진다.
+                kakao.maps.event.addListener(
                     marker,
                     "mouseout",
                     function () {
@@ -212,8 +232,9 @@ const FunctionMap = ({ value, searchplace }: any) => {
         }
 
         setMarkerArr(arr);
+        setInfoArr(info)
     }, [data]);
-
+    //데이터 가져오기
     useEffect(() => {
         const getJsonData = async () => {
             try {
@@ -240,7 +261,7 @@ const FunctionMap = ({ value, searchplace }: any) => {
             level: 3,
         });
 
-        setMapData(map);
+        setMapData(map);        
         FunctionSearch(searchplace, map);
     }, [searchplace]);
 
