@@ -82,199 +82,63 @@ const Map = () => {
       console.log(areas); //pa?
       setArea(areas); //areas usesStae에 담음.
       setDataDesc(DataDesc);
-
-      //이 밑에 애들은 line 좌표 여러개 넣는거 할 때 할 것
-      // let path = [];
-      // for (let i = 0; i < response.data.length; i++) {
-      //   // console.log(response.data[i].LOCATION_DATA);
-      //   let a = response.data[i].LOCATION_DATA.slice(
-      //     9,
-      //     response.data[i].LOCATION_DATA.length - 2
-      //   );
-      //   let b = a.split(",");
-      // console.log(b);
-
-      // for (let j = 0; j < b.length; j++) {
-      //   let c = b[j].split(" ");
-      //   console.log(c);
-      //   path.push(c);
-      // }
-      // console.log(path);
-      // }
-      // for (let i = 0; i < data.length; i++) {
-      //   areas.push(new window.kakao.maps.LatLng(data[i][1], data[i][0]));
-      // }
-      // console.log(areas);
-      // console.log(path);
-      // let polygon = new window.kakao.maps.Polygon({
-      //   path: path.map((array, i) => {
-      //     console.log(array);
-      //     return new window.kakao.maps.LatLng(array[i][1], array[i][0]);
-      //   }),
-      //   strokeWeight: 2,
-      //   strokeColor: "red",
-      //   strokeOpacity: 0.8,
-      //   fillColor: "red",
-      //   fillOpacity: 0.7,
-      // });
-      // polygon.setMap(map);
     });
     axios
       .get(`http://127.0.0.1:5000/hazard/line`)
       .then((response) => {
-        let arr = response.data;
-        let arr2: any = [];
-        let arr3: any = [];
-        let arr4: any = [];
+        let Data = response.data;
+        let dataReplace: any = [];
+        let dataSplit: any = [];
+        let LData: any = [];
         let str = /[LINE()"]/gim;
-        arr.forEach((value: any) => {
-          arr2.push(value.LOCATION_DATA.replace(str, ""));
+        Data.forEach((value: any) => {
+          dataReplace.push(value.LOCATION_DATA.replace(str, ""));
         });
-        arr2.forEach((value: any) => {
-          arr3.push(value.split(","));
+        dataReplace.forEach((value: any) => {
+          dataSplit.push(value.split(","));
         });
-        arr3.forEach((value: any, index: any) => {
-          arr4[index] = [];
+        dataSplit.forEach((value: any, index: any) => {
+          LData[index] = [];
           for (let i = 0; i < value.length; i++) {
-            arr4[index].push(value[i].split(" "));
+            LData[index].push(value[i].split(" "));
           }
         });
-        console.log(arr4);
-        // console.log(arr4[0][0][1], arr4[0][0][0]);
+        console.log(LData);
+        // console.log(LData[0][0][1], LData[0][0][0]);
 
-        let Larr:any = []
+        let Larr: any = [];
 
-        for (let i = 0; i < arr4.length; i++) {
+        for (let i = 0; i < LData.length; i++) {
           // console.log(arr4[i]);
-          let arr:any = []
-
-          let sLarr = arr4[i];
-          for (let j =0; j<sLarr.length; j++){
-
+          let arr: any = [];
+          let sLarr = LData[i];
+          // console.log(sLarr);
+          for (let j = 0; j < sLarr.length; j++) {
+            // console.log(sLarr[j][1], sLarr[j][0]);
             arr.push(new window.kakao.maps.LatLng(sLarr[j][1], sLarr[j][0]));
           }
-          // console.log(arr)
-          Larr.push(arr)
+          // console.log(arr);
+          Larr.push(arr);
           // linePath.push(new window.kakao.maps.LatLng(arr))
           // sLarr.forEach((value: any, index: number) => {
           //   console.log(value[i], index);
           // });
         }
-        console.log(Larr)
+        console.log(Larr);
 
         setLarr(Larr);
-        // -----------------------------------------
-        // console.log(response.data);
-        // let LData = response.data;
-        // console.log(LData);
-        // // console.log(LData[0].DATA_DESC);
-        // console.log(LData[0].LOCATION_DATA);
-        // let Lareas = [];
-        // let Ldesc = [];
-        // let Lpath = [];
-        // let LpathTwo: any = [];
 
-        // for (let i = 0; i < LData.length; i++) {
-        //   // console.log(LData[i].LOCATION_DATA);
-        //   let Lslice = LData[i].LOCATION_DATA.slice(
-        //     6,
-        //     LData[i].LOCATION_DATA.length - 2
-        //   );
+        //------------------------DATA 상세 정보 구간 -----------------------
+        let Ldesc = [];
+        // console.log(Data[0].DATA_DESC);
+        for (let k = 0; k < Data.length; k++) {
+          let Desc = Data[k].DATA_DESC;
+          console.log(Desc);
+          Ldesc.push(Desc);
+        }
+        // console.log(Ldesc[0]);
 
-        //   console.log(Lslice);
-        //   let LSplit = Lslice.split(",");
-        //   // console.log(LSplit[i].split(" ")); // 여기를 하나의 배열로 담아야 함. 배열 묶음 여러개 필요 (line 배열 0번 LOCATION_DATA LINE 좌표 전체 하나로 묶기)
-        //   console.log(LSplit[0]);
-
-        //   Lpath.push(LSplit);
-        // ---------------------------------------------------------
-        // console.log(Lpath);
-        // console.log(i, "숫자");
-
-        // LSplit.map((el: string, index: number) => {
-        //   console.log(el);
-        //   let arr = [];
-        //   arr.push(el.split(" "));
-        //   console.log(arr);
-
-        //   console.log(index, LSplit.length - 1);
-        //   if (index === LSplit.length - 1) {
-        //     LpathTwo.push(arr);
-        //   }
-        // });
-
-        // console.log(LpathTwo);
-        // console.log(Lpath);
-
-        // let arr = [];
-        // --------------------------------------------------
-        // for (let i = 0; i < Lpath.length; i++) {
-        //   // console.log(LSplit[i]);
-        //   let Larr = [];
-        //   for (let j = 0; j < Lpath[i].length; j++) {
-        //     // console.log(Lpath[i][j].split(" "));
-        //     Larr.push(Lpath[i][j].split(" "));
-        //   }
-        //   // LpathTwo.push(arr);
-        //   console.log(Larr);
-        //   setLarr(Larr);
-        //   // Lareas.push(arr);
-        //   // console.log(Lareas);
-        // }
-        // ------------------------------------------------
-        // setLarr(Larr);
-
-        // console.log(arr);
-        // console.log(Lareas);
-        // for (let j = 0; j < LSplit.length; j++) {
-        //   console.log(LSplit.length, "bbbb");
-        //   console.log(j, "aa");
-        //   let LpathArray = Lpath[j];
-        //   console.log(LpathArray);
-
-        //   // let LSplitTwo = LpathArray[j].split(" ");
-        //   // console.log(LSplitTwo);
-        //   // LpathTwo.push(LSplitTwo);
-        // }
-        // }
-        // console.log(LpathTwo);
-
-        // for (let k = 0; k < Lpath.length; k++) {
-        //   console.log(Lpath[k]);
-        //   // Lareas.push(Lpath[k]);
-        // }
-        // console.log(Lareas);
-        // let LpathArray = Lpath;
-        // console.log(LpathArray.split(" "));
-
-        // for (let j = 0; j < Lpath.length; j++) {
-        //   // console.log(Lpath.length);
-        //   let LpathArray = Lpath[j][j];
-        //   console.log(LpathArray);
-        //   // LpathTwo.push(LpathArray);
-        //   // console.log(LpathTwo);
-        //   let LSplitTwo = LpathArray.split(" ");
-        //   console.log(LSplitTwo);
-        //   LpathTwo.push(LSplitTwo);
-        // }
-        // console.log(LpathTwo);
-
-        // for (let k = 0; k < LpathTwo.length; k++) {
-        //   console.log(LpathTwo[k].split(" "));
-        // }
-
-        // for (let i = 0; i < Lpath.length; i++) {
-        //   console.log(Lareas.push(new window.kakao.maps.LatLng(Lpath[i][0][1])));
-        // }
-
-        // for (let k = 0; k < LData.length; k++) {
-        //   let Desc = LData[k].DATA_DESC;
-        //   Ldesc.push(Desc);
-        // }
-        // console.log(Ldesc);
-
-        // setLpath(Lpath);
-        // setLdesc(Ldesc);
+        setLdesc(Ldesc);
       })
       .catch((e) => console.log(e));
 
@@ -347,9 +211,11 @@ const Map = () => {
 
   //// 지도에 영역데이터를 폴리곤으로 표시
   for (let i = 0; i < areas.length; i++) {
+    // console.log(areas[i].Ma, areas[i].La);
     area.push(new window.kakao.maps.LatLng(areas[i].Ma, areas[i].La));
   }
   // console.log(area[0].Ma, area[0].La);
+  console.log(area);
 
   // 다각형을 생상하고 이벤트를 등록하는 함수
   function dispalyArea(area: any) {
@@ -409,70 +275,55 @@ const Map = () => {
     );
   }
   dispalyArea(area);
+  //--------------------------------- 여기까지 폴리건 부분-------------------------
 
-  console.log(Larr);
+  //-----------------------LINE 부분---------------------------------------
+  // console.log(Larr);
+  console.log(Ldesc);
   // console.log(Larr[0]);
-  let linePath:any = []
+  let linePath: any = [];
 
   for (let i = 0; i < Larr.length; i++) {
-    console.log(Larr[i][0])
-    linePath.push(new window.kakao.maps.LatLng(Larr[i][0], Larr[i][1]));
+    // console.log(Larr[i]);
+    let arr: any = [];
+    let s = Larr[i];
+    // console.log(s);
+    for (let j = 0; j < s.length; j++) {
+      // console.log(s[j]);
+      arr.push(new window.kakao.maps.LatLng(s[j].Ma, s[j].La));
+    }
+    linePath.push(arr);
+    // console.log(arr);
   }
-  console.log(linePath) // 아니 왜 안들어가냐고
+  // console.log(linePath);
 
-  var polyline = new window.kakao.maps.Polyline({
-    path: linePath, // 선을 구성하는 좌표배열 입니다
-    strokeWeight: 100, // 선의 두께 입니다
-    strokeColor: '#000000', // 선의 색깔입니다
-    strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-    strokeStyle: 'solid' // 선의 스타일입니다
-});
+  function dispalyLine(linePath: any) {
+    var polyline = new window.kakao.maps.Polyline({
+      path: linePath, // 선을 구성하는 좌표배열 입니다
+      strokeWeight: 5, // 선의 두께 입니다
+      strokeColor: "red", // 선의 색깔입니다
+      strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+      strokeStyle: "solid", // 선의 스타일입니다
+    });
+    // 지도에 선을 표시합니다
+    polyline.setMap(kakaoMap);
 
-// 지도에 선을 표시합니다 
-polyline.setMap(kakaoMap);  
-
-
-  // let Line: any = [];
-  // Larr.forEach((value: [], index: number) => {
-  //   // console.log(value, index);
-  //   let arr: any = [];
-  //   for (let i = 0; i < value.length; i++) {
-  //     // console.log(value.length);
-  //     // console.log(value[i][1], value[i][0]);
-  //     arr.push(value[i][1], value[i][0]);
-  //   }
-  //   console.log(arr);
-  //   Line.push(arr);
-  // });
-  // console.log(Line);
-
-  // let LineArr = []
-
-  // for(let i =0; i< Larr.length; i++){
-  //   // console.log(Larr[i][0])
-  //   // console.log(new window.kakao.maps.LatLng(Larr[i][1].Ma,Larr[i][0].La))
-  // }
-  
-  // let linePath =
-  // let Line: any[] = [];
-  // Larr.forEach((value: [], index: number) => {
-  //   for (let i = 0; i < value.length; i++) {
-  //     Line[index] = new Array(value.length);
-  //     Line[index].push([Larr[index][i][1], value[i][0]]);
-  //   }
-  // });
-  // console.log(Line);
-  // var polyline = new window.kakao.maps.Polyline({
-  //   path: Line, // 선을 구성하는 좌표배열 입니다
-  //   strokeWeight: 100, // 선의 두께 입니다
-  //   strokeColor: "#000000", // 선의 색깔입니다
-  //   strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-  //   strokeStyle: "solid", // 선의 스타일입니다
-  // });
-  // console.log(Line);
-
-  // // 지도에 선을 표시합니다
-  // polyline.setMap(kakaoMap);
+    window.kakao.maps.event.addListener(
+      polyline,
+      "mouseover",
+      function (mouseEvent: any) {
+        polyline.setOptions({ fillColor: "#09f" });
+        for (let i = 0; i < Ldesc.length; i++) {
+          console.log(Ldesc.length);
+          console.log(Ldesc[i]);
+          customOverlay.setContent("<div>" + Ldesc[i] + "</div>");
+        }
+        customOverlay.setPosition(mouseEvent.latLng);
+        customOverlay.setMap(kakaoMap);
+      }
+    );
+  }
+  dispalyLine(linePath);
 
   // for (let i = 0; i < Larr.length; i++) {
   //   console.log(Larr[i]);
