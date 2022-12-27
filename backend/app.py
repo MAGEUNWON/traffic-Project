@@ -179,6 +179,15 @@ def dirCall():
         finalData.append(dataObj)
         trafficLink.append(lastLink)
 
+# @app.route('/directions', methods = ['POST']) # 접속하는 url
+# def dirCall():
+#         nodeData = request.json['markerArr']
+#         finalData = []
+#         trafficLink = []
+#         trafficData = []
+#         print("aa")
+#         finalData.append(nodeData[0])
+
         if dataObj['node_id'] == end['node_id']:
             for i in trafficLink:
                 sql = f"SELECT * FROM daejeon_traffic where linkID = {i}"
@@ -249,6 +258,7 @@ def dirCall():
 #     return data
 
 #
+
 # @app.route('/dot') # 접속하는 url
 # def dot():
 #         db_class = DataRoute()
