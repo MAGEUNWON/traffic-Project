@@ -10,6 +10,7 @@ load_dotenv()
 api_key = os.environ.get("api_key")
 api_keyI = os.environ.get("api_keyI")
 api_keyP = os.environ.get("api_keyP")
+
 #화연
 open_api_key = os.environ.get("API_KEY_POLICE")
 #연주

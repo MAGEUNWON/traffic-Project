@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, forwardRef } from 'react';
 //useEffect는 리액트 컴포넌트가 렌더링 될 때마다 특정 작업을 수행하도록 설정할 수 있는 Hook. 기본적으로 렌더링되고 난 직후마다 실행.
 //useEffect에서 설정한 함수를 컴포넌트가 화면에 맨 처음 렌더링될 때만 실행하고, 업데이트될 때는 실행하지 않으려면 함수의 두 번째 파라미터로 비어 있는 배열을 넣어 주면 됨.
 //특정 값이 변경 될 때만 호출하고 싶은 경우에는 useEffect의 두 번째 파라미터로 전달되는 배열 안에 검사하고 싶은 값을 넣어주면 됨.
-import styled from "styled-components";
-import FunctionSearch from "./FunctionSearch";
+import styled from 'styled-components';
+import FunctionSearch from './FunctionSearch';
 
 declare global {
   interface Window {
@@ -18,27 +18,27 @@ interface btnSet {
   [index: string]: string;
 }
 
-const Map = ({ searchplace }: any) => {
-  const [mapTypes, SetMapTypes] = useState<string>("Roadmap");
+const Map = forwardRef(({ searchplace, mapRef }: any) => {
+  const [mapTypes, SetMapTypes] = useState<string>('Roadmap');
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     SetMapTypes(e.currentTarget.value);
   };
 
-  const ref = useRef("");
+  const ref = useRef('');
 
   ref.current = mapTypes;
 
   useEffect(() => {
     // console.log(maptype)
-    console.log("렌더링 완료"); //useEffect는 React.StrictMode가 적용된 개발환경에서는 콘솔이 두번씩 찍힘.
+    console.log('렌더링 완료'); //useEffect는 React.StrictMode가 적용된 개발환경에서는 콘솔이 두번씩 찍힘.
 
     // axios.get(`http://127.0.0.1:5000/hazard`).then((response) => {
     //   console.log(response.data);
     //   setData(response.data);
     // });
 
-    let container = document.getElementById("map") as HTMLElement; //지도를 담을 영역의 DOM 레퍼런스
+    let container = document.getElementById('map') as HTMLElement; //지도를 담을 영역의 DOM 레퍼런스
     //카카오 객체가 window 하위 객체라는 것을 정의해야 하므로 window.kakao로 변경해야 함
     let options = {
       center: new window.kakao.maps.LatLng(36.3492506, 127.3776511),
@@ -60,13 +60,13 @@ const Map = ({ searchplace }: any) => {
 
     //maptype에 따라 지도에 추가할 지도타입을 결정
 
-    if (ref.current === "Roadmap") {
+    if (ref.current === 'Roadmap') {
       //로드뷰 도로정보 지도타입
       changeMapType = window.kakao.maps.MapTypeId.ROADMAP;
-    } else if (ref.current === "Skyview") {
+    } else if (ref.current === 'Skyview') {
       //지형정보 지도타입
       changeMapType = window.kakao.maps.MapTypeId.HYBRID;
-    } else if (ref.current === "roadview") {
+    } else if (ref.current === 'roadview') {
       //지적편집도 지도타입
       changeMapType = window.kakao.maps.MapTypeId.ROADVIEW;
     }
@@ -98,14 +98,14 @@ const Map = ({ searchplace }: any) => {
   }, [mapTypes, searchplace]);
 
   const btnSet: btnSet[] = [
-    { value: "Roadmap", con: "지도" },
-    { value: "Skyview", con: "스카이뷰" },
-    { value: "roadview", con: "로드뷰" },
+    { value: 'Roadmap', con: '지도' },
+    { value: 'Skyview', con: '스카이뷰' },
+    { value: 'roadview', con: '로드뷰' },
   ];
 
   return (
     <>
-      <div id="map" style={{ width: "80vw", height: "100vh" }} />
+      <div id='map' style={{ width: '80vw', height: '100vh' }} />
       <ButtonSet>
         {btnSet.map((value, index) => {
           return (
@@ -117,7 +117,7 @@ const Map = ({ searchplace }: any) => {
       </ButtonSet>
     </>
   );
-};
+});
 
 const ButtonSet = styled.div`
   display: flex;
