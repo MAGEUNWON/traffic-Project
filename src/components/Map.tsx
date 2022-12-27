@@ -222,10 +222,10 @@ const Map = () => {
     // 다각형을 생성
     let polygon = new window.kakao.maps.Polygon({
       path: area,
-      strokeWeight: 2,
+      strokeWeight: 30,
       strokeColor: "#004c80",
       strokeOpacity: 0.8,
-      fillColor: "#fff",
+      fillColor: "#004c80",
       fillOpacity: 0.7,
     });
     polygon.setMap(kakaoMap);
@@ -278,7 +278,7 @@ const Map = () => {
   //--------------------------------- 여기까지 폴리건 부분-------------------------
 
   //-----------------------LINE 부분---------------------------------------
-  // console.log(Larr);
+  console.log(Larr);
   console.log(Ldesc);
   // console.log(Larr[0]);
   let linePath: any = [];
@@ -296,32 +296,76 @@ const Map = () => {
     // console.log(arr);
   }
   // console.log(linePath);
+  console.log(Ldesc.indexOf("결빙구간"));
 
   function dispalyLine(linePath: any) {
-    var polyline = new window.kakao.maps.Polyline({
-      path: linePath, // 선을 구성하는 좌표배열 입니다
-      strokeWeight: 5, // 선의 두께 입니다
-      strokeColor: "red", // 선의 색깔입니다
-      strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-      strokeStyle: "solid", // 선의 스타일입니다
-    });
-    // 지도에 선을 표시합니다
-    polyline.setMap(kakaoMap);
+    for (let i = 0; i < Ldesc.length; i++) {
+      var polyline = new window.kakao.maps.Polyline({
+        path: linePath[i], // 선을 구성하는 좌표배열 입니다
+        strokeWeight: 5, // 선의 두께 입니다
+        strokeColor: "red", // 선의 색깔입니다
+        strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+        strokeStyle: "solid", // 선의 스타일입니다
+      });
+      // 지도에 선을 표시합니다
+      polyline.setMap(kakaoMap);
 
-    window.kakao.maps.event.addListener(
-      polyline,
-      "mouseover",
-      function (mouseEvent: any) {
-        polyline.setOptions({ fillColor: "#09f" });
-        for (let i = 0; i < Ldesc.length; i++) {
-          console.log(Ldesc.length);
-          console.log(Ldesc[i]);
+      const imageSize = new window.kakao.maps.Size(25, 25);
+      const falling = "/asset/falling.png";
+      const freezing = "/asset/freezing.png";
+      const foggy = "/asset/foggy.png";
+      const slope = "/asset/slope.png";
+      const slippery = "/asset/slippery.png";
+      const curve = "/asset/curve.png";
+      const winding = "/asset/winding-road.png";
+
+      // if (Ldesc[i] === "결빙구간") {
+      //   console.log("결빙");
+      // } else if (Ldesc[i] === "추락위험 구간") {
+      //   console.log("추락");
+      // } else {
+      //   console.log("no");
+      // }
+      // console.log(Ldesc[i]);
+      // console.log(Ldesc.includes("결빙구간"));
+      const accidentMarker = new window.kakao.maps.Marker({
+        map: kakaoMap,
+        position: linePath[i][1], // 마커를 표시할 위치
+        image:
+          Ldesc[i] === "결빙구간"
+            ? new window.kakao.maps.MarkerImage(freezing, imageSize)
+            : Ldesc[i] === "추락위험 구간"
+            ? new window.kakao.maps.MarkerImage(falling, imageSize)
+            : Ldesc[i] === "급경사 구간"
+            ? new window.kakao.maps.MarkerImage(slope, imageSize)
+            : Ldesc[i] === "급커브 구간"
+            ? new window.kakao.maps.MarkerImage(curve, imageSize)
+            : Ldesc[i] === "고속도로 안개 다발구간"
+            ? new window.kakao.maps.MarkerImage(foggy, imageSize)
+            : Ldesc[i] === "우로굽은도로구간 도로이탈 사고많은 곳 임"
+            ? new window.kakao.maps.MarkerImage(winding, imageSize)
+            : new window.kakao.maps.MarkerImage(slippery, imageSize),
+      });
+
+      // var marker = new window.kakao.maps.Marker({
+      //   map: kakaoMap,
+      //   position: linePath[i][1], // 마커의 위치
+      //   image : markerImage
+      // });
+
+      window.kakao.maps.event.addListener(
+        polyline,
+        "mouseover",
+        function (mouseEvent: any) {
+          polyline.setOptions({ fillColor: "#09f" });
+          // console.log(Ldesc.length);
+          // console.log(Ldesc[0]);
           customOverlay.setContent("<div>" + Ldesc[i] + "</div>");
+          customOverlay.setPosition(mouseEvent.latLng);
+          customOverlay.setMap(kakaoMap);
         }
-        customOverlay.setPosition(mouseEvent.latLng);
-        customOverlay.setMap(kakaoMap);
-      }
-    );
+      );
+    }
   }
   dispalyLine(linePath);
 
