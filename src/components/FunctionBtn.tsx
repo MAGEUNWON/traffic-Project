@@ -1,3 +1,4 @@
+//cctv, 돌발정보, 보호구역, 주차장 버튼 기능 함수
 import { useState } from "react";
 import styled from "styled-components";
 import Button from "@/common/Button";
