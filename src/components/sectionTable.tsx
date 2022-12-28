@@ -192,7 +192,7 @@ const SectionTable = forwardRef(({ setSearchPlace, mapRef }: any) => {
                                     );
 
                                     path.map((el: any, i: number) => {
-                                        let color = "black";
+                                        let color = "green";
                                         if (
                                             getData.data.trafficData[i]
                                                 ?.congestion === 1

@@ -55,7 +55,7 @@ const FunctionMap = ({ value, searchplace }: any) => {
                         return imageSrc[value][0];
                     case "2":
                         return imageSrc[value][1];
-                    case "3":
+                    case "5":
                         return imageSrc[value][2];
                     default:
                         return imageSrc[value];
@@ -128,17 +128,18 @@ const FunctionMap = ({ value, searchplace }: any) => {
 
                 //주차장 
                 const content = `
-                <div style="
+                <div style=" width: 10vw;
+                text-align : center;
                 background-color: aliceblue;
                 box-sizing: border-box;
                 padding: 10px;
-                font-size: 7px;">
+                font-size: 10px;">
                   <span>${data[i].name}</span>
                 </div>
               `;
 
                 // 주차장 오버레이 생성
-                const overlay = new kakao.maps.CustomOverlay({
+                const infowindow = new kakao.maps.InfoWindow({
                     position: new kakao.maps.LatLng(
                         data[i].lat,
                         data[i].lon
@@ -151,7 +152,7 @@ const FunctionMap = ({ value, searchplace }: any) => {
                     marker,
                     "mouseover",
                     function () {
-                        overlay.setMap(mapData);
+                        infowindow.open(mapData,marker);
                     }
                 );
 
@@ -160,23 +161,24 @@ const FunctionMap = ({ value, searchplace }: any) => {
                     marker,
                     "mouseout",
                     function () {
-                        overlay.setMap(null);
+                        infowindow.setMap(null);
                     }
                 );
             } else if (data[i].GOV_NM) {
                 //보호구역
                 const content = `
-                <div style="
+                <div style=" width: 10vw;
+                text-align : center;
                 background-color: aliceblue;
                 box-sizing: border-box;
                 padding: 10px;
-                font-size: 7px;">
+                font-size: 10px;">
                   <div>제한속도: ${data[i]["MAX_SPD"]}</div>
                   <div>시설명: ${data[i]["LADDR"]}</div>
                 </div>
               `;
                 //보호구역 오버레이 설정
-                const overlay = new kakao.maps.CustomOverlay({
+                const infowindow = new kakao.maps.InfoWindow({
                     position: new kakao.maps.LatLng(
                         data[i].locationDataY,
                         data[i].locationDataX
@@ -189,7 +191,7 @@ const FunctionMap = ({ value, searchplace }: any) => {
                     marker,
                     "mouseover",
                     function () {
-                        overlay.setMap(mapData);
+                        infowindow.open(mapData,marker);
                     }
                 );
 
@@ -198,23 +200,24 @@ const FunctionMap = ({ value, searchplace }: any) => {
                     marker,
                     "mouseout",
                     function () {
-                        overlay.setMap(null);
+                        infowindow.setMap(null);
                     }
                 );
             } else if (data[i].addressJibunCd) {
                 // 돌발 정보
                 const content = `
-                <div style="
+                <div style=" width: 10vw;
+                text-align : center;
                 background-color: aliceblue;
                 box-sizing: border-box;
                 padding: 10px;
-                font-size: 7px;">
+                font-size: 10px;">
                   <div>돌발정보: ${data[i]["incidentTitle"]}</div>
                   <div>도로차수: ${data[i]["lane"]}</div>
                 </div>
               `;
                 //돌발 정보 오버레이 설정
-                const overlay = new kakao.maps.CustomOverlay({
+                const infowindow = new kakao.maps.InfoWindow({
                     position: new kakao.maps.LatLng(
                         data[i].locationDataY,
                         data[i].locationDataX
@@ -227,7 +230,7 @@ const FunctionMap = ({ value, searchplace }: any) => {
                     marker,
                     "mouseover",
                     function () {
-                        overlay.setMap(mapData);
+                        infowindow.open(mapData,marker);
                     }
                 );
                 //돌발 정보 마커를 마우스 오버 하면, 해당 돌발 정보 오버레이가 사라진다.                
@@ -235,7 +238,7 @@ const FunctionMap = ({ value, searchplace }: any) => {
                     marker,
                     "mouseout",
                     function () {
-                        overlay.setMap(null);
+                        infowindow.setMap(null);
                     }
                 );
             }
