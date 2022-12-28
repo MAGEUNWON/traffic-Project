@@ -5,6 +5,7 @@ import React, { useEffect, useState, useRef, forwardRef } from "react";
 import styled from "styled-components";
 import FunctionSearch from "./FunctionSearch";
 import axios from "axios";
+import "./Map.css";
 
 declare global {
   interface Window {
@@ -272,7 +273,7 @@ const Map = ({ searchplace }: any) => {
     // let test: any = [];
     function dispalyLine(linePath: any, kakaoMap: any) {
       for (let i = 0; i < Ldesc.length; i++) {
-        console.log(i, "반복문 횟수!");
+        // console.log(i, "반복문 횟수!");
 
         var polyline = new window.kakao.maps.Polyline({
           path: linePath[i], // 선을 구성하는 좌표배열 입니다
@@ -319,7 +320,9 @@ const Map = ({ searchplace }: any) => {
             polyline.setOptions({ fillColor: "#09f" });
             // console.log(Ldesc.length);
             // console.log(Ldesc[0]);
-            customOverlay.setContent("<div>" + Ldesc[i] + "</div>");
+            customOverlay.setContent(
+              "<div class = desc>" + Ldesc[i] + "</div>"
+            );
             customOverlay.setPosition(mouseEvent.latLng);
             customOverlay.setMap(kakaoMap);
           }
