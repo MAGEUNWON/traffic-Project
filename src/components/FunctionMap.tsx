@@ -39,11 +39,10 @@ const FunctionMap = ({ value, searchplace }: any) => {
             el.setMap(null);
         });
         //기능 변경시 인포윈도우 초기화 하기 위한 함수
-        infoArr.map((el:any)=>{
-            el.setMap(null)
+        infoArr.map((el: any) => {
+            el.setMap(null);
         });
 
-        
         let arr: any = [];
         let info: any = [];
 
@@ -69,7 +68,7 @@ const FunctionMap = ({ value, searchplace }: any) => {
             );
             let column1: any;
             let column2: any;
-            
+
             //각 기능별 데이터에 담긴 컬럼값이 다르므로 각각 컬럼값을 입력
             if (data[i]["lat"]) {
                 column1 = "lat";
@@ -111,22 +110,22 @@ const FunctionMap = ({ value, searchplace }: any) => {
                     removable: true,
                 });
 
-                info.push(infowindow)
+                info.push(infowindow);
 
                 //infowindow 닫기 위한 close함수
                 const close = () => {
-                for (let i = 0; i < info.length; i++) {
-                    info[i].close();
-                }}
+                    for (let i = 0; i < info.length; i++) {
+                        info[i].close();
+                    }
+                };
 
                 //클릭시 인포윈도우를 한 번 초기화 후 팝업
                 kakao.maps.event.addListener(marker, "click", () => {
-                    close()
+                    close();
                     infowindow.open(mapData, marker);
                 });
             } else if (data[i].lat) {
-
-                //주차장 
+                //주차장
                 const content = `
                 <div style=" width: 10vw;
                 text-align : center;
@@ -140,30 +139,19 @@ const FunctionMap = ({ value, searchplace }: any) => {
 
                 // 주차장 오버레이 생성
                 const infowindow = new kakao.maps.InfoWindow({
-                    position: new kakao.maps.LatLng(
-                        data[i].lat,
-                        data[i].lon
-                    ),
+                    position: new kakao.maps.LatLng(data[i].lat, data[i].lon),
                     content: content,
                 });
 
                 // 주차장 마커에 마우스오버하면, 해당 주차장 상황 정보 오버레이가 보인다.
-                kakao.maps.event.addListener(
-                    marker,
-                    "mouseover",
-                    function () {
-                        infowindow.open(mapData,marker);
-                    }
-                );
+                kakao.maps.event.addListener(marker, "mouseover", function () {
+                    infowindow.open(mapData, marker);
+                });
 
                 // 주차장 마커를 마우스오버 하면, 해당 주차장 정보 오버레이가 사라진다.
-                kakao.maps.event.addListener(
-                    marker,
-                    "mouseout",
-                    function () {
-                        infowindow.setMap(null);
-                    }
-                );
+                kakao.maps.event.addListener(marker, "mouseout", function () {
+                    infowindow.setMap(null);
+                });
             } else if (data[i].GOV_NM) {
                 //보호구역
                 const content = `
@@ -187,22 +175,14 @@ const FunctionMap = ({ value, searchplace }: any) => {
                 });
 
                 // 보호구역 마커에 마우스오버하면, 해당 보호구역 정보 오버레이가 보인다.
-                kakao.maps.event.addListener(
-                    marker,
-                    "mouseover",
-                    function () {
-                        infowindow.open(mapData,marker);
-                    }
-                );
+                kakao.maps.event.addListener(marker, "mouseover", function () {
+                    infowindow.open(mapData, marker);
+                });
 
                 // 보호구역 마커를 마우스오버 하면, 해당 보호구역 정보 오버레이가 사라진다.
-                kakao.maps.event.addListener(
-                    marker,
-                    "mouseout",
-                    function () {
-                        infowindow.setMap(null);
-                    }
-                );
+                kakao.maps.event.addListener(marker, "mouseout", function () {
+                    infowindow.setMap(null);
+                });
             } else if (data[i].addressJibunCd) {
                 // 돌발 정보
                 const content = `
@@ -226,21 +206,13 @@ const FunctionMap = ({ value, searchplace }: any) => {
                 });
 
                 //돌발 정보 마커를 마우스 오버 하면, 해당 돌발 정보 오버레이가 나타난다.
-                kakao.maps.event.addListener(
-                    marker,
-                    "mouseover",
-                    function () {
-                        infowindow.open(mapData,marker);
-                    }
-                );
-                //돌발 정보 마커를 마우스 오버 하면, 해당 돌발 정보 오버레이가 사라진다.                
-                kakao.maps.event.addListener(
-                    marker,
-                    "mouseout",
-                    function () {
-                        infowindow.setMap(null);
-                    }
-                );
+                kakao.maps.event.addListener(marker, "mouseover", function () {
+                    infowindow.open(mapData, marker);
+                });
+                //돌발 정보 마커를 마우스 오버 하면, 해당 돌발 정보 오버레이가 사라진다.
+                kakao.maps.event.addListener(marker, "mouseout", function () {
+                    infowindow.setMap(null);
+                });
             }
         }
         setInfoArr(info);

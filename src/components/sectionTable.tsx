@@ -121,7 +121,6 @@ const SectionTable = forwardRef(({ setSearchPlace, mapRef }: any) => {
                                             });
                                         } else if (address.length === 1) {
                                             address.push(...result);
-                                            console.log(address);
                                             setAddress(() => {
                                                 return { ...address };
                                             });
@@ -369,6 +368,85 @@ const SectionTable = forwardRef(({ setSearchPlace, mapRef }: any) => {
             },
         },
     ];
+
+    // <div>
+    //     <div>
+    //         <button></button>
+    //         <button></button>
+    //     </div>
+
+    //     <div>
+    //         <form onSubmit={onSubmit}>
+    //             <input
+    //                 type="text"
+    //                 placeholder={placeholder}
+    //                 onChange={onChange}
+    //                 value={value}
+    //             />
+    //             <button type="submit" onClick={() => console.log("실행")}>
+    //                 <img src="asset/icon_search2.png" />
+    //             </button>
+    //         </form>
+
+    //         <div>
+    //             <div id="menu_wrap" className="scroll-wrapper">
+    //                 <ul id="placesList"></ul>
+    //             </div>
+    //             <div id="pagination"></div>
+    //         </div>
+
+    //         {/* 조건문 */}
+
+    //         <div key={i}>
+    //             <form>
+    //                 <input
+    //                     placeholder={placeholder}
+    //                     defaultValue={address?.address?.address_name || ""}
+    //                 />
+    //                 <button>
+    //                     <img src="asset/icon_search2.png" />
+    //                 </button>
+    //             </form>
+    //             <div>
+    //                 <form>
+    //                     <input
+    //                         placeholder={placeholder}
+    //                         defaultValue={address?.address?.address_name || ""}
+    //                     />
+    //                     <button>
+    //                         <img src="asset/icon_search2.png" />
+    //                     </button>
+    //                 </form>
+
+    //                 <button></button>
+
+    //                 <div>
+    //                     {trafficData.map((el: any, i: number) => {
+    //                         return (
+    //                             <div key={i}>
+    //                                 <TrafficWrap>
+    //                                     <div>시간:{el.travelT}초</div>
+    //                                     <div>
+    //                                         전체길이:
+    //                                         {Math.round(el.linkLength)}m
+    //                                     </div>
+    //                                 </TrafficWrap>
+    //                                 <div>
+    //                                     <TrafficButton>출발</TrafficButton>
+    //                                     {address[0].address.address_name}
+    //                                 </div>
+    //                                 <div>
+    //                                     <TrafficButton> 도착</TrafficButton>
+    //                                     {address[1].address.address_name}
+    //                                 </div>
+    //                             </div>
+    //                         );
+    //                     })}
+    //                 </div>
+    //             </div>
+    //         </div>
+    //     </div>
+    // </div>;
 
     return (
         <MainBox>

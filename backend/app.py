@@ -136,7 +136,6 @@ def dirCall():
         finalData = []
         trafficLink = []
         trafficData = []
-        print("aa")
         finalData.append(nodeData[0])
 
         
@@ -145,7 +144,7 @@ def dirCall():
                 sql  = f"SELECT * FROM daejeon_link where F_NODE = {start['node_id']}"
                 row = db_class.executeAll(sql)
                 
-                
+                [0,1,2,3]
                 dataObj = 0
                 minData = 99999999
                 lastLink = '';
@@ -197,7 +196,7 @@ def dirCall():
                         print('end')
                 
                 else:
-                        navi(dataObj,end)
+                        navi(dataObj, end)
 
 
         navi(nodeData[0],nodeData[1])
