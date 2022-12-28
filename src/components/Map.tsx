@@ -5,6 +5,7 @@ import React, { useEffect, useState, useRef, forwardRef } from "react";
 import styled from "styled-components";
 import FunctionSearch from "./FunctionSearch";
 import axios from "axios";
+import "./Map.css";
 
 declare global {
   interface Window {
@@ -145,7 +146,7 @@ const Map = ({ searchplace }: any) => {
     let currentTypeId;
     let changeMapType;
 
-    //maptype에 따라 지도에 추가할 지도타입을 결정
+    //--------------------------------- maptype에 따라 지도에 추가할 지도타입을 결정 ---------------------------------------
 
     if (ref.current === "Roadmap") {
       //로드뷰 도로정보 지도타입
@@ -191,10 +192,11 @@ const Map = ({ searchplace }: any) => {
     { value: "roadview", con: "로드뷰" },
   ];
 
+  //-------------------------------- 여기부터 폴리건 부분 --------------------------------------------------
   useEffect(() => {
     // console.log(DataDesc)
 
-    if (!kakaoMap) return;
+    if (!kakaoMap) return; //이거 없어도 됨??
 
     let customOverlay = new window.kakao.maps.CustomOverlay({});
     // let infowindow = new window.kakao.maps.InfoWindow({ removable: true });
@@ -247,8 +249,11 @@ const Map = ({ searchplace }: any) => {
         }
       );
     }
-    dispalyArea(area, kakaoMap);
+    dispalyArea(area, kakaoMap); // 얘도 없어도 나옴?
   }, [areas, kakaoMap]);
+  //--------------------------------- 여기까지 폴리건 부분-------------------------
+
+  //-----------------------LINE 부분---------------------------------------
 
   useEffect(() => {
     let customOverlay = new window.kakao.maps.CustomOverlay({});
@@ -271,8 +276,9 @@ const Map = ({ searchplace }: any) => {
     // console.log(linePath);
     // let test: any = [];
     function dispalyLine(linePath: any, kakaoMap: any) {
+      // 얘도 kakaoMap 없어도 나오는건가?
       for (let i = 0; i < Ldesc.length; i++) {
-        console.log(i, "반복문 횟수!");
+        // console.log(i, "반복문 횟수!");
 
         var polyline = new window.kakao.maps.Polyline({
           path: linePath[i], // 선을 구성하는 좌표배열 입니다
@@ -284,7 +290,7 @@ const Map = ({ searchplace }: any) => {
         // 지도에 선을 표시합니다
         polyline.setMap(kakaoMap);
 
-        const imageSize = new window.kakao.maps.Size(25, 25);
+        const imageSize = new window.kakao.maps.Size(40, 40);
         const falling = "/asset/falling.png";
         const freezing = "/asset/freezing.png";
         const foggy = "/asset/foggy.png";
@@ -319,20 +325,18 @@ const Map = ({ searchplace }: any) => {
             polyline.setOptions({ fillColor: "#09f" });
             // console.log(Ldesc.length);
             // console.log(Ldesc[0]);
-            customOverlay.setContent("<div>" + Ldesc[i] + "</div>");
+            customOverlay.setContent(
+              "<div class = desc>" + Ldesc[i] + "</div>"
+            );
             customOverlay.setPosition(mouseEvent.latLng);
             customOverlay.setMap(kakaoMap);
           }
         );
       }
     }
-
     dispalyLine(linePath, kakaoMap);
   }, [areas, kakaoMap]);
 
-  //--------------------------------- 여기까지 폴리건 부분-------------------------
-
-  //-----------------------LINE 부분---------------------------------------
   console.log(Larr);
   console.log(Ldesc);
   // console.log(Larr[0]);
