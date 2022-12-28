@@ -15,7 +15,6 @@ const SectionTable = forwardRef(({ setSearchPlace, mapRef }: any) => {
     const onChangeWhere = (e: any) => {
         setInputText(e.target.value);
     };
-    console.log(trafficData);
     // inputeText에 값을 searchPlace에 값 받음
     const submitWhere = (e: any) => {
         e.preventDefault();
@@ -39,7 +38,6 @@ const SectionTable = forwardRef(({ setSearchPlace, mapRef }: any) => {
                 setIsCheck(false);
 
                 //카카오 객체가 window 하위 객체라는 것을 정의해야 하므로 window.kakao로 변경해야 함
-                console.log(window.document.getElementById("map"));
 
                 let kakaoMap: any = new window.kakao.maps.Map(
                     window.document.getElementById("map"),

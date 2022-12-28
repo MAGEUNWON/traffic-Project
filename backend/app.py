@@ -54,8 +54,9 @@ def danger_Api():
 
 @app.route('/hazard', methods=['GET'])
 def execute():
+
     db_class = DataRoute()  # 얘가 변수 query인듯?
-    sql = f"SELECT * FROM traffic.danger"  # danger 테이블 내용 다 가져와라
+    sql = f"SELECT * FROM danger"  # danger 테이블 내용 다 가져와라
     # sql  = f"SELECT LOCATION_DATA FROM danger" #location 좌표만 가져옴
     row = db_class.executeAll(sql)  # executeAll은 전체 내용 다 가져오라는 명령문
     print(row)
@@ -66,7 +67,7 @@ def execute():
 def Polygon(polygon):
     db_class = DataRoute()
     # location 좌표만 가져옴
-    sql = f"SELECT LOCATION_DATA, DATA_DESC FROM traffic.danger WHERE LOCATION_DATA Like '%%{polygon}%%'"
+    sql = f"SELECT LOCATION_DATA, DATA_DESC FROM danger WHERE LOCATION_DATA Like '%%{polygon}%%'"
     row = db_class.executeAll(sql)  # executeAll은 전체 내용 다 가져오라는 명령문
 
     data_stack = list()
@@ -80,7 +81,7 @@ def Polygon(polygon):
 def Line(line):
     db_class = DataRoute()
     # location 좌표만 가져옴
-    sql = f"SELECT LOCATION_DATA FROM traffic.danger WHERE LOCATION_DATA Like '%%{line}%%'"
+    sql = f"SELECT LOCATION_DATA FROM danger WHERE LOCATION_DATA Like '%%{line}%%'"
     row = db_class.executeAll(sql)  # executeAll은 전체 내용 다 가져오라는 명령문
     print(row)
     return jsonify(row)
@@ -90,7 +91,7 @@ def Line(line):
 def Point(point):
     db_class = DataRoute()
     # location 좌표만 가져옴
-    sql = f"SELECT LOCATION_DATA FROM traffic.danger WHERE LOCATION_DATA Like '%%{point}%%'"
+    sql = f"SELECT LOCATION_DATA FROM danger WHERE LOCATION_DATA Like '%%{point}%%'"
     row = db_class.executeAll(sql)  # executeAll은 전체 내용 다 가져오라는 명령문
     print(row)
     return jsonify(row)
@@ -224,13 +225,6 @@ def dirCall():
 # ------------------------------------------------------------------
 
 
-# # CCTV
-# @app.route('/cctv')
-# def daejeon():
-#     db_class  = DataRoute()
-#     sql  = f"SELECT * From CCTV"
-#     row = db_class.executeAll(sql)
-
 #     return jsonify(row)
 
 # # safezone
@@ -258,6 +252,7 @@ def dirCall():
 #     return data
 
 #
+
 
 # @app.route('/dot') # 접속하는 url
 # def dot():
@@ -333,7 +328,5 @@ def dirCall():
 #     navi(nodeData[0], nodeData[1])
 
 #     return {"finalData": finalData, "trafficData": trafficData}
-
-
 if __name__ == '__main__':
     app.run(debug=True)
