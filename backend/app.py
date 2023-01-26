@@ -36,6 +36,7 @@ def daejeon():
 
 
 # 팀장님
+
 # @app.route('/dajeun', methods=['GET'])
 # def dajuen_Api():
 #     data = ApiRoute()
@@ -65,7 +66,7 @@ def execute():
 @app.route('/hazard/<polygon>', methods=['GET'])
 def Polygon(polygon):
     db_class = DataRoute()
-    # location 좌표만 가져옴
+    # danger 테이블에서 polygon 단어가 포함된 좌표만 가져 와라
     sql = f"SELECT LOCATION_DATA, DATA_DESC FROM danger WHERE LOCATION_DATA Like '%%{polygon}%%'"
     row = db_class.executeAll(sql)  # executeAll은 전체 내용 다 가져오라는 명령문
 
