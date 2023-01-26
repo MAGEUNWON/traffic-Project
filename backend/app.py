@@ -20,7 +20,7 @@ CORS(app)
 @app.route('/', methods=['GET'])
 def test():
 
-    return "HELLO WROLED"
+    return "대전 안내 서비스"
 
 # CCTV
 
@@ -145,7 +145,7 @@ def dot():
     return row
 
 
-@app.route('/directions', methods=['POST']) 
+@app.route('/directions', methods=['POST'])
 def dirCall():
     nodeData = request.json['markerArr']
     finalData = []
