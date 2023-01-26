@@ -20,7 +20,7 @@ CORS(app)
 @app.route('/', methods=['GET'])
 def test():
 
-    return "대전 안내 서비스"
+    return "대전 교통 안내 서비스"
 
 # CCTV
 
