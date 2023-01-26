@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, forwardRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 //useEffect는 리액트 컴포넌트가 렌더링 될 때마다 특정 작업을 수행하도록 설정할 수 있는 Hook. 기본적으로 렌더링되고 난 직후마다 실행.
 //useEffect에서 설정한 함수를 컴포넌트가 화면에 맨 처음 렌더링될 때만 실행하고, 업데이트될 때는 실행하지 않으려면 함수의 두 번째 파라미터로 비어 있는 배열을 넣어 주면 됨.
 //특정 값이 변경 될 때만 호출하고 싶은 경우에는 useEffect의 두 번째 파라미터로 전달되는 배열 안에 검사하고 싶은 값을 넣어주면 됨.
@@ -203,22 +203,22 @@ const Map = ({ searchplace }: any) => {
     useEffect(() => {
         // console.log(DataDesc)
 
-        if (!kakaoMap) return; //이거 없어도 됨??
+        if (!kakaoMap) return; //이거 없어도 되나??
 
         let customOverlay = new window.kakao.maps.CustomOverlay({});
         // let infowindow = new window.kakao.maps.InfoWindow({ removable: true });
 
         let area = [];
 
-        //// 지도에 영역데이터를 폴리곤으로 표시
+        // 지도에 영역데이터를 폴리곤으로 표시
         for (let i = 0; i < areas.length; i++) {
             // console.log(areas[i].Ma, areas[i].La);
             area.push(new window.kakao.maps.LatLng(areas[i].Ma, areas[i].La));
         }
         // console.log(area[0].Ma, area[0].La);
-        // console.log(area, "아리아!");
+        // console.log(area);
 
-        // 다각형을 생상하고 이벤트를 등록하는 함수
+        // 다각형을 생성하고 이벤트를 등록하는 함수
         function dispalyArea(area: any, kakaoMap: any) {
             // 다각형을 생성
             let polygon = new window.kakao.maps.Polygon({
@@ -258,7 +258,7 @@ const Map = ({ searchplace }: any) => {
                 }
             );
         }
-        dispalyArea(area, kakaoMap); // 얘도 없어도 나옴?
+        dispalyArea(area, kakaoMap); // 얘도 없어도 나오나?
     }, [areas, kakaoMap]);
     //--------------------------------- 여기까지 폴리건 부분-------------------------
 
@@ -290,13 +290,13 @@ const Map = ({ searchplace }: any) => {
                 // console.log(i, "반복문 횟수!");
 
                 var polyline = new window.kakao.maps.Polyline({
-                    path: linePath[i], // 선을 구성하는 좌표배열 입니다
-                    strokeWeight: 5, // 선의 두께 입니다
-                    strokeColor: "red", // 선의 색깔입니다
-                    strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-                    strokeStyle: "solid", // 선의 스타일입니다
+                    path: linePath[i], // 선을 구성하는 좌표배열
+                    strokeWeight: 5, // 선의 두께
+                    strokeColor: "red", // 선의 색깔
+                    strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명
+                    strokeStyle: "solid", // 선의 스타일
                 });
-                // 지도에 선을 표시합니다
+                // 지도에 선을 표시
                 polyline.setMap(kakaoMap);
 
                 const imageSize = new window.kakao.maps.Size(40, 40);
